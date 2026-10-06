@@ -2,13 +2,20 @@
 set -euo pipefail
 export LC_ALL=C
 
-DEVICE=""
+DEVICE="${NATIVEPAIR_DEVICE:-}"
+HOST_ONLY=no
 
 usage() {
   cat <<'EOF'
 Usage:
   ./scripts/probe-bluetooth.sh
   ./scripts/probe-bluetooth.sh --device AA:BB:CC:DD:EE:FF
+  ./scripts/probe-bluetooth.sh --host-only
+
+You may set NATIVEPAIR_DEVICE once in the current shell instead of passing
+--device repeatedly:
+
+  export NATIVEPAIR_DEVICE='AA:BB:CC:DD:EE:FF'
 
 The output is intentionally privacy-safe: it does not print phone names,
 Bluetooth addresses, message contents, contacts, or notification contents.
@@ -24,6 +31,11 @@ while [[ $# -gt 0 ]]; do
       fi
       DEVICE="$2"
       shift 2
+      ;;
+    --host-only)
+      HOST_ONLY=yes
+      DEVICE=""
+      shift
       ;;
     --help|-h)
       usage
@@ -54,7 +66,7 @@ bool_line() {
   printf '%s=%s\n' "$1" "$2"
 }
 
-echo "nativepair_probe_schema=1"
+echo "nativepair_probe_schema=2"
 echo "probe_scope=host$([[ -n "$DEVICE" ]] && printf '+device')"
 
 bool_line bluetoothctl_present "$(command_present bluetoothctl)"
@@ -100,7 +112,14 @@ else
   bool_line session_dbus_available no
 fi
 
-if [[ -z "$DEVICE" ]]; then
+if command -v systemctl >/dev/null 2>&1 &&
+  systemctl --user is-active --quiet mpris-proxy.service 2>/dev/null; then
+  bool_line mpris_proxy_user_service_active yes
+else
+  bool_line mpris_proxy_user_service_active no
+fi
+
+if [[ "$HOST_ONLY" == yes || -z "$DEVICE" ]]; then
   exit 0
 fi
 
