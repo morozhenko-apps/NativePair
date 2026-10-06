@@ -111,6 +111,25 @@ Before interpreting an event timeout, run `scripts/probe-mns.sh`. It verifies wh
 
 For Android event tests, the trigger must be a real SMS/MMS rather than an RCS chat. Google Messages can deliver RCS over Wi-Fi/mobile data, while SMS/MMS use the carrier path. The event probe is therefore inconclusive if the message transport was not confirmed.
 
+### BlueZ 5.85 server-profile registration defect
+
+Upstream BlueZ issue #2315 documents a 5.85 startup-order defect that can leave all obexd server profiles unregistered when `org.bluez` is already present before `obex_server_init()` populates the profile list. The affected environment in that report is Ubuntu 26.04.
+
+A matching NativePair diagnostic pattern is:
+
+- MAP client signature present in `obexd`;
+- MNS server signature present in `obexd`;
+- MNS not explicitly disabled;
+- MNS controller UUID absent.
+
+For controlled feasibility testing only, the upstream workaround is:
+
+```bash
+sudo systemctl restart bluetooth
+```
+
+Run it only after `obexd` is already running, then rerun `scripts/probe-mns.sh`. This interrupts active Bluetooth connections and is not a NativePair product requirement.
+
 `scripts/probe-map-events.sh` keeps a MAP session alive for a bounded window and watches only for creation of a new `org.bluez.obex.Message1` proxy. It does not inspect the message object's properties.
 
 Run the probe, then arrange for one incoming SMS during the wait window:

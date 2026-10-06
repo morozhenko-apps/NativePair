@@ -149,4 +149,16 @@ else
   echo "local_mns_sdp_record_present=unknown"
 fi
 
+known_bluez_2315_pattern=no
+if [[ "${OBEX_EXE:-}" != "" ]] &&
+  command -v strings >/dev/null 2>&1 &&
+  strings "$OBEX_EXE" | grep -Fq 'x-bt/MAP-NotificationRegistration' &&
+  strings "$OBEX_EXE" | grep -Fq 'x-bt/MAP-event-report' &&
+  ! bluetoothctl show 2>/dev/null |
+    tr '[:upper:]' '[:lower:]' |
+    grep -Fq '00001133-0000-1000-8000-00805f9b34fb'; then
+  known_bluez_2315_pattern=yes
+fi
+
+echo "known_bluez_2315_pattern=$known_bluez_2315_pattern"
 echo "note=map_client_and_mns_server_signatures_are_checked_independently"
