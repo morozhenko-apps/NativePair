@@ -24,11 +24,12 @@ Target hardware should include at least:
 
 Experiments:
 
-- [ ] Pair/trust through standard BlueZ workflow.
-- [ ] MAP session can be created.
+- [x] Pair/trust through standard BlueZ workflow.
+- [x] MAP session can be created.
 - [ ] MAP folders/messages can be listed.
 - [ ] MAP message send behavior is characterized.
 - [ ] MAP event notification behavior is characterized.
+- [x] PBAP session can be created.
 - [ ] PBAP contact listing is characterized.
 - [ ] HFP call-control feasibility is characterized.
 - [ ] HFP audio path is characterized.
@@ -39,7 +40,7 @@ Infrastructure:
 
 - [x] Define privacy-safe phase-0 Bluetooth probe.
 - [x] Establish headless Debian package build and CI installation gate.
-- [ ] Record first Pixel probe evidence.
+- [x] Record first Pixel probe evidence.
 - [ ] Record capability matrix.
 
 Deliverable: a capability matrix backed by reproducible commands/logs and no personal payloads in committed fixtures.
