@@ -4,14 +4,14 @@ Roadmap states are factual project status, not release promises.
 
 ## M0 - Repository foundation
 
-Status: **in progress**
+Status: **complete**
 
 - [x] Choose Apache-2.0.
 - [x] Establish `main` + `dev` branch model.
 - [x] Create project governance and architecture documentation.
-- [ ] Create compileable Rust workspace.
-- [ ] Add baseline CI.
-- [ ] Verify all baseline checks are green.
+- [x] Create compileable Rust workspace.
+- [x] Add baseline CI.
+- [x] Verify all baseline checks are green.
 
 ## M1 - Protocol feasibility
 
