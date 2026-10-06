@@ -138,7 +138,9 @@ If MNS is present but MAP notification registration is still not observed, run:
 
 BlueZ 5.85 only queues `x-bt/MAP-NotificationRegistration` when the remote MAP MAS SDP record exposes `MASInstanceID` (attribute `0x0315`). The probe reports only attribute presence and suppresses the raw SDP record.
 
-`scripts/probe-map-events.sh` keeps a MAP session alive for a bounded window and watches only for creation of a new `org.bluez.obex.Message1` proxy. It does not inspect the message object's properties.
+`scripts/probe-map-events.sh` starts a low-level session-bus monitor before creating the MAP session. It uses that temporary monitor stream to catch the short-lived internal `org.bluez.obex.Transfer1` used for notification registration, then keeps the MAP session alive for a bounded window and watches for a new `org.bluez.obex.Message1` object. It does not inspect message properties.
+
+Raw monitor output can contain session metadata, so it is stored only in a temporary directory and deleted on exit. The probe prints only bounded status fields.
 
 Run the probe, then arrange for one incoming SMS during the wait window:
 

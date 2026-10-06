@@ -19,11 +19,15 @@ Optional wait window:
 
   NATIVEPAIR_EVENT_TIMEOUT=90 ./scripts/probe-map-events.sh
 
-The probe keeps a MAP session open and waits for BlueZ to expose a new
-org.bluez.obex.Message1 object. Trigger one incoming SMS during the wait window.
+The probe starts a low-level D-Bus monitor before creating the MAP session,
+observes the short-lived notification-registration Transfer1 object, then
+waits for BlueZ to expose a new org.bluez.obex.Message1 object.
 
-The script never prints Bluetooth addresses, phone aliases, sender/recipient
-data, message subject/body, or OBEX object paths.
+Trigger one incoming SMS during the wait window.
+
+Raw D-Bus and obexctl output is stored only in a temporary directory and
+deleted on exit. The script never prints Bluetooth addresses, phone aliases,
+sender/recipient data, message subject/body, or OBEX object paths.
 EOF
 }
 
@@ -61,7 +65,7 @@ for command in busctl bluetoothctl obexctl stdbuf mktemp; do
   fi
 done
 
-echo "nativepair_map_event_probe_schema=2"
+echo "nativepair_map_event_probe_schema=3"
 echo "personal_payload_printed=no"
 echo "event_window_seconds=$EVENT_TIMEOUT"
 
@@ -77,13 +81,23 @@ if ! bluetoothctl info "$DEVICE" 2>/dev/null | grep -Eq '^[[:space:]]*Paired:[[:
 fi
 echo "device_paired=yes"
 
+if bluetoothctl show 2>/dev/null |
+  tr '[:upper:]' '[:lower:]' |
+  grep -Fq '00001133-0000-1000-8000-00805f9b34fb'; then
+  echo "local_mns_profile_advertised=yes"
+else
+  echo "local_mns_profile_advertised=no"
+fi
+
 TMP_DIR="$(mktemp -d)"
 OBEX_LOG="$TMP_DIR/obexctl.log"
+MONITOR_LOG="$TMP_DIR/busctl-monitor.log"
 OBEX_INPUT="$TMP_DIR/obexctl.in"
 mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
+MONITOR_PID=""
 SESSION_PATH=""
 
 cleanup() {
@@ -103,26 +117,41 @@ cleanup() {
     wait "$OBEX_PID" 2>/dev/null || true
   fi
 
+  if [[ -n "$MONITOR_PID" ]] && kill -0 "$MONITOR_PID" 2>/dev/null; then
+    kill "$MONITOR_PID" 2>/dev/null || true
+    wait "$MONITOR_PID" 2>/dev/null || true
+  fi
+
   rm -rf "$TMP_DIR"
   exit "$status"
 }
 trap cleanup EXIT INT TERM
+
+# Transfer1 can be created and removed before obexctl publishes a proxy for it.
+# Start the monitor before the MAP session so that short lifetime is observable.
+stdbuf -oL -eL busctl --user monitor org.bluez.obex >"$MONITOR_LOG" 2>&1 &
+MONITOR_PID=$!
+sleep 0.3
+
+if ! kill -0 "$MONITOR_PID" 2>/dev/null; then
+  echo "dbus_monitor_ready=no"
+  exit 1
+fi
+echo "dbus_monitor_ready=yes"
 
 stdbuf -oL -eL obexctl <"$OBEX_INPUT" >"$OBEX_LOG" 2>&1 &
 OBEX_PID=$!
 exec {OBEX_FD}>"$OBEX_INPUT"
 
 wait_for_log() {
-  local pattern="$1"
-  local timeout_seconds="$2"
+  local file="$1"
+  local pattern="$2"
+  local timeout_seconds="$3"
   local elapsed=0
 
   while (( elapsed < timeout_seconds * 10 )); do
-    if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then
+    if grep -Eq "$pattern" "$file" 2>/dev/null; then
       return 0
-    fi
-    if ! kill -0 "$OBEX_PID" 2>/dev/null; then
-      return 1
     fi
     sleep 0.1
     ((elapsed += 1))
@@ -131,7 +160,7 @@ wait_for_log() {
   return 1
 }
 
-if ! wait_for_log 'Client .*/org/bluez/obex|\[NEW\].*Client' 5; then
+if ! wait_for_log "$OBEX_LOG" 'Client .*/org/bluez/obex|\[NEW\].*Client' 5; then
   echo "obexctl_ready=no"
   exit 1
 fi
@@ -139,7 +168,7 @@ echo "obexctl_ready=yes"
 
 printf 'connect %s map\n' "$DEVICE" >&"$OBEX_FD"
 
-if ! wait_for_log 'Connection successful|Failed to connect' "$CONNECT_TIMEOUT"; then
+if ! wait_for_log "$OBEX_LOG" 'Connection successful|Failed to connect' "$CONNECT_TIMEOUT"; then
   echo "session_established=no"
   echo "session_error=timeout"
   exit 1
@@ -162,51 +191,35 @@ if [[ -z "$SESSION_PATH" ]]; then
   exit 1
 fi
 
-if ! wait_for_log 'MessageAccess /org/bluez/obex/client/session|\[NEW\].*MessageAccess' 2; then
+if ! wait_for_log "$OBEX_LOG" 'MessageAccess /org/bluez/obex/client/session|\[NEW\].*MessageAccess' 2; then
   echo "session_established=no"
   echo "session_error=message_access_proxy_missing"
   exit 1
 fi
+
 echo "session_established=yes"
-
-if bluetoothctl show 2>/dev/null |
-  tr '[:upper:]' '[:lower:]' |
-  grep -Fq '00001133-0000-1000-8000-00805f9b34fb'; then
-  echo "local_mns_profile_advertised=yes"
-else
-  echo "local_mns_profile_advertised=no"
-fi
-
 echo "notification_registration_attempted_by_bluez=yes"
 
 registration_transfer_seen=no
 registration_transfer_status=not_seen
 
-# BlueZ queues MAP Notification Registration before publishing MessageAccess1.
-# obexctl records that transfer even if it completes quickly.
-if grep -Eq "\[NEW\].*Transfer $SESSION_PATH/transfer[0-9]+" "$OBEX_LOG" 2>/dev/null; then
+if wait_for_log "$MONITOR_LOG" 'org\.bluez\.obex\.Transfer1' 3; then
   registration_transfer_seen=yes
 
-  if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: complete" "$OBEX_LOG" 2>/dev/null; then
-    registration_transfer_status=complete
-  elif grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: error" "$OBEX_LOG" 2>/dev/null; then
-    registration_transfer_status=error
-  else
-    for _ in {1..30}; do
-      if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: complete" "$OBEX_LOG" 2>/dev/null; then
-        registration_transfer_status=complete
-        break
-      fi
-      if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: error" "$OBEX_LOG" 2>/dev/null; then
-        registration_transfer_status=error
-        break
-      fi
-      sleep 0.1
-    done
-
-    if [[ "$registration_transfer_status" == not_seen ]]; then
-      registration_transfer_status=unknown
+  for _ in {1..30}; do
+    if grep -Eqi 'Status.*complete|complete.*Status' "$MONITOR_LOG"; then
+      registration_transfer_status=complete
+      break
     fi
+    if grep -Eqi 'Status.*error|error.*Status' "$MONITOR_LOG"; then
+      registration_transfer_status=error
+      break
+    fi
+    sleep 0.1
+  done
+
+  if [[ "$registration_transfer_status" == not_seen ]]; then
+    registration_transfer_status=unknown
   fi
 fi
 
@@ -215,18 +228,25 @@ echo "notification_registration_status=$registration_transfer_status"
 
 echo "waiting_for_new_message_event=yes"
 
-baseline_count="$(
+baseline_monitor_messages="$(
+  grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null || true
+)"
+baseline_obexctl_messages="$(
   grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null || true
 )"
 
 elapsed=0
 event_observed=no
 while (( elapsed < EVENT_TIMEOUT * 10 )); do
-  current_count="$(
+  current_monitor_messages="$(
+    grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null || true
+  )"
+  current_obexctl_messages="$(
     grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null || true
   )"
 
-  if (( current_count > baseline_count )); then
+  if (( current_monitor_messages > baseline_monitor_messages ||
+        current_obexctl_messages > baseline_obexctl_messages )); then
     event_observed=yes
     break
   fi
@@ -235,6 +255,13 @@ while (( elapsed < EVENT_TIMEOUT * 10 )); do
     echo "map_event_observed=no"
     echo "event_probe_complete=no"
     echo "event_error=obexctl_exited"
+    exit 1
+  fi
+
+  if ! kill -0 "$MONITOR_PID" 2>/dev/null; then
+    echo "map_event_observed=no"
+    echo "event_probe_complete=no"
+    echo "event_error=dbus_monitor_exited"
     exit 1
   fi
 

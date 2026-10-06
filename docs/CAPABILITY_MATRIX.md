@@ -22,7 +22,7 @@ Evidence date: 2026-10-06
 | --- | --- | ---: | --- | --- |
 | Messages read/list | MAP | 4 | Proven | Session, folders, `telecom/msg`, and non-empty inbox listing all succeeded. Personal payloads were suppressed. |
 | Messages send | MAP | 4 | Not yet tested beyond read | `PushMessage` behavior requires an explicit controlled send test. |
-| Message events | MAP | 4 | Inconclusive | Two 60-second observation windows produced no new Message1 proxy. Enhanced diagnostics are required to prove whether MNS advertisement and notification registration completed. |
+| Message events | MAP | 4 | Inconclusive | MNS server availability and remote MAP SDP prerequisites are proven. Earlier obexctl-only observation can miss the short-lived internal Transfer1; the current probe uses a pre-session low-level D-Bus monitor. |
 | Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
 | Calls | HFP Audio Gateway | 2 | Advertised only | Session/control/audio behavior not yet characterized. |
 | App notifications | Generic Android Bluetooth | — | No baseline mechanism selected | Android has no project-approved generic equivalent to iPhone ANCS for arbitrary app notifications. |
