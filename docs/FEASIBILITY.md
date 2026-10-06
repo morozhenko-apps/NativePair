@@ -103,6 +103,26 @@ Usage:
 ./scripts/probe-obex-read.sh --target pbap
 ```
 
+## MAP event probe
+
+BlueZ 5.85 automatically attempts MAP Notification Registration when its MAP client driver creates the `MessageAccess1` session interface. NativePair therefore does not need a separate public D-Bus registration call for this feasibility test.
+
+`scripts/probe-map-events.sh` keeps a MAP session alive for a bounded window and watches only for creation of a new `org.bluez.obex.Message1` proxy. It does not inspect the message object's properties.
+
+Run the probe, then arrange for one incoming SMS during the wait window:
+
+```bash
+./scripts/probe-map-events.sh
+```
+
+The default window is 60 seconds. Override it without changing the script:
+
+```bash
+NATIVEPAIR_EVENT_TIMEOUT=90 ./scripts/probe-map-events.sh
+```
+
+No incoming message during the window produces an inconclusive result, not a failure.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
