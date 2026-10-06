@@ -75,6 +75,34 @@ The probe records:
 
 The session path and Bluetooth address are intentionally not printed.
 
+## OBEX read probe
+
+`scripts/probe-obex-read.sh` performs the first bounded level-4 checks while keeping the same privacy boundary.
+
+For MAP it:
+
+- lists the current folder with a bounded result count;
+- selects `telecom/msg`;
+- requests at most one inbox entry;
+- asks only for the message `type` field;
+- reports only whether the calls succeeded and whether the returned arrays were empty.
+
+For PBAP it:
+
+- selects the internal phonebook;
+- queries whether the phonebook is non-empty without printing its exact size;
+- requests at most one contact-list entry;
+- suppresses the raw response and reports only success/non-empty state.
+
+Raw D-Bus responses exist only in a temporary directory and are deleted on exit. They are never printed by the probe.
+
+Usage:
+
+```bash
+./scripts/probe-obex-read.sh --target map
+./scripts/probe-obex-read.sh --target pbap
+```
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
