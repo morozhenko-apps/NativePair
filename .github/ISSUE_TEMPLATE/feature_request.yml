@@ -1,0 +1,32 @@
+name: Feature request
+description: Propose a focused NativePair capability or integration
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem should this solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: native-capability
+    attributes:
+      label: Native phone capability
+      description: Which Android/iPhone OS capability or standard protocol could support this without a companion app?
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy/security impact
+      description: What sensitive data or permissions would this feature touch?

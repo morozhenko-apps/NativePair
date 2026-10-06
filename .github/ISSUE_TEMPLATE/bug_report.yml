@@ -1,0 +1,56 @@
+name: Bug report
+description: Report a reproducible NativePair defect
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real message contents, phone numbers, contacts, Bluetooth addresses, or other personal data.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Use sanitized values only.
+    validations:
+      required: true
+
+  - type: input
+    id: linux
+    attributes:
+      label: Linux distribution and version
+      placeholder: Ubuntu 26.04
+
+  - type: input
+    id: phone
+    attributes:
+      label: Phone model and OS version
+      placeholder: Pixel 6a / Android version
+
+  - type: input
+    id: bluez
+    attributes:
+      label: BlueZ version
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs
+      description: Remove personal content and stable device identifiers before posting.
