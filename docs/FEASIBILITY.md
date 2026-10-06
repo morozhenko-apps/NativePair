@@ -130,6 +130,14 @@ sudo systemctl restart bluetooth
 
 Run it only after `obexd` is already running, then rerun `scripts/probe-mns.sh`. This interrupts active Bluetooth connections and is not a NativePair product requirement.
 
+If MNS is present but MAP notification registration is still not observed, run:
+
+```bash
+./scripts/probe-map-sdp.sh
+```
+
+BlueZ 5.85 only queues `x-bt/MAP-NotificationRegistration` when the remote MAP MAS SDP record exposes `MASInstanceID` (attribute `0x0315`). The probe reports only attribute presence and suppresses the raw SDP record.
+
 `scripts/probe-map-events.sh` keeps a MAP session alive for a bounded window and watches only for creation of a new `org.bluez.obex.Message1` proxy. It does not inspect the message object's properties.
 
 Run the probe, then arrange for one incoming SMS during the wait window:

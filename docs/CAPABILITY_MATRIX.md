@@ -32,6 +32,8 @@ Evidence date: 2026-10-06
 
 The Ubuntu BlueZ `mpris-proxy` process crashed during an early MAP attempt. The crash is treated as a distro/BlueZ environment issue and is not counted against MAP/PBAP capability evidence.
 
+The host also reproduced upstream BlueZ issue #2315: server-side OBEX profiles including MNS were absent until `bluetoothd` was restarted while `obexd` remained running. After the restart, MNS and Object Push UUIDs became visible. This is recorded as a BlueZ 5.85 / Ubuntu 26.04 compatibility defect, not a Pixel limitation.
+
 A short-lived Bluetooth access/authorization UI appeared on the phone during later probing. The bounded read operations completed successfully.
 
 ## Interpretation
