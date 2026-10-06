@@ -23,7 +23,7 @@ The probe keeps a MAP session open and waits for BlueZ to expose a new
 org.bluez.obex.Message1 object. Trigger one incoming SMS during the wait window.
 
 The script never prints Bluetooth addresses, phone aliases, sender/recipient
-data, message subject/body, or the Message1 object path.
+data, message subject/body, or OBEX object paths.
 EOF
 }
 
@@ -61,7 +61,7 @@ for command in busctl bluetoothctl obexctl stdbuf mktemp; do
   fi
 done
 
-echo "nativepair_map_event_probe_schema=1"
+echo "nativepair_map_event_probe_schema=2"
 echo "personal_payload_printed=no"
 echo "event_window_seconds=$EVENT_TIMEOUT"
 
@@ -84,6 +84,7 @@ mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
+SESSION_PATH=""
 
 cleanup() {
   local status=$?
@@ -150,14 +151,68 @@ if grep -Fq 'Failed to connect' "$OBEX_LOG"; then
   exit 1
 fi
 
+SESSION_PATH="$(
+  sed -nE 's/.*Session (\/org\/bluez\/obex\/client\/session[0-9]+).*/\1/p' "$OBEX_LOG" |
+    tail -n 1
+)"
+
+if [[ -z "$SESSION_PATH" ]]; then
+  echo "session_established=no"
+  echo "session_error=session_object_missing"
+  exit 1
+fi
+
 if ! wait_for_log 'MessageAccess /org/bluez/obex/client/session|\[NEW\].*MessageAccess' 2; then
   echo "session_established=no"
   echo "session_error=message_access_proxy_missing"
   exit 1
 fi
-
 echo "session_established=yes"
-echo "notification_registration_managed_by_bluez=yes"
+
+if bluetoothctl show 2>/dev/null |
+  tr '[:upper:]' '[:lower:]' |
+  grep -Fq '00001133-0000-1000-8000-00805f9b34fb'; then
+  echo "local_mns_profile_advertised=yes"
+else
+  echo "local_mns_profile_advertised=no"
+fi
+
+echo "notification_registration_attempted_by_bluez=yes"
+
+registration_transfer_seen=no
+registration_transfer_status=not_seen
+
+# BlueZ queues MAP Notification Registration before publishing MessageAccess1.
+# obexctl records that transfer even if it completes quickly.
+if grep -Eq "\[NEW\].*Transfer $SESSION_PATH/transfer[0-9]+" "$OBEX_LOG" 2>/dev/null; then
+  registration_transfer_seen=yes
+
+  if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: complete" "$OBEX_LOG" 2>/dev/null; then
+    registration_transfer_status=complete
+  elif grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: error" "$OBEX_LOG" 2>/dev/null; then
+    registration_transfer_status=error
+  else
+    for _ in {1..30}; do
+      if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: complete" "$OBEX_LOG" 2>/dev/null; then
+        registration_transfer_status=complete
+        break
+      fi
+      if grep -Eq "\[CHG\].*Transfer $SESSION_PATH/transfer[0-9]+ Status: error" "$OBEX_LOG" 2>/dev/null; then
+        registration_transfer_status=error
+        break
+      fi
+      sleep 0.1
+    done
+
+    if [[ "$registration_transfer_status" == not_seen ]]; then
+      registration_transfer_status=unknown
+    fi
+  fi
+fi
+
+echo "notification_registration_transfer_seen=$registration_transfer_seen"
+echo "notification_registration_status=$registration_transfer_status"
+
 echo "waiting_for_new_message_event=yes"
 
 baseline_count="$(
@@ -194,5 +249,9 @@ if [[ "$event_observed" == yes ]]; then
   echo "note=new_message_proxy_observed_without_reading_personal_properties"
 else
   echo "event_probe_complete=inconclusive"
-  echo "note=no_new_message_event_observed_within_window"
+  if [[ "$registration_transfer_status" != complete ]]; then
+    echo "note=no_event_and_notification_registration_not_proven"
+  else
+    echo "note=registration_completed_but_no_new_message_event_observed_within_window"
+  fi
 fi
