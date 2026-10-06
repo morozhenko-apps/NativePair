@@ -71,6 +71,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes dpkg-dev bluez bluez-obexd
 
+      - name: Check script executable bits
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r script; do
+            if [[ ! -x "$script" ]]; then
+              echo "Script is tracked but not executable: $script" >&2
+              exit 1
+            fi
+          done < <(git ls-files 'scripts/*.sh')
+
       - name: Check shell syntax
         run: bash -n scripts/*.sh
 
