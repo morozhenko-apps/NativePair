@@ -64,6 +64,36 @@ The first hardware spike must validate:
 
 Android results must include at least one modern Pixel device because profile availability alone does not guarantee compatible runtime behavior.
 
+## Development
+
+Run the Rust quality gate:
+
+```bash
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace --all-features
+```
+
+Run the privacy-safe host/device Bluetooth probe:
+
+```bash
+./scripts/probe-bluetooth.sh
+./scripts/probe-bluetooth.sh --device AA:BB:CC:DD:EE:FF
+```
+
+The device address is used locally for the probe and is not printed by the script.
+
+Build and verify the Debian package:
+
+```bash
+./scripts/build-deb.sh
+./scripts/verify-deb.sh artifacts/nativepair_0.1.0_amd64.deb
+```
+
+CI builds the `.deb`, verifies its checksum and layout, runs both packaged binaries, installs the package through `apt` on Ubuntu, and publishes the package plus SHA-256 sidecar as a short-lived workflow artifact.
+
+See [Build and packaging](docs/BUILD_AND_PACKAGING.md) and [Protocol feasibility](docs/FEASIBILITY.md).
+
 ## Non-goals
 
 For the initial product:

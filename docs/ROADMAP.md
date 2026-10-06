@@ -38,6 +38,7 @@ Experiments:
 Infrastructure:
 
 - [x] Define privacy-safe phase-0 Bluetooth probe.
+- [x] Establish headless Debian package build and CI installation gate.
 - [ ] Record first Pixel probe evidence.
 - [ ] Record capability matrix.
 
