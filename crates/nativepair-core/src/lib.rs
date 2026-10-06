@@ -132,10 +132,7 @@ mod tests {
     fn temporarily_unavailable_capability_is_not_reported_as_supported() {
         let mut profile = DeviceProfile::new(PhonePlatform::Android);
 
-        profile.set_availability(
-            Capability::Contacts,
-            Availability::TemporarilyUnavailable,
-        );
+        profile.set_availability(Capability::Contacts, Availability::TemporarilyUnavailable);
 
         assert_eq!(
             profile.availability(Capability::Contacts),
