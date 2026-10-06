@@ -1,0 +1,12 @@
+Package: nativepair
+Version: @VERSION@
+Section: utils
+Priority: optional
+Architecture: @ARCH@
+Maintainer: morozhenko-apps
+Depends: bluez, bluez-obexd
+Homepage: https://github.com/morozhenko-apps/NativePair
+Description: Native Android and iPhone integration for Linux
+ NativePair integrates Linux with capabilities exposed by Android and iPhone
+ through standard operating-system Bluetooth services. The baseline design
+ requires no companion application on the phone.
