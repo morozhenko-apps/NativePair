@@ -2,7 +2,7 @@
 set -euo pipefail
 export LC_ALL=C
 
-echo "nativepair_mns_probe_schema=1"
+echo "nativepair_mns_probe_schema=2"
 
 command_present() {
   if command -v "$1" >/dev/null 2>&1; then
@@ -20,6 +20,14 @@ bool_line bluetoothctl_present "$(command_present bluetoothctl)"
 bool_line busctl_present "$(command_present busctl)"
 bool_line sdptool_present "$(command_present sdptool)"
 bool_line strings_present "$(command_present strings)"
+bool_line dpkg_query_present "$(command_present dpkg-query)"
+
+if command -v dpkg-query >/dev/null 2>&1; then
+  package_version="$(dpkg-query -W -f='${Version}' bluez-obexd 2>/dev/null || true)"
+  printf 'bluez_obexd_package_version=%s\n' "${package_version:-unknown}"
+else
+  echo "bluez_obexd_package_version=unknown"
+fi
 
 if command -v busctl >/dev/null 2>&1 &&
   busctl --user list 2>/dev/null | awk '{print $1}' | grep -Fxq org.bluez.obex; then
@@ -61,13 +69,42 @@ else
 fi
 
 if [[ -n "$OBEX_EXE" && -r "$OBEX_EXE" ]] && command -v strings >/dev/null 2>&1; then
-  if strings "$OBEX_EXE" | grep -Fq 'Message Notification server'; then
-    echo "mns_plugin_compiled=yes"
+  STRINGS_OUT="$(mktemp)"
+  SDP_OUT=""
+  trap 'rm -f "$STRINGS_OUT" "${SDP_OUT:-}"' EXIT
+  strings "$OBEX_EXE" >"$STRINGS_OUT"
+
+  if grep -Fq 'x-bt/MAP-NotificationRegistration' "$STRINGS_OUT"; then
+    echo "obexd_map_client_signature=yes"
   else
-    echo "mns_plugin_compiled=no"
+    echo "obexd_map_client_signature=no"
+  fi
+
+  if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT"; then
+    echo "obexd_mns_event_report_signature=yes"
+  else
+    echo "obexd_mns_event_report_signature=no"
+  fi
+
+  if grep -Fq 'Message Notification server' "$STRINGS_OUT"; then
+    echo "obexd_mns_name_signature=yes"
+  else
+    echo "obexd_mns_name_signature=no"
+  fi
+
+  if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT" ||
+    grep -Fq 'Message Notification server' "$STRINGS_OUT"; then
+    echo "mns_server_compiled=likely_yes"
+  else
+    echo "mns_server_compiled=likely_no"
   fi
 else
-  echo "mns_plugin_compiled=unknown"
+  echo "obexd_map_client_signature=unknown"
+  echo "obexd_mns_event_report_signature=unknown"
+  echo "obexd_mns_name_signature=unknown"
+  echo "mns_server_compiled=unknown"
+  SDP_OUT=""
+  trap 'rm -f "${SDP_OUT:-}"' EXIT
 fi
 
 if command -v bluetoothctl >/dev/null 2>&1 &&
@@ -81,7 +118,6 @@ fi
 
 if command -v sdptool >/dev/null 2>&1; then
   SDP_OUT="$(mktemp)"
-  trap 'rm -f "$SDP_OUT"' EXIT
 
   set +e
   sdptool browse local >"$SDP_OUT" 2>&1
@@ -90,6 +126,7 @@ if command -v sdptool >/dev/null 2>&1; then
 
   if [[ $SDP_STATUS -eq 0 ]]; then
     echo "local_sdp_query=yes"
+    echo "local_sdp_error_class=none"
     if grep -Eqi 'Message Notification|0x1133|00001133-0000-1000-8000-00805f9b34fb' "$SDP_OUT"; then
       echo "local_mns_sdp_record_present=yes"
     else
@@ -97,11 +134,19 @@ if command -v sdptool >/dev/null 2>&1; then
     fi
   else
     echo "local_sdp_query=no"
+    if grep -Eqi 'permission|not permitted|access denied' "$SDP_OUT"; then
+      echo "local_sdp_error_class=permission"
+    elif grep -Eqi 'connection refused|failed to connect|no such file|not available|not found' "$SDP_OUT"; then
+      echo "local_sdp_error_class=service_unavailable"
+    else
+      echo "local_sdp_error_class=unknown"
+    fi
     echo "local_mns_sdp_record_present=unknown"
   fi
 else
   echo "local_sdp_query=unavailable"
+  echo "local_sdp_error_class=tool_missing"
   echo "local_mns_sdp_record_present=unknown"
 fi
 
-echo "note=mns_profile_presence_is_prerequisite_for_remote_map_event_delivery"
+echo "note=map_client_and_mns_server_signatures_are_checked_independently"
