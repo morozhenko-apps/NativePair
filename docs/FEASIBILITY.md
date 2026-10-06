@@ -22,19 +22,36 @@ Phone
 
 NativePair must not replace BlueZ or bypass the operating-system pairing/trust model.
 
+## Local device variable
+
+During manual feasibility work, keep the phone address in the shell environment instead of repeating it in commands or pasted logs:
+
+```bash
+export NATIVEPAIR_DEVICE='AA:BB:CC:DD:EE:FF'
+```
+
+NativePair probe scripts accept this variable as the default device. An explicit `--device` argument overrides it. Remove it when finished:
+
+```bash
+unset NATIVEPAIR_DEVICE
+```
+
+The scripts must never echo the address.
+
 ## Phase-0 host probe
 
 `scripts/probe-bluetooth.sh` is the first reproducible diagnostic. It reports only bounded capability/environment facts and intentionally suppresses phone names, Bluetooth addresses, message content, contacts, and other personal data.
 
-Without a device argument it checks:
+Without `NATIVEPAIR_DEVICE` or a device argument it checks:
 
 - BlueZ tool availability and version;
 - whether the Bluetooth service is active;
 - whether an adapter is visible;
 - whether OBEX tooling is installed;
-- whether a session D-Bus is available.
+- whether a session D-Bus is available;
+- whether a user `mpris-proxy` service is active when systemd user services are available.
 
-With `--device <Bluetooth address>` it additionally checks pairing/trust/connection flags and whether the remote device advertises UUIDs associated with:
+With `NATIVEPAIR_DEVICE` or `--device <Bluetooth address>` it additionally checks pairing/trust/connection flags and whether the remote device advertises UUIDs associated with:
 
 - MAP Message Access Server: `00001132-0000-1000-8000-00805f9b34fb`;
 - PBAP Phonebook Access Server: `0000112f-0000-1000-8000-00805f9b34fb`;
@@ -43,13 +60,36 @@ With `--device <Bluetooth address>` it additionally checks pairing/trust/connect
 
 These UUID checks are hints only. A capability remains `unknown` until an end-to-end operation succeeds.
 
+## OBEX session probe
+
+`scripts/probe-obex-session.sh` creates a temporary MAP or PBAP session through `org.bluez.obex.Client1.CreateSession`, inspects the resulting session, and removes it on exit.
+
+The probe records:
+
+- whether `org.bluez.obex` is available;
+- whether the device is paired;
+- whether `CreateSession` succeeds;
+- the non-sensitive target service UUID reported by `org.bluez.obex.Session1`;
+- the set of interfaces exported on the session object;
+- whether the expected MAP/PBAP interface is present.
+
+The session path and Bluetooth address are intentionally not printed.
+
+## Known BlueZ mpris-proxy interference
+
+On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
+
+This is tracked as an environment/tooling defect, not a NativePair protocol result. Upstream BlueZ has a known null-dereference fix in `mpris-proxy` around OBEX property handling. Until the distro package carries the fix, manual MAP/PBAP feasibility runs may temporarily stop `mpris-proxy.service` to remove unrelated media-proxy noise from the experiment.
+
+NativePair must not require disabling `mpris-proxy` as a product behavior. This is only a controlled feasibility workaround.
+
 ## Evidence ladder
 
 A capability progresses through these evidence levels:
 
 1. **Host ready**: required Linux service/tooling exists.
 2. **Advertised**: the phone advertises the expected service/profile.
-3. **Session established**: Linux creates the relevant protocol session.
+3. **Session established**: Linux creates the relevant protocol session and the expected target interface is available.
 4. **Read path proven**: bounded synthetic or user-approved data can be listed/fetched.
 5. **Write/event path proven**: send/update/event behavior works where applicable.
 6. **Recovery proven**: disconnect/reconnect, permission denial, service restart, and stale-session behavior are characterized.
