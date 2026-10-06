@@ -272,8 +272,13 @@ done
 echo "map_event_observed=$event_observed"
 
 if [[ "$event_observed" == yes ]]; then
+  echo "notification_registration_effective=yes"
   echo "event_probe_complete=yes"
-  echo "note=new_message_proxy_observed_without_reading_personal_properties"
+  if [[ "$registration_transfer_status" == complete ]]; then
+    echo "note=new_message_proxy_observed_and_registration_completion_seen"
+  else
+    echo "note=new_message_proxy_observed_so_registration_was_effective_even_without_explicit_completion_status"
+  fi
 else
   echo "event_probe_complete=inconclusive"
   if [[ "$registration_transfer_status" != complete ]]; then

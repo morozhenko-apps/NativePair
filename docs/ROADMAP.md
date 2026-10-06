@@ -28,7 +28,7 @@ Experiments:
 - [x] MAP session can be created.
 - [x] MAP folders/messages can be listed.
 - [ ] MAP message send behavior is characterized.
-- [ ] MAP event notification behavior is characterized.
+- [x] MAP event notification behavior is characterized.
 - [x] PBAP session can be created.
 - [x] PBAP contact listing is characterized.
 - [ ] HFP call-control feasibility is characterized.
