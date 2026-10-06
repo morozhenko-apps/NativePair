@@ -83,7 +83,12 @@ jobs:
           done < <(git ls-files 'scripts/*.sh')
 
       - name: Check shell syntax
-        run: bash -n scripts/*.sh
+        shell: bash
+        run: |
+          set -euo pipefail
+          for script in scripts/*.sh; do
+            bash -n "$script"
+          done
 
       - name: Build Debian package
         id: package
