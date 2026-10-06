@@ -66,14 +66,14 @@ for value_name in CONNECT_TIMEOUT TRANSFER_TIMEOUT; do
   fi
 done
 
-for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed; do
+for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
   fi
 done
 
-echo "nativepair_map_send_probe_schema=1"
+echo "nativepair_map_send_probe_schema=2"
 echo "personal_payload_printed=no"
 echo "send_requested=$DO_SEND"
 
@@ -222,8 +222,11 @@ if ! busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageA
 fi
 echo "map_msg_selected=yes"
 
-MSG_BLOCK="$(printf 'BEGIN:MSG\r\n%s\r\nEND:MSG\r\n' "$MESSAGE_TEXT")"
-MSG_LENGTH="$(printf '%s' "$MSG_BLOCK" | wc -c)"
+MESSAGE_BYTES="$(printf '%s' "$MESSAGE_TEXT" | wc -c)"
+# Android's MAP bMessage builder defines LENGTH as:
+# BEGIN:MSG + CRLF + message + CRLF + END:MSG + CRLF.
+# That is message UTF-8 byte length + 22 bytes for an ASCII body.
+MSG_LENGTH="$((MESSAGE_BYTES + 22))"
 
 {
   printf 'BEGIN:BMSG\r\n'
@@ -240,14 +243,292 @@ MSG_LENGTH="$(printf '%s' "$MSG_BLOCK" | wc -c)"
   printf 'BEGIN:BBODY\r\n'
   printf 'CHARSET:UTF-8\r\n'
   printf 'LENGTH:%s\r\n' "$MSG_LENGTH"
-  printf '%s' "$MSG_BLOCK"
+  printf 'BEGIN:MSG\r\n'
+  printf '%s\r\n' "$MESSAGE_TEXT"
+  printf 'END:MSG\r\n'
   printf 'END:BBODY\r\n'
   printf 'END:BENV\r\n'
   printf 'END:BMSG\r\n'
 } >"$BMSG_FILE"
 chmod 600 "$BMSG_FILE"
 
+# Guard against the CRLF corruption that Bash command substitution can cause
+# when multiline payloads are captured into variables.
+if ! grep -Fqx 
+echo "retry_enabled=no"
+echo "transparent_enabled=yes"
+
+if [[ "$DO_SEND" != yes ]]; then
+  echo "actual_send=no"
+  echo "send_probe_complete=preflight"
+  echo "note=rerun_with_--send_only_after_confirming_the_hidden_recipient"
+  exit 0
+fi
+
+echo "actual_send=yes"
+
+MONITOR_BASELINE="$(wc -l <"$MONITOR_LOG")"
+
+set +e
+busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 PushMessage 'ssa{sv}'   "$BMSG_FILE" outbox 3   Transparent b true   Retry b false   Charset s utf8 >"$PUSH_REPLY" 2>&1
+PUSH_STATUS=$?
+set -e
+
+if [[ $PUSH_STATUS -ne 0 ]]; then
+  echo "push_message_accepted=no"
+  echo "send_probe_complete=no"
+  echo "send_error=push_message_call_failed"
+  exit 1
+fi
+echo "push_message_accepted=yes"
+
+TRANSFER_PATH="$(
+  sed -nE 's/^oa\{sv\} "([^"]+)".*/\1/p' "$PUSH_REPLY" |
+    head -n 1
+)"
+
+if [[ -n "$TRANSFER_PATH" ]]; then
+  echo "transfer_path_returned=yes"
+else
+  echo "transfer_path_returned=no"
+fi
+
+transfer_result=unknown
+elapsed=0
+while (( elapsed < TRANSFER_TIMEOUT * 10 )); do
+  NEW_LOG="$TMP_DIR/monitor-new.log"
+  tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null || true
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "complete"'; then
+    transfer_result=complete
+    break
+  fi
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "error"'; then
+    transfer_result=error
+    break
+  fi
+
+  if ! kill -0 "$OBEX_PID" 2>/dev/null; then
+    transfer_result=session_lost
+    break
+  fi
+
+  sleep 0.1
+  ((elapsed += 1))
+done
+
+echo "push_transfer_status=$transfer_result"
+
+case "$transfer_result" in
+  complete)
+    echo "send_probe_complete=yes"
+    echo "note=map_push_transfer_completed_verify_recipient_received_exactly_one_sms"
+    ;;
+  error)
+    echo "send_probe_complete=no"
+    echo "send_error=transfer_error"
+    exit 1
+    ;;
+  session_lost)
+    echo "send_probe_complete=no"
+    echo "send_error=session_lost"
+    exit 1
+    ;;
+  *)
+    echo "send_probe_complete=inconclusive"
+    echo "note=push_was_accepted_but_transfer_completion_was_not_observed"
+    ;;
+esac
+BEGIN:MSG\r' "$BMSG_FILE" ||
+  ! grep -Fqx 
+echo "retry_enabled=no"
+echo "transparent_enabled=yes"
+
+if [[ "$DO_SEND" != yes ]]; then
+  echo "actual_send=no"
+  echo "send_probe_complete=preflight"
+  echo "note=rerun_with_--send_only_after_confirming_the_hidden_recipient"
+  exit 0
+fi
+
+echo "actual_send=yes"
+
+MONITOR_BASELINE="$(wc -l <"$MONITOR_LOG")"
+
+set +e
+busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 PushMessage 'ssa{sv}'   "$BMSG_FILE" outbox 3   Transparent b true   Retry b false   Charset s utf8 >"$PUSH_REPLY" 2>&1
+PUSH_STATUS=$?
+set -e
+
+if [[ $PUSH_STATUS -ne 0 ]]; then
+  echo "push_message_accepted=no"
+  echo "send_probe_complete=no"
+  echo "send_error=push_message_call_failed"
+  exit 1
+fi
+echo "push_message_accepted=yes"
+
+TRANSFER_PATH="$(
+  sed -nE 's/^oa\{sv\} "([^"]+)".*/\1/p' "$PUSH_REPLY" |
+    head -n 1
+)"
+
+if [[ -n "$TRANSFER_PATH" ]]; then
+  echo "transfer_path_returned=yes"
+else
+  echo "transfer_path_returned=no"
+fi
+
+transfer_result=unknown
+elapsed=0
+while (( elapsed < TRANSFER_TIMEOUT * 10 )); do
+  NEW_LOG="$TMP_DIR/monitor-new.log"
+  tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null || true
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "complete"'; then
+    transfer_result=complete
+    break
+  fi
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "error"'; then
+    transfer_result=error
+    break
+  fi
+
+  if ! kill -0 "$OBEX_PID" 2>/dev/null; then
+    transfer_result=session_lost
+    break
+  fi
+
+  sleep 0.1
+  ((elapsed += 1))
+done
+
+echo "push_transfer_status=$transfer_result"
+
+case "$transfer_result" in
+  complete)
+    echo "send_probe_complete=yes"
+    echo "note=map_push_transfer_completed_verify_recipient_received_exactly_one_sms"
+    ;;
+  error)
+    echo "send_probe_complete=no"
+    echo "send_error=transfer_error"
+    exit 1
+    ;;
+  session_lost)
+    echo "send_probe_complete=no"
+    echo "send_error=session_lost"
+    exit 1
+    ;;
+  *)
+    echo "send_probe_complete=inconclusive"
+    echo "note=push_was_accepted_but_transfer_completion_was_not_observed"
+    ;;
+esac
+END:MSG\r' "$BMSG_FILE" ||
+  ! grep -Fqx 
+echo "retry_enabled=no"
+echo "transparent_enabled=yes"
+
+if [[ "$DO_SEND" != yes ]]; then
+  echo "actual_send=no"
+  echo "send_probe_complete=preflight"
+  echo "note=rerun_with_--send_only_after_confirming_the_hidden_recipient"
+  exit 0
+fi
+
+echo "actual_send=yes"
+
+MONITOR_BASELINE="$(wc -l <"$MONITOR_LOG")"
+
+set +e
+busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 PushMessage 'ssa{sv}'   "$BMSG_FILE" outbox 3   Transparent b true   Retry b false   Charset s utf8 >"$PUSH_REPLY" 2>&1
+PUSH_STATUS=$?
+set -e
+
+if [[ $PUSH_STATUS -ne 0 ]]; then
+  echo "push_message_accepted=no"
+  echo "send_probe_complete=no"
+  echo "send_error=push_message_call_failed"
+  exit 1
+fi
+echo "push_message_accepted=yes"
+
+TRANSFER_PATH="$(
+  sed -nE 's/^oa\{sv\} "([^"]+)".*/\1/p' "$PUSH_REPLY" |
+    head -n 1
+)"
+
+if [[ -n "$TRANSFER_PATH" ]]; then
+  echo "transfer_path_returned=yes"
+else
+  echo "transfer_path_returned=no"
+fi
+
+transfer_result=unknown
+elapsed=0
+while (( elapsed < TRANSFER_TIMEOUT * 10 )); do
+  NEW_LOG="$TMP_DIR/monitor-new.log"
+  tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null || true
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "complete"'; then
+    transfer_result=complete
+    break
+  fi
+
+  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
+    grep -Fq 'STRING "error"'; then
+    transfer_result=error
+    break
+  fi
+
+  if ! kill -0 "$OBEX_PID" 2>/dev/null; then
+    transfer_result=session_lost
+    break
+  fi
+
+  sleep 0.1
+  ((elapsed += 1))
+done
+
+echo "push_transfer_status=$transfer_result"
+
+case "$transfer_result" in
+  complete)
+    echo "send_probe_complete=yes"
+    echo "note=map_push_transfer_completed_verify_recipient_received_exactly_one_sms"
+    ;;
+  error)
+    echo "send_probe_complete=no"
+    echo "send_error=transfer_error"
+    exit 1
+    ;;
+  session_lost)
+    echo "send_probe_complete=no"
+    echo "send_error=session_lost"
+    exit 1
+    ;;
+  *)
+    echo "send_probe_complete=inconclusive"
+    echo "note=push_was_accepted_but_transfer_completion_was_not_observed"
+    ;;
+esac
+END:BBODY\r' "$BMSG_FILE" ||
+  [[ "$(tail -c 2 "$BMSG_FILE" | od -An -t x1 | tr -d '[:space:]')" != "0d0a" ]]; then
+  echo "bmessage_prepared=no"
+  echo "bmessage_structure_valid=no"
+  exit 1
+fi
+
 echo "bmessage_prepared=yes"
+echo "bmessage_structure_valid=yes"
 echo "bmessage_type=SMS_GSM"
 echo "retry_enabled=no"
 echo "transparent_enabled=yes"

@@ -174,7 +174,9 @@ A real send requires an explicit side-effect flag:
 ./scripts/probe-map-send.sh --send
 ```
 
-The probe selects `telecom/msg`, pushes to `outbox`, uses UTF-8, sets `Transparent=true`, and disables MAP retry to reduce duplicate-send risk. A successful OBEX transfer proves that the remote accepted the pushed message; the human test must also verify that the intended recipient received exactly one SMS before level 5 send support is recorded.
+The probe selects `telecom/msg`, pushes to `outbox`, uses UTF-8, sets `Transparent=true`, and disables MAP retry to reduce duplicate-send risk. It writes the bMessage body directly with CRLF framing and validates the generated structure before any real send. A successful OBEX transfer proves that the remote accepted the pushed message; the human test must also verify that the intended recipient received exactly one SMS before level 5 send support is recorded.
+
+The first send attempt from the initial probe revision is excluded from capability evidence because Bash command substitution stripped the LF from the final CRLF of the `END:MSG` line, producing malformed bMessage framing.
 
 ## Known BlueZ mpris-proxy interference
 
