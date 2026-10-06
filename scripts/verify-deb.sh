@@ -61,8 +61,16 @@ case "$architecture" in
 esac
 
 depends="$(dpkg-deb --field "$PACKAGE_PATH" Depends)"
+dependency_present() {
+  local dependency="$1"
+
+  tr ',' '\n' <<<"$depends" |
+    sed 's/^[[:space:]]*//' |
+    grep -Eq "^$dependency([[:space:](]|$)"
+}
+
 for dependency in bluez bluez-obexd; do
-  if [[ ",$depends," != *"$dependency"* ]]; then
+  if ! dependency_present "$dependency"; then
     echo "Missing runtime dependency in package metadata: $dependency" >&2
     exit 1
   fi
