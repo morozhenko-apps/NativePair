@@ -1,0 +1,23 @@
+[workspace]
+members = [
+    "crates/nativepair-core",
+    "crates/nativepair-daemon",
+    "crates/nativepair-cli",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/morozhenko-apps/NativePair"
+homepage = "https://github.com/morozhenko-apps/NativePair"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"

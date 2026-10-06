@@ -1,0 +1,16 @@
+[package]
+name = "nativepair-cli"
+description = "Command-line client for NativePair"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish = false
+
+[dependencies]
+nativepair-core = { path = "../nativepair-core" }
+
+[lints]
+workspace = true
