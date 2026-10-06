@@ -107,6 +107,10 @@ Usage:
 
 BlueZ 5.85 automatically attempts MAP Notification Registration when its MAP client driver creates the `MessageAccess1` session interface. NativePair therefore does not need a separate public D-Bus registration call for this feasibility test.
 
+Before interpreting an event timeout, run `scripts/probe-mns.sh`. It verifies whether the local BlueZ/obexd installation appears capable of receiving MAP event callbacks through the Message Notification Server (MNS, UUID `00001133-0000-1000-8000-00805f9b34fb`). The probe checks the running obexd process, whether MNS was explicitly disabled, whether the MNS plugin appears compiled into obexd, controller UUID visibility, and the local SDP record when `sdptool` is available.
+
+For Android event tests, the trigger must be a real SMS/MMS rather than an RCS chat. Google Messages can deliver RCS over Wi-Fi/mobile data, while SMS/MMS use the carrier path. The event probe is therefore inconclusive if the message transport was not confirmed.
+
 `scripts/probe-map-events.sh` keeps a MAP session alive for a bounded window and watches only for creation of a new `org.bluez.obex.Message1` proxy. It does not inspect the message object's properties.
 
 Run the probe, then arrange for one incoming SMS during the wait window:
