@@ -156,6 +156,26 @@ NATIVEPAIR_EVENT_TIMEOUT=90 ./scripts/probe-map-events.sh
 
 No incoming message during the window produces an inconclusive result, not a failure.
 
+## MAP send probe
+
+`scripts/probe-map-send.sh` characterizes one outgoing SMS through BlueZ MAP `PushMessage`.
+
+The probe uses a fixed ASCII test body and requires the recipient through `NATIVEPAIR_SMS_RECIPIENT` in E.164 form. The phone number and bMessage payload are never printed or committed. The generated bMessage exists only in a mode-0600 temporary file and is deleted on exit.
+
+Default invocation is preflight only and cannot send:
+
+```bash
+./scripts/probe-map-send.sh
+```
+
+A real send requires an explicit side-effect flag:
+
+```bash
+./scripts/probe-map-send.sh --send
+```
+
+The probe selects `telecom/msg`, pushes to `outbox`, uses UTF-8, sets `Transparent=true`, and disables MAP retry to reduce duplicate-send risk. A successful OBEX transfer proves that the remote accepted the pushed message; the human test must also verify that the intended recipient received exactly one SMS before level 5 send support is recorded.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
