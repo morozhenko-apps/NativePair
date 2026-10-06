@@ -45,3 +45,60 @@ jobs:
 
       - name: Run tests
         run: cargo test --workspace --all-features
+
+  package-deb:
+    name: Debian package gate
+    needs: rust
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@7e38f4b43b4db5c8dd498af069a4f6196df1d067 # v1
+        with:
+          toolchain: 1.99.0
+
+      - name: Restore Cargo cache
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+
+      - name: Install Debian packaging/runtime dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes dpkg-dev bluez bluez-obexd
+
+      - name: Check shell syntax
+        run: bash -n scripts/*.sh
+
+      - name: Build Debian package
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          package_path="$(./scripts/build-deb.sh)"
+          echo "path=$package_path" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Debian package
+        run: ./scripts/verify-deb.sh "${{ steps.package.outputs.path }}"
+
+      - name: Install and smoke Debian package
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get install --yes "${{ steps.package.outputs.path }}"
+          nativepair --version
+          /usr/libexec/nativepair-daemon --version
+
+      - name: Upload Debian package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nativepair-deb-${{ github.sha }}
+          path: |
+            artifacts/nativepair_*.deb
+            artifacts/nativepair_*.deb.sha256
+          if-no-files-found: error
+          retention-days: 14
