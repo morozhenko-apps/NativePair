@@ -4,6 +4,7 @@ export LC_ALL=C
 
 DEVICE="${NATIVEPAIR_DEVICE:-}"
 TARGET=""
+CONNECT_TIMEOUT="${NATIVEPAIR_OBEX_TIMEOUT:-45}"
 
 usage() {
   cat <<'EOF'
@@ -18,10 +19,9 @@ Set NATIVEPAIR_DEVICE once to avoid repeating the address:
 
 An explicit --device argument overrides NATIVEPAIR_DEVICE.
 
-Creates a temporary BlueZ OBEX session through D-Bus, records only
-privacy-safe session metadata, then removes the session.
-
-The output never prints the Bluetooth address or session object path.
+The probe keeps one obexctl process alive for the full session lifetime,
+then inspects the live session through D-Bus. It never prints the Bluetooth
+address, phone name, session object path, or personal payload data.
 EOF
 }
 
@@ -54,13 +54,20 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
+if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+  echo "NATIVEPAIR_OBEX_TIMEOUT must be a positive integer." >&2
+  exit 2
+fi
+
 case "$TARGET" in
   map)
     EXPECTED_INTERFACE="org.bluez.obex.MessageAccess1"
+    EXPECTED_PROXY_LABEL="MessageAccess"
     EXPECTED_TARGET_UUID="00001132-0000-1000-8000-00805f9b34fb"
     ;;
   pbap)
     EXPECTED_INTERFACE="org.bluez.obex.PhonebookAccess1"
+    EXPECTED_PROXY_LABEL="PhonebookAccess"
     EXPECTED_TARGET_UUID="0000112f-0000-1000-8000-00805f9b34fb"
     ;;
   *)
@@ -69,22 +76,14 @@ case "$TARGET" in
     ;;
 esac
 
-for command in busctl bluetoothctl; do
+for command in busctl bluetoothctl obexctl stdbuf mktemp; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
   fi
 done
 
-sanitize() {
-  sed -e "s/$DEVICE/<redacted-device>/g"
-}
-
-compact_error() {
-  sanitize | tr '\n' ' ' | tr -s ' ' | cut -c1-300
-}
-
-echo "nativepair_obex_probe_schema=2"
+echo "nativepair_obex_probe_schema=3"
 echo "target=$TARGET"
 
 if ! busctl --user list 2>/dev/null | awk '{print $1}' | grep -Fxq org.bluez.obex; then
@@ -92,7 +91,6 @@ if ! busctl --user list 2>/dev/null | awk '{print $1}' | grep -Fxq org.bluez.obe
   echo "session_created=no"
   exit 1
 fi
-
 echo "obex_service_available=yes"
 
 if ! bluetoothctl info "$DEVICE" 2>/dev/null | grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then
@@ -100,35 +98,104 @@ if ! bluetoothctl info "$DEVICE" 2>/dev/null | grep -Eq '^[[:space:]]*Paired:[[:
   echo "session_created=no"
   exit 1
 fi
-
 echo "device_paired=yes"
 
-set +e
-CALL_OUTPUT="$(
-  busctl --user call     org.bluez.obex     /org/bluez/obex     org.bluez.obex.Client1     CreateSession     'sa{sv}'     "$DEVICE"     1     Target s "$TARGET" 2>&1
-)"
-CALL_STATUS=$?
-set -e
+TMP_DIR="$(mktemp -d)"
+OBEX_LOG="$TMP_DIR/obexctl.log"
+OBEX_INPUT="$TMP_DIR/obexctl.in"
+mkfifo "$OBEX_INPUT"
 
-if [[ $CALL_STATUS -ne 0 ]]; then
-  echo "session_created=no"
-  printf 'error=%s\n' "$(printf '%s' "$CALL_OUTPUT" | compact_error)"
-  exit 1
-fi
-
-SESSION_PATH="$(sed -n 's/^o "\([^"]*\)".*/\1/p' <<<"$CALL_OUTPUT")"
-if [[ -z "$SESSION_PATH" ]]; then
-  echo "session_created=no"
-  echo "error=CreateSession returned an unexpected response"
-  exit 1
-fi
+OBEX_PID=""
+OBEX_FD=""
+SESSION_PATH=""
 
 cleanup() {
-  busctl --user call     org.bluez.obex     /org/bluez/obex     org.bluez.obex.Client1     RemoveSession     o "$SESSION_PATH" >/dev/null 2>&1 || true
-}
-trap cleanup EXIT
+  local status=$?
 
+  if [[ -n "$OBEX_FD" ]]; then
+    printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null || true
+    exec {OBEX_FD}>&- 2>/dev/null || true
+  fi
+
+  if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then
+    for _ in 1 2 3 4 5; do
+      kill -0 "$OBEX_PID" 2>/dev/null || break
+      sleep 0.1
+    done
+    kill "$OBEX_PID" 2>/dev/null || true
+    wait "$OBEX_PID" 2>/dev/null || true
+  fi
+
+  rm -rf "$TMP_DIR"
+  exit "$status"
+}
+trap cleanup EXIT INT TERM
+
+stdbuf -oL -eL obexctl <"$OBEX_INPUT" >"$OBEX_LOG" 2>&1 &
+OBEX_PID=$!
+
+exec {OBEX_FD}>"$OBEX_INPUT"
+
+wait_for_log() {
+  local pattern="$1"
+  local timeout_seconds="$2"
+  local elapsed=0
+
+  while (( elapsed < timeout_seconds * 10 )); do
+    if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then
+      return 0
+    fi
+    if ! kill -0 "$OBEX_PID" 2>/dev/null; then
+      return 1
+    fi
+    sleep 0.1
+    ((elapsed += 1))
+  done
+
+  return 1
+}
+
+if ! wait_for_log 'Client .*/org/bluez/obex|\[NEW\].*Client' 5; then
+  echo "obexctl_ready=no"
+  echo "session_created=no"
+  exit 1
+fi
+echo "obexctl_ready=yes"
+
+printf 'connect %s %s\n' "$DEVICE" "$TARGET" >&"$OBEX_FD"
+
+if ! wait_for_log 'Connection successful|Failed to connect' "$CONNECT_TIMEOUT"; then
+  echo "session_created=no"
+  echo "error=OBEX connection timed out waiting for phone authorization"
+  exit 1
+fi
+
+if grep -Fq 'Failed to connect' "$OBEX_LOG"; then
+  echo "session_created=no"
+  failure="$(grep -F 'Failed to connect' "$OBEX_LOG" | tail -n 1 | sed -E 's/[[:space:]]+/ /g' | cut -c1-220)"
+  printf 'error=%s\n' "$failure"
+  exit 1
+fi
+
+SESSION_PATH="$(
+  sed -nE 's/.*Session (\/org\/bluez\/obex\/client\/session[0-9]+).*/\1/p' "$OBEX_LOG" |
+    tail -n 1
+)"
+
+if [[ -z "$SESSION_PATH" ]]; then
+  echo "session_created=no"
+  echo "error=Connection succeeded but obexctl did not expose a session object"
+  exit 1
+fi
 echo "session_created=yes"
+
+# The session is still owned by the live obexctl D-Bus connection here.
+if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   org.bluez.obex.Session1 >/dev/null 2>&1; then
+  echo "session_interface_present=yes"
+else
+  echo "session_interface_present=no"
+  exit 1
+fi
 
 set +e
 TARGET_PROPERTY="$(
@@ -138,7 +205,10 @@ TARGET_STATUS=$?
 set -e
 
 if [[ $TARGET_STATUS -eq 0 ]]; then
-  SESSION_TARGET_UUID="$(sed -n 's/^s "\([^"]*\)".*/\1/p' <<<"$TARGET_PROPERTY" | tr '[:upper:]' '[:lower:]')"
+  SESSION_TARGET_UUID="$(
+    sed -n 's/^s "\([^"]*\)".*/\1/p' <<<"$TARGET_PROPERTY" |
+      tr '[:upper:]' '[:lower:]'
+  )"
   printf 'session_target_uuid=%s\n' "${SESSION_TARGET_UUID:-unknown}"
   if [[ "$SESSION_TARGET_UUID" == "$EXPECTED_TARGET_UUID" ]]; then
     echo "session_target_matches=yes"
@@ -148,39 +218,25 @@ if [[ $TARGET_STATUS -eq 0 ]]; then
 else
   echo "session_target_uuid=unavailable"
   echo "session_target_matches=no"
-  printf 'target_property_error=%s\n' "$(printf '%s' "$TARGET_PROPERTY" | compact_error)"
 fi
 
-set +e
-INTROSPECTION="$(
-  busctl --user introspect org.bluez.obex "$SESSION_PATH" 2>&1
-)"
-INTROSPECT_STATUS=$?
-set -e
-
-if [[ $INTROSPECT_STATUS -ne 0 ]]; then
-  echo "session_introspection=no"
-  printf 'error=%s\n' "$(printf '%s' "$INTROSPECTION" | compact_error)"
-  exit 1
-fi
-
-echo "session_introspection=yes"
-
-SESSION_INTERFACES="$(
-  awk '$2 == "interface" { print $1 }' <<<"$INTROSPECTION" |
-    sort -u |
-    paste -sd, -
-)"
-printf 'session_interfaces=%s\n' "${SESSION_INTERFACES:-none}"
-
-if grep -Fq "$EXPECTED_INTERFACE" <<<"$INTROSPECTION"; then
+if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then
   echo "target_interface_present=yes"
 else
   echo "target_interface_present=no"
-  echo "session_removed_on_exit=yes"
-  echo "note=session_created_but_target_interface_missing"
-  exit 1
 fi
 
-echo "session_removed_on_exit=yes"
-echo "note=session_success_is_not_read_path_support"
+if wait_for_log "\[NEW\].*$EXPECTED_PROXY_LABEL|$EXPECTED_PROXY_LABEL /org/bluez/obex/client/session" 2; then
+  echo "target_proxy_observed=yes"
+else
+  echo "target_proxy_observed=no"
+fi
+
+if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then
+  echo "session_established=yes"
+  echo "note=session_success_is_not_read_path_support"
+else
+  echo "session_established=no"
+  echo "note=create_session_succeeded_but_target_interface_missing"
+  exit 1
+fi
