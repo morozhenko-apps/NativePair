@@ -15,7 +15,7 @@ Status: **complete**
 
 ## M1 - Protocol feasibility
 
-Status: **not started**
+Status: **in progress**
 
 Target hardware should include at least:
 
@@ -34,6 +34,12 @@ Experiments:
 - [ ] HFP audio path is characterized.
 - [ ] iPhone ANCS discovery and event flow is characterized.
 - [ ] Failure cases and permission UX are documented.
+
+Infrastructure:
+
+- [x] Define privacy-safe phase-0 Bluetooth probe.
+- [ ] Record first Pixel probe evidence.
+- [ ] Record capability matrix.
 
 Deliverable: a capability matrix backed by reproducible commands/logs and no personal payloads in committed fixtures.
 
@@ -79,9 +85,11 @@ Status: **not started**
 
 - GTK4 UI.
 - Tray/background lifecycle integration.
-- Debian/Ubuntu `.deb` packaging.
+- Debian/Ubuntu `.deb` release packaging.
 - AppImage considered after Debian packaging.
 - Release CI and signed artifacts.
+
+A headless Debian packaging baseline is intentionally established during M1 so packaging failures do not accumulate until the UI milestone.
 
 ## M7 - Optional file-transfer integration
 

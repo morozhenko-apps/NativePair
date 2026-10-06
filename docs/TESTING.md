@@ -50,7 +50,7 @@ Protocol fixtures must use synthetic data. Never commit real:
 
 ## CI baseline
 
-Every code change should eventually pass:
+Every code change must pass:
 
 ```bash
 cargo fmt --all -- --check
@@ -58,7 +58,19 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 ```
 
-Additional security and packaging checks will be added when relevant dependencies and release artifacts exist.
+Repository shell scripts are syntax-checked in CI. Debian packaging is also built and verified in CI so packaging regressions fail before release work.
+
+## Packaging verification
+
+The Debian package gate validates:
+
+- package name/version/architecture;
+- required binary locations;
+- project documentation and license payload;
+- executable smoke via packaged `nativepair --version` and daemon `--version`;
+- SHA-256 sidecar integrity.
+
+The package gate is an integration/contract check, not a substitute for daemon or protocol tests.
 
 ## Hardware verification
 
@@ -69,6 +81,7 @@ Hardware tests must document:
 - Linux distribution;
 - BlueZ version;
 - relevant permissions;
-- exact capability being verified.
+- exact capability being verified;
+- evidence level from `docs/FEASIBILITY.md`.
 
 Logs included in issues or test evidence must be sanitized before publication.
