@@ -1,0 +1,50 @@
+# Capability Matrix
+
+This matrix records observed capability evidence, not platform promises.
+
+Evidence levels:
+
+1. host ready;
+2. profile advertised;
+3. protocol session established;
+4. bounded read path proven;
+5. write/event path proven;
+6. recovery behavior characterized.
+
+## Android reference device
+
+Reference device: Pixel 6a  
+Host: Ubuntu 26.04  
+BlueZ: 5.85 / Ubuntu package 5.85-4ubuntu0.2  
+Evidence date: 2026-10-06
+
+| Capability | Native mechanism | Highest proven level | Result | Notes |
+| --- | --- | ---: | --- | --- |
+| Messages read/list | MAP | 4 | Proven | Session, folders, `telecom/msg`, and non-empty inbox listing all succeeded. Personal payloads were suppressed. |
+| Messages send | MAP | 4 | Not yet tested beyond read | `PushMessage` behavior requires an explicit controlled send test. |
+| Message events | MAP | 4 | Not yet tested beyond read | Notification registration/event delivery still needs characterization. |
+| Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
+| Calls | HFP Audio Gateway | 2 | Advertised only | Session/control/audio behavior not yet characterized. |
+| App notifications | Generic Android Bluetooth | — | No baseline mechanism selected | Android has no project-approved generic equivalent to iPhone ANCS for arbitrary app notifications. |
+| Apple notifications | ANCS | — | Not applicable | ANCS was not advertised by the Android reference device, as expected. |
+
+## Environment observations
+
+The Ubuntu BlueZ `mpris-proxy` process crashed during an early MAP attempt. The crash is treated as a distro/BlueZ environment issue and is not counted against MAP/PBAP capability evidence.
+
+A short-lived Bluetooth access/authorization UI appeared on the phone during later probing. The bounded read operations completed successfully.
+
+## Interpretation
+
+For the Pixel 6a, NativePair's no-companion-app Android foundation is currently proven for:
+
+- SMS/message listing through MAP;
+- contact listing through PBAP.
+
+The next unknowns are active behavior rather than basic accessibility:
+
+- MAP send;
+- MAP event notification;
+- HFP control;
+- HFP audio routing;
+- reconnect/recovery behavior.
