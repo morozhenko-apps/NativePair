@@ -255,6 +255,21 @@ Transport activation alone is not sufficient evidence for bidirectional audio. F
 
 Rollback point: the Stage A probe is additive and can be removed independently without changing production behavior or the already-proven HFP call-control path.
 
+### Audio health probe interpretation
+
+The first `probe-audio-health.sh` revision reports aggregate `pw-top` ERR growth. That signal is intentionally diagnostic, not a pass/fail criterion: a node can accumulate PipeWire xruns/errors without producing an audible regression on the current playback path.
+
+Before using ERR growth as evidence for HFP-induced playback degradation, the probe must classify the affected node without printing names or personal metadata. At minimum it must report whether growth occurred on:
+
+- the current default audio sink;
+- the current default audio source;
+- any BlueZ node;
+- any HFP/SCO node;
+- any output-audio application stream;
+- a running node versus an inactive/suspended node.
+
+This keeps the diagnostic bounded while separating actual playback-path impact from unrelated graph noise.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
