@@ -134,10 +134,12 @@ else
   bool_line telephony_manager_api_available no
 fi
 
-# HFP HF profile connection is a Bluetooth transport/session action only.
-# No call-control method is invoked by this probe.
+# The phone is the remote HFP Audio Gateway (UUID 0x111f). Connecting to that
+# remote service makes PipeWire's local role HFP Hands-Free. Do not target the
+# remote HFP-HF UUID here; that reverses the roles.
+echo "remote_hfp_service=hfp_ag"
 set +e
-timeout "${CONNECT_TIMEOUT}s" bluetoothctl connect "$DEVICE" hfp-hf >"$CONNECT_LOG" 2>&1
+timeout "${CONNECT_TIMEOUT}s" bluetoothctl connect "$DEVICE" "$HFP_AG_UUID" >"$CONNECT_LOG" 2>&1
 CONNECT_STATUS=$?
 set -e
 

@@ -182,7 +182,7 @@ The first send attempt from the initial probe revision is excluded from capabili
 
 `scripts/probe-hfp.sh` characterizes the native no-companion HFP path without placing or modifying a call.
 
-The intended Linux role is HFP Hands-Free while the phone remains the HFP Audio Gateway. The probe verifies the phone's HFP AG advertisement, requests the BlueZ `hfp-hf` profile connection, and then inspects PipeWire's native Bluetooth Telephony service on the user D-Bus.
+The intended Linux role is HFP Hands-Free while the phone remains the HFP Audio Gateway. The probe verifies the phone's HFP AG advertisement, connects to the phone's remote HFP Audio Gateway service (UUID `0000111f-0000-1000-8000-00805f9b34fb`), and then inspects PipeWire's native Bluetooth Telephony service on the user D-Bus. BlueZ profile selection names the remote service: targeting remote `hfp-hf` would reverse the roles and is incorrect for a phone acting as Audio Gateway.
 
 A successful preflight requires a PipeWire Telephony AudioGateway object for the phone. That object is treated as evidence that the HFP service-level connection reached PipeWire's native HFP backend. The probe also verifies that the call-control API exposes `Dial`, `HangupAll`, `SendTones`, and call-state query support, but it does not invoke any mutating call-control method.
 
