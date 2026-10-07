@@ -278,9 +278,11 @@ Following two failed guarded SCO attempts, game audio exhibited intermittent aud
 
 **Stage 1 — connection-only HFP probe (done):** two successive `probe-hfp.sh` runs each established/confirmed the HFP AG session while the game continued without audible interruption. This isolates repeated HFP preflight as non-reproducing, but does not prove a cold connection is harmless if the session was already present.
 
-**Stage 2 — Dial/Hangup only (pending explicit approval):** place exactly one real call using the existing guarded `probe-hfp-call.sh --dial`; do not call `AudioGatewayTransport1.Activate` or mutate default audio devices. Confirm that cleanup was accepted, then assess ordinary playback audibly and capture an optional read-only health snapshot.
+**Stage 2 — Dial/Hangup only (observed):** one explicitly approved real outgoing call succeeded and was ended by `HangupAll` without `Activate`. Game audio went completely silent during the call and returned when the call ended. No evidence supports treating this as SCO failure or persistent playback dropouts; it is a distinct, reversible call-correlated media interruption. The mechanism is unknown because no during-call audio graph/stream-state snapshot was taken.
 
-**Stage 3 — guarded SCO activation (pending):** only if Stage 2 is characterized and separately approved, continue the corrected SCO probe with fresh call-object polling and transport readback. Log whether the graph introduces HFP nodes and whether playback changes.
+**Stage 3 — passive audio graph observation (pending):** add a bounded, read-only watcher that reports privacy-safe default sink, mute, output stream, link and Bluetooth/HFP changes. Only with fresh permission for another real call, observe the graph before/during/after a guarded Dial-only test. Do not alter device defaults or send any call from the watcher.
+
+**Stage 4 — guarded SCO activation (pending):** only when Stage 3 is characterized and separately approved, continue the corrected SCO probe with fresh call-object polling and transport readback. Log whether the graph introduces HFP nodes and whether playback changes.
 
 Each stage must record both the objective PipeWire snapshot and the user's audible observation. A failure must not be attributed to Bluetooth RF quality merely because a Bluetooth reset clears it: BlueZ HFP profile state, SCO transport state, PipeWire graph scheduling, and headset firmware/radio coexistence remain separate hypotheses. Do not automatically flip the entire Bluetooth controller as product cleanup without a scoped recovery design.
 
