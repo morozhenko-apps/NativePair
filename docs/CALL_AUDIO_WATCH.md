@@ -1,6 +1,6 @@
 # Passive HFP call-audio observation
 
-A read-only watcher for before/during/after HFP call-audio diagnosis. It never
+A read-only, **optional** watcher for before/during/after HFP call-audio diagnosis. It never
 dials, activates SCO, changes routing or volumes, or records voice payloads.
 Raw PipeWire and D-Bus data are processed in memory and never printed or stored.
 
@@ -27,3 +27,10 @@ identity, device address, application name or call metadata.
 
 Defaults: 35 seconds, 500 ms sample spacing. Accepted options are seconds
 5..90 and interval-ms 250..2000. Ctrl+C safely stops observation.
+
+Important observation: the initial Dial/Hangup-only test took focus from a game
+that normally stops playback when minimized/out of focus. The temporary game
+silence during the call is consistent with normal game focus behavior. Do not
+repeat a real call solely to diagnose that expected behavior or treat it as a
+PipeWire/SCO regression. Use this watcher only for independently unexplained
+audio behavior, with fresh explicit approval for any actual call.
