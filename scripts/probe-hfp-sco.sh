@@ -7,6 +7,7 @@ RECIPIENT="${NATIVEPAIR_CALL_RECIPIENT:-}"
 DO_DIAL=no
 CONNECT_TIMEOUT="${NATIVEPAIR_HFP_CONNECT_TIMEOUT:-20}"
 STATE_TIMEOUT="${NATIVEPAIR_SCO_STATE_TIMEOUT:-15}"
+CALL_ACTIVE_TIMEOUT="${NATIVEPAIR_CALL_ACTIVE_TIMEOUT:-30}"
 HUMAN_WINDOW="${NATIVEPAIR_SCO_HUMAN_WINDOW:-20}"
 
 TELEPHONY_SERVICE="org.pipewire.Telephony"
@@ -26,6 +27,7 @@ Environment:
   NATIVEPAIR_CALL_RECIPIENT       Real test destination, kept private.
   NATIVEPAIR_HFP_CONNECT_TIMEOUT  HFP connect timeout in seconds (default 20).
   NATIVEPAIR_SCO_STATE_TIMEOUT    Condition wait limit for SCO activation (default 15).
+  NATIVEPAIR_CALL_ACTIVE_TIMEOUT  Condition wait limit for remote answer (default 30).
   NATIVEPAIR_SCO_HUMAN_WINDOW     Human audio-check window after activation (default 20).
 
 Default invocation is preflight only. --dial creates one real outgoing call,
@@ -61,7 +63,7 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
-for value_name in CONNECT_TIMEOUT STATE_TIMEOUT HUMAN_WINDOW; do
+for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do
   value="${!value_name}"
   if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then
     echo "$value_name must be a positive integer." >&2
@@ -75,7 +77,7 @@ if [[ "$DO_DIAL" == yes ]] &&
   exit 2
 fi
 
-for command in bluetoothctl busctl grep head mktemp python3 pw-dump seq sleep timeout; do
+for command in bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -91,10 +93,12 @@ STATE_REPLY="$TMP_DIR/state.reply"
 DIAL_REPLY="$TMP_DIR/dial.reply"
 ACTIVATE_REPLY="$TMP_DIR/activate.reply"
 HANGUP_REPLY="$TMP_DIR/hangup.reply"
+CALL_STATE_REPLY="$TMP_DIR/call-state.reply"
 PW_DUMP="$TMP_DIR/pw-dump.json"
 NODE_RESULT="$TMP_DIR/nodes.result"
 
 AG_PATH=""
+CALL_PATH=""
 DIAL_ACCEPTED=no
 HANGUP_DONE=no
 
@@ -120,6 +124,17 @@ read_transport_state() {
     return 1
   fi
   sed -nE 's/^s "(.*)"$/\1/p' "$STATE_REPLY"
+}
+
+read_call_state() {
+  if [[ -z "$CALL_PATH" ]]; then
+    return 1
+  fi
+  if ! busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \
+    org.pipewire.Telephony.Call1 State >"$CALL_STATE_REPLY" 2>/dev/null; then
+    return 1
+  fi
+  sed -nE 's/^s "(.*)"$/\1/p' "$CALL_STATE_REPLY"
 }
 
 inspect_hfp_nodes() {
@@ -293,10 +308,18 @@ echo "dial_call_accepted=yes"
 
 CALL_SEEN=no
 for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do
-  if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null &&
-    grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then
-    CALL_SEEN=yes
-    break
+  if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
+    org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
+    CALL_PATH="$(
+      {
+        grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" || true
+      } |
+        head -n 1
+    )"
+    if [[ -n "$CALL_PATH" ]]; then
+      CALL_SEEN=yes
+      break
+    fi
   fi
   sleep 0.1
 done
@@ -308,6 +331,27 @@ if [[ "$CALL_SEEN" != yes ]]; then
   exit 1
 fi
 
+echo "awaiting_remote_answer=yes"
+CALL_ACTIVE_SEEN=no
+LAST_CALL_STATE=""
+for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do
+  LAST_CALL_STATE="$(read_call_state || true)"
+  if [[ "$LAST_CALL_STATE" == active ]]; then
+    CALL_ACTIVE_SEEN=yes
+    break
+  fi
+  sleep 0.1
+done
+
+printf 'call_state_before_activate=%s\n' "${LAST_CALL_STATE:-unknown}"
+echo "call_active_observed=$CALL_ACTIVE_SEEN"
+
+if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then
+  echo "probe_complete=no"
+  echo "sco_error=call_not_active"
+  exit 1
+fi
+
 set +e
 busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" Activate >"$ACTIVATE_REPLY" 2>&1
 ACTIVATE_STATUS=$?
@@ -315,6 +359,14 @@ set -e
 
 if [[ $ACTIVATE_STATUS -ne 0 ]]; then
   echo "transport_activate_accepted=no"
+  ACTIVATE_ERROR_CLASS="$(
+    {
+      grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState|NotSupported|InProgress|Failed|CME)|org\.freedesktop\.DBus\.Error\.(InvalidArgs|Failed)' "$ACTIVATE_REPLY" ||
+        true
+    } |
+      head -n 1
+  )"
+  printf 'activate_error_class=%s\n' "${ACTIVATE_ERROR_CLASS:-unknown}"
   echo "probe_complete=no"
   echo "sco_error=activate_failed"
   exit 1
