@@ -178,6 +178,24 @@ The probe selects `telecom/msg`, pushes to `outbox`, uses UTF-8, sets `Transpare
 
 The first send attempt from the initial probe revision is excluded from capability evidence because Bash command substitution stripped the LF from the final CRLF of the `END:MSG` line, producing malformed bMessage framing.
 
+## HFP call-control preflight
+
+`scripts/probe-hfp.sh` characterizes the native no-companion HFP path without placing or modifying a call.
+
+The intended Linux role is HFP Hands-Free while the phone remains the HFP Audio Gateway. The probe verifies the phone's HFP AG advertisement, requests the BlueZ `hfp-hf` profile connection, and then inspects PipeWire's native Bluetooth Telephony service on the user D-Bus.
+
+A successful preflight requires a PipeWire Telephony AudioGateway object for the phone. That object is treated as evidence that the HFP service-level connection reached PipeWire's native HFP backend. The probe also verifies that the call-control API exposes `Dial`, `HangupAll`, `SendTones`, and call-state query support, but it does not invoke any mutating call-control method.
+
+The probe suppresses raw D-Bus replies because modem and call objects can carry phone numbers or caller metadata. Only boolean capability results are printed.
+
+Run:
+
+```bash
+./scripts/probe-hfp.sh
+```
+
+This preflight can establish the HFP profile connection, but it never creates, answers, rejects, hangs up, or otherwise modifies a phone call. Actual call-control and SCO audio tests require separate explicit approval and dedicated probes.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
