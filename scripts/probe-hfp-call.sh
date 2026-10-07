@@ -71,13 +71,23 @@ for command in bluetoothctl busctl grep head mktemp sleep seq timeout; do
 done
 
 TMP_DIR="$(mktemp -d)"
+DIAL_ACCEPTED=no
+HANGUP_DONE=no
+AG_PATH=""
 MODEMS_REPLY="$TMP_DIR/modems.reply"
 CALLS_REPLY="$TMP_DIR/calls.reply"
 DIAL_REPLY="$TMP_DIR/dial.reply"
 HANGUP_REPLY="$TMP_DIR/hangup.reply"
 
 cleanup() {
+  local status=$?
+
+  if [[ "$DIAL_ACCEPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then
+    busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"       org.pipewire.Telephony.AudioGateway1 HangupAll >/dev/null 2>&1 || true
+  fi
+
   rm -rf "$TMP_DIR"
+  exit "$status"
 }
 trap cleanup EXIT INT TERM
 
@@ -115,7 +125,6 @@ else
   echo "hfp_connect_result=attempted"
 fi
 
-AG_PATH=""
 for _ in $(seq 1 50); do
   if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then
     AG_PATH="$(
@@ -178,6 +187,7 @@ if [[ $DIAL_STATUS -ne 0 ]]; then
   exit 1
 fi
 echo "dial_call_accepted=yes"
+DIAL_ACCEPTED=yes
 
 CALL_SEEN=no
 for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do
@@ -197,6 +207,7 @@ HANGUP_STATUS=$?
 set -e
 
 if [[ $HANGUP_STATUS -eq 0 ]]; then
+  HANGUP_DONE=yes
   echo "hangup_all_accepted=yes"
 else
   echo "hangup_all_accepted=no"
