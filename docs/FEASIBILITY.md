@@ -196,6 +196,16 @@ Run:
 
 This preflight can establish the HFP profile connection, but it never creates, answers, rejects, hangs up, or otherwise modifies a phone call. Actual call-control and SCO audio tests require separate explicit approval and dedicated probes.
 
+## HFP call-control mutation probe
+
+`scripts/probe-hfp-call.sh` is a guarded call-control probe layered on top of the proven HFP service-level connection.
+
+Default invocation is preflight only. It connects to the remote HFP Audio Gateway, resolves the PipeWire Telephony AudioGateway object, verifies the call-control API, and checks that no call object already exists. It never prints a destination number.
+
+A real call requires both a private `NATIVEPAIR_CALL_RECIPIENT` value and the explicit `--dial` flag. The probe refuses to dial while any call object already exists. After an accepted `Dial`, it waits briefly for a PipeWire Telephony call object and then invokes `HangupAll`.
+
+Because `--dial` creates a real telephone call and may incur carrier charges, it must only be used as a separately approved side-effect test.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
