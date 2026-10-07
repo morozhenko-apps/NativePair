@@ -77,7 +77,7 @@ if [[ "$DO_DIAL" == yes ]] &&
   exit 2
 fi
 
-for command in bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout; do
+for command in bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -99,6 +99,7 @@ NODE_RESULT="$TMP_DIR/nodes.result"
 
 AG_PATH=""
 CALL_PATH=""
+CALL_STATE=""
 DIAL_ACCEPTED=no
 HANGUP_DONE=no
 
@@ -126,15 +127,44 @@ read_transport_state() {
   sed -nE 's/^s "(.*)"$/\1/p' "$STATE_REPLY"
 }
 
-read_call_state() {
+refresh_call_snapshot() {
+  CALL_PATH=""
+  CALL_STATE=""
+
+  if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
+    org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
+    return 1
+  fi
+
+  CALL_PATH="$(
+    {
+      grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" || true
+    } |
+      head -n 1
+  )"
+
   if [[ -z "$CALL_PATH" ]]; then
-    return 1
+    return 2
   fi
-  if ! busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \
-    org.pipewire.Telephony.Call1 State >"$CALL_STATE_REPLY" 2>/dev/null; then
-    return 1
-  fi
-  sed -nE 's/^s "(.*)"$/\1/p' "$CALL_STATE_REPLY"
+
+  for state in active dialing alerting incoming waiting held disconnected; do
+    if grep -Eq "\"State\"[[:space:]]+s[[:space:]]+\"$state\"" "$CALLS_REPLY"; then
+      CALL_STATE="$state"
+      return 0
+    fi
+  done
+
+  for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do
+    if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \
+      "$iface" State >"$CALL_STATE_REPLY" 2>/dev/null; then
+      CALL_STATE="$(sed -nE 's/^s "(.*)"$/\1/p' "$CALL_STATE_REPLY")"
+      if [[ -n "$CALL_STATE" ]]; then
+        return 0
+      fi
+    fi
+  done
+
+  return 0
 }
 
 inspect_hfp_nodes() {
@@ -178,7 +208,7 @@ print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}")
 PY
 }
 
-echo "nativepair_hfp_sco_probe_schema=1"
+echo "nativepair_hfp_sco_probe_schema=2"
 echo "personal_payload_printed=no"
 echo "dial_requested=$DO_DIAL"
 
@@ -308,18 +338,9 @@ echo "dial_call_accepted=yes"
 
 CALL_SEEN=no
 for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do
-  if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
-    org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
-    CALL_PATH="$(
-      {
-        grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" || true
-      } |
-        head -n 1
-    )"
-    if [[ -n "$CALL_PATH" ]]; then
-      CALL_SEEN=yes
-      break
-    fi
+  if refresh_call_snapshot && [[ -n "$CALL_PATH" ]]; then
+    CALL_SEEN=yes
+    break
   fi
   sleep 0.1
 done
@@ -335,10 +356,12 @@ echo "awaiting_remote_answer=yes"
 CALL_ACTIVE_SEEN=no
 LAST_CALL_STATE=""
 for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do
-  LAST_CALL_STATE="$(read_call_state || true)"
-  if [[ "$LAST_CALL_STATE" == active ]]; then
-    CALL_ACTIVE_SEEN=yes
-    break
+  if refresh_call_snapshot; then
+    LAST_CALL_STATE="$CALL_STATE"
+    if [[ "$LAST_CALL_STATE" == active ]]; then
+      CALL_ACTIVE_SEEN=yes
+      break
+    fi
   fi
   sleep 0.1
 done
