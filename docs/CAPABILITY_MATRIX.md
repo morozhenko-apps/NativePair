@@ -21,7 +21,7 @@ Evidence date: 2026-10-06
 | Capability | Native mechanism | Highest proven level | Result | Notes |
 | --- | --- | ---: | --- | --- |
 | Messages read/list | MAP | 4 | Proven | Session, folders, `telecom/msg`, and non-empty inbox listing all succeeded. Personal payloads were suppressed. |
-| Messages send | MAP | 4 | Push transport proven; delivery verification pending | Corrected bMessage passed local structure validation, PushMessage returned a transfer, and the transfer reached complete. Human confirmation of exactly one received SMS is still required before level 5. |
+| Messages send | MAP | 5 | Proven | Corrected bMessage passed local structure validation, PushMessage returned a transfer, the transfer reached complete, and the intended recipient confirmed exactly one SMS with the expected fixed probe text. |
 | Message events | MAP | 5 | Proven | A real incoming SMS produced a new Message1 object through the MAP/MNS path. Registration Transfer1 was observed; explicit completion status was not captured, but end-to-end event delivery proves registration was effective. |
 | Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
 | Calls | HFP Audio Gateway | 2 | Advertised only | Session/control/audio behavior not yet characterized. |
@@ -41,11 +41,13 @@ A short-lived Bluetooth access/authorization UI appeared on the phone during lat
 For the Pixel 6a, NativePair's no-companion-app Android foundation is currently proven for:
 
 - SMS/message listing through MAP;
+- outgoing SMS through MAP;
+- incoming MAP message events;
 - contact listing through PBAP.
 
 The next unknowns are active behavior rather than basic accessibility:
 
-- MAP send recipient-delivery verification;
+
 - HFP control;
 - HFP audio routing;
 - reconnect/recovery behavior.

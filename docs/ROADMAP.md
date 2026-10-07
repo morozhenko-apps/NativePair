@@ -27,7 +27,7 @@ Experiments:
 - [x] Pair/trust through standard BlueZ workflow.
 - [x] MAP session can be created.
 - [x] MAP folders/messages can be listed.
-- [ ] MAP message send behavior is characterized.
+- [x] MAP message send behavior is characterized.
 - [x] MAP event notification behavior is characterized.
 - [x] PBAP session can be created.
 - [x] PBAP contact listing is characterized.
