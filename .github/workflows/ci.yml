@@ -90,6 +90,11 @@ jobs:
             bash -n "$script"
           done
 
+      - name: Test passive audio watcher
+        run: |
+          python3 -m py_compile scripts/probe_call_audio_watch.py
+          python3 -m unittest discover -s scripts/tests -p 'test_call_audio_watch.py' -v
+
       - name: Build Debian package
         id: package
         shell: bash
