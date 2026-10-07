@@ -232,11 +232,14 @@ The later real audio test requires separate explicit approval because it creates
 - use the already approved PipeWire Telephony HFP path;
 - create one guarded outgoing test call;
 - observe a call object;
-- request transport activation only after the call exists;
+- wait until that call's `org.pipewire.Telephony.Call1.State` becomes `active`, which requires the remote party to answer;
+- request transport activation only after the call is active;
 - observe the transport reaching `active`;
 - verify that PipeWire exposes the HFP/SCO audio endpoints;
 - terminate the call on success, error, or interruption;
 - never print the destination number, caller metadata, or captured voice payload.
+
+The first real SCO attempt is excluded from audio capability evidence. That probe invoked `AudioGatewayTransport1.Activate` immediately after a call object appeared, while the outgoing call could still be in `dialing` or `alerting`. The activation request failed. The corrected probe must condition-wait for `Call1.State=active` before requesting SCO activation.
 
 Transport activation alone is not sufficient evidence for bidirectional audio. Final SCO audio support requires both system-level evidence that the transport/endpoints are active and human confirmation that audio is usable in both directions.
 
