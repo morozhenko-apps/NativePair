@@ -270,6 +270,20 @@ Before using ERR growth as evidence for HFP-induced playback degradation, the pr
 
 This keeps the diagnostic bounded while separating actual playback-path impact from unrelated graph noise.
 
+### HFP audio regression trigger isolation
+
+Following two failed guarded SCO attempts, game audio exhibited intermittent audible dropouts. A full Bluetooth off/on restored normal audible playback. A read-only routing snapshot after cleanup showed `State=idle`, zero HFP nodes, and unchanged default routes.
+
+**Stage 0 — healthy baseline (done):** after Bluetooth reset, a schema-2 health snapshot showed 62 ERR increments on the running local default Audio/Sink node despite normal playback. No Bluetooth/HFP or application output stream ERR increments were detected. ERR growth without audible symptoms is not a failure gate.
+
+**Stage 1 — connection-only HFP probe (done):** two successive `probe-hfp.sh` runs each established/confirmed the HFP AG session while the game continued without audible interruption. This isolates repeated HFP preflight as non-reproducing, but does not prove a cold connection is harmless if the session was already present.
+
+**Stage 2 — Dial/Hangup only (pending explicit approval):** place exactly one real call using the existing guarded `probe-hfp-call.sh --dial`; do not call `AudioGatewayTransport1.Activate` or mutate default audio devices. Confirm that cleanup was accepted, then assess ordinary playback audibly and capture an optional read-only health snapshot.
+
+**Stage 3 — guarded SCO activation (pending):** only if Stage 2 is characterized and separately approved, continue the corrected SCO probe with fresh call-object polling and transport readback. Log whether the graph introduces HFP nodes and whether playback changes.
+
+Each stage must record both the objective PipeWire snapshot and the user's audible observation. A failure must not be attributed to Bluetooth RF quality merely because a Bluetooth reset clears it: BlueZ HFP profile state, SCO transport state, PipeWire graph scheduling, and headset firmware/radio coexistence remain separate hypotheses. Do not automatically flip the entire Bluetooth controller as product cleanup without a scoped recovery design.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
