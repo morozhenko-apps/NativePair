@@ -31,7 +31,7 @@ Experiments:
 - [x] MAP event notification behavior is characterized.
 - [x] PBAP session can be created.
 - [x] PBAP contact listing is characterized.
-- [ ] HFP call-control feasibility is characterized.
+- [x] HFP call-control feasibility is characterized.
 - [ ] HFP audio path is characterized.
 - [ ] iPhone ANCS discovery and event flow is characterized.
 - [ ] Failure cases and permission UX are documented.
