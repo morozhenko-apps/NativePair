@@ -24,7 +24,7 @@ Evidence date: 2026-10-06
 | Messages send | MAP | 5 | Proven | Corrected bMessage passed local structure validation, PushMessage returned a transfer, the transfer reached complete, and the intended recipient confirmed exactly one SMS with the expected fixed probe text. |
 | Message events | MAP | 5 | Proven | A real incoming SMS produced a new Message1 object through the MAP/MNS path. Registration Transfer1 was observed; explicit completion status was not captured, but end-to-end event delivery proves registration was effective. |
 | Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
-| Calls | HFP (phone AG, Linux HF) | 5 | Call control proven | PipeWire Telephony exposed the connected phone as an AudioGateway; Dial was accepted, a call object appeared, and HangupAll was accepted. SCO audio routing remains unproven. |
+| Calls | HFP (phone AG, Linux HF) | 5 | Call control proven; SCO preflight ready | Dial and HangupAll are proven. AudioGatewayTransport1 is present, mSBC is negotiated, and RejectSCO=false. Real SCO activation and bidirectional audio remain unproven. |
 | App notifications | Generic Android Bluetooth | — | No baseline mechanism selected | Android has no project-approved generic equivalent to iPhone ANCS for arbitrary app notifications. |
 | Apple notifications | ANCS | — | Not applicable | ANCS was not advertised by the Android reference device, as expected. |
 
