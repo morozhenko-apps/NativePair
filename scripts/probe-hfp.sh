@@ -43,7 +43,7 @@ if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
   exit 2
 fi
 
-for command in bluetoothctl busctl grep awk sed head mktemp timeout; do
+for command in bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -155,7 +155,10 @@ AG_PATH=""
 for _ in $(seq 1 50); do
   if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then
     AG_PATH="$(
-      grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" |
+      {
+        grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" ||
+          true
+      } |
         head -n 1
     )"
     if [[ -n "$AG_PATH" ]]; then
