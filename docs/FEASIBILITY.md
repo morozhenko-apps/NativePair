@@ -206,6 +206,42 @@ A real call requires both a private `NATIVEPAIR_CALL_RECIPIENT` value and the ex
 
 Because `--dial` creates a real telephone call and may incur carrier charges, it must only be used as a separately approved side-effect test.
 
+## HFP SCO audio characterization plan
+
+HFP audio feasibility is split into two explicit stages so that transport discovery is separated from real-call side effects.
+
+### Stage A: transport preflight
+
+`scripts/probe-hfp-audio.sh` must:
+
+- connect only to the phone's remote HFP Audio Gateway service;
+- resolve the existing PipeWire Telephony AudioGateway object;
+- verify `org.pipewire.Telephony.AudioGatewayTransport1`;
+- read the transport `State`, `Codec`, and `RejectSCO` properties;
+- verify that the `Activate` method is exposed;
+- print only bounded, privacy-safe status fields;
+- never invoke `Activate`, never place a call, and never open an audio stream.
+
+The preflight is successful when the Telephony AudioGateway transport interface is present and its properties can be read. An idle transport before a call is expected and is not a failure. `RejectSCO=true` is recorded as a blocker for the later SCO test rather than silently changed.
+
+### Stage B: real-call SCO proof
+
+The later real audio test requires separate explicit approval because it creates a telephone call. It must:
+
+- refuse to proceed if a pre-existing call exists;
+- use the already approved PipeWire Telephony HFP path;
+- create one guarded outgoing test call;
+- observe a call object;
+- request transport activation only after the call exists;
+- observe the transport reaching `active`;
+- verify that PipeWire exposes the HFP/SCO audio endpoints;
+- terminate the call on success, error, or interruption;
+- never print the destination number, caller metadata, or captured voice payload.
+
+Transport activation alone is not sufficient evidence for bidirectional audio. Final SCO audio support requires both system-level evidence that the transport/endpoints are active and human confirmation that audio is usable in both directions.
+
+Rollback point: the Stage A probe is additive and can be removed independently without changing production behavior or the already-proven HFP call-control path.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
