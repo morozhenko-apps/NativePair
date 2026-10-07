@@ -241,6 +241,16 @@ The later real audio test requires separate explicit approval because it creates
 
 The first real SCO attempt is excluded from audio capability evidence. That probe invoked `AudioGatewayTransport1.Activate` immediately after a call object appeared, while the outgoing call could still be in `dialing` or `alerting`. The activation request failed. The corrected probe must condition-wait for `Call1.State=active` before requesting SCO activation.
 
+### Second real SCO attempt
+
+The second real attempt successfully dialed and observed a call object, but the probe reported `call_state_before_activate=unknown` and timed out before invoking `Activate`.
+
+Human observation during that real call was asymmetric: the remote party could hear the local user, while the local user could not hear the remote party. This is diagnostic evidence only, not bidirectional SCO proof.
+
+The probe bug is that it cached the first call object path and queried that path repeatedly. PipeWire may remove/recreate or otherwise change the current call object while the outgoing call progresses. The corrected state wait must refresh `GetCalls` on every poll and derive the current state from the fresh snapshot, with a bounded fallback property read.
+
+Before changing routing, the probe must also report whether the current default PipeWire sink/source correspond to the HFP nodes. Routing inspection is read-only; no default device or link is changed by this diagnostic stage.
+
 Transport activation alone is not sufficient evidence for bidirectional audio. Final SCO audio support requires both system-level evidence that the transport/endpoints are active and human confirmation that audio is usable in both directions.
 
 Rollback point: the Stage A probe is additive and can be removed independently without changing production behavior or the already-proven HFP call-control path.
