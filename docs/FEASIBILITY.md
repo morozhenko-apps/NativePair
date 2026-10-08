@@ -255,6 +255,8 @@ Transport activation alone is not sufficient evidence for bidirectional audio. F
 
 Rollback point: the Stage A probe is additive and can be removed independently without changing production behavior or the already-proven HFP call-control path.
 
+**Implementation completed (2026-10-08, dev):** commit `105d630` now marks the guarded outgoing Dial attempt before the D-Bus mutation and makes a bounded cleanup HangupAll attempt when the Dial response is ambiguous. Commit `47e1831` adds eight deterministic fake-BlueZ/D-Bus contract tests for the actual Bash probes. CI run [37734895074](https://github.com/morozhenko-apps/NativePair/actions/runs/37734895074) passed Rust, guarded-probe tests and Debian package gate. No real calls or SCO activations were made as part of this implementation. The native two-way audio path remains unproven; scoped recovery and user-facing duplex audio routing remain separate work.
+
 ### Audio health probe interpretation
 
 The first `probe-audio-health.sh` revision reports aggregate `pw-top` ERR growth. That signal is intentionally diagnostic, not a pass/fail criterion: a node can accumulate PipeWire xruns/errors without producing an audible regression on the current playback path.
