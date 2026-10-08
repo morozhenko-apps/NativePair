@@ -55,7 +55,11 @@ elif command == "get-property":
         if "/call" in args[2]:
             print('s "' + state["call_state"] + '"')
         else:
-            print('s "idle"')
+            state["transport_reads"] += 1
+            if (state["scenario"] == "pending_then_active"
+                    and state["transport_reads"] >= 3):
+                state["transport_state"] = "active"
+            print('s "' + state["transport_state"] + '"')
     else:
         rc = 2
 elif command == "call":
@@ -72,12 +76,24 @@ elif command == "call":
         state["call_exists"] = True  # Simulate side-effect preceding D-Bus reply
         if state["scenario"] == "ambiguous_dial":
             rc = 1
+        elif state["scenario"] == "already_active":
+            state["transport_state"] = "active"
+        elif state["scenario"] == "pending_then_active":
+            state["transport_state"] = "pending"
     elif method == "HangupAll":
         state["hangup_attempts"] += 1
         state["call_exists"] = False
     elif method == "Activate":
         state["activate_attempts"] += 1
-        rc = 1
+        if state["scenario"] == "activate_success":
+            state["transport_state"] = "active"
+        elif state["scenario"] == "active_after_error":
+            state["transport_state"] = "active"
+            print("org.pipewire.Telephony.Error.InvalidState")
+            rc = 1
+        else:
+            print("org.pipewire.Telephony.Error.InvalidState")
+            rc = 1
     else:
         rc = 2
 else:
@@ -98,7 +114,7 @@ class GuardedProbeTests(unittest.TestCase):
             for executable, content in (
                 ("bluetoothctl", FAKE_BLUEZ),
                 ("busctl", FAKE_BUSCTL),
-                ("pw-dump", "#!/bin/sh\nexit 0\n"),
+                ("pw-dump", "#!/bin/sh\nprintf '%s\\n' '[{\"type\":\"PipeWire:Interface:Node\",\"info\":{\"props\":{\"api.bluez5.address\":\"02:00:00:00:00:01\",\"api.bluez5.profile\":\"headset-head-unit\",\"media.class\":\"Audio/Source\"}}},{\"type\":\"PipeWire:Interface:Node\",\"info\":{\"props\":{\"api.bluez5.address\":\"02:00:00:00:00:01\",\"api.bluez5.profile\":\"headset-head-unit\",\"media.class\":\"Audio/Sink\"}}}]'\n"),
                 ("wpctl", "#!/bin/sh\nexit 0\n"),
             ):
                 path = bin_dir / executable
@@ -112,6 +128,8 @@ class GuardedProbeTests(unittest.TestCase):
                 "dial_attempts": 0,
                 "hangup_attempts": 0,
                 "activate_attempts": 0,
+                "transport_state": "idle",
+                "transport_reads": 0,
             }
             state_file.write_text(json.dumps(state), encoding="utf-8")
             env = {
@@ -123,6 +141,7 @@ class GuardedProbeTests(unittest.TestCase):
                 "NATIVEPAIR_SCO_STATE_TIMEOUT": "1",
                 "NATIVEPAIR_CALL_ACTIVE_TIMEOUT": "1",
                 "NATIVEPAIR_HFP_CONNECT_TIMEOUT": "1",
+                "NATIVEPAIR_SCO_HUMAN_WINDOW": "1",
             }
             argv = ["bash", str(script)]
             if dial:
@@ -191,12 +210,56 @@ class GuardedProbeTests(unittest.TestCase):
         run, state = self.run_probe(SCO, dial=True)
         self.assertNotEqual(run.returncode, 0)
         self.assertIn("call_active_observed=yes", run.stdout)
-        self.assertIn("sco_error=activate_failed", run.stdout)
+        self.assertIn("sco_error=activate_failed_transport_inactive", run.stdout)
+        self.assertIn("transport_state_after_activate_error=idle", run.stdout)
+        self.assertIn("activate_error_class=org.pipewire.Telephony.Error.InvalidState", run.stdout)
         self.assertIn("cleanup_hangup_attempted=yes", run.stdout)
         self.assertEqual(state["dial_attempts"], 1)
         self.assertEqual(state["activate_attempts"], 1)
         self.assertEqual(state["hangup_attempts"], 1)
         self.assertFalse(state["call_exists"])
+
+    def test_sco_auto_active_skips_activate(self):
+        run, state = self.run_probe(SCO, "already_active", dial=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn("transport_state_before_activate=active", run.stdout)
+        self.assertIn("transport_already_active_before_activate=yes", run.stdout)
+        self.assertIn("transport_activate_invoked=no", run.stdout)
+        self.assertIn("transport_activation_path=already_active", run.stdout)
+        self.assertIn("pipewire_hfp_nodes_observed=yes", run.stdout)
+        self.assertEqual(state["activate_attempts"], 0)
+        self.assertEqual(state["hangup_attempts"], 1)
+        self.assertFalse(state["call_exists"])
+
+    def test_sco_pending_transport_waits_for_auto_activation(self):
+        run, state = self.run_probe(SCO, "pending_then_active", dial=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn("transport_state_before_activate=pending", run.stdout)
+        self.assertIn("transport_pending_wait=yes", run.stdout)
+        self.assertIn("transport_activate_invoked=no", run.stdout)
+        self.assertIn("transport_activation_path=pending_wait", run.stdout)
+        self.assertEqual(state["activate_attempts"], 0)
+        self.assertEqual(state["hangup_attempts"], 1)
+
+    def test_sco_error_but_transport_auto_active(self):
+        run, state = self.run_probe(SCO, "active_after_error", dial=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn("transport_activate_accepted=no", run.stdout)
+        self.assertIn("transport_state_after_activate_error=active", run.stdout)
+        self.assertIn("transport_activation_path=error_but_transport_active", run.stdout)
+        self.assertIn("probe_complete=yes", run.stdout)
+        self.assertEqual(state["activate_attempts"], 1)
+        self.assertEqual(state["hangup_attempts"], 1)
+
+    def test_sco_explicit_activate_success(self):
+        run, state = self.run_probe(SCO, "activate_success", dial=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn("transport_activate_accepted=yes", run.stdout)
+        self.assertIn("transport_state_after_activate=active", run.stdout)
+        self.assertIn("transport_activation_path=accepted", run.stdout)
+        self.assertIn("probe_complete=yes", run.stdout)
+        self.assertEqual(state["activate_attempts"], 1)
+        self.assertEqual(state["hangup_attempts"], 1)
 
     def test_sco_wait_timeout_triggers_cleanup_without_activate(self):
         run, state = self.run_probe(SCO, "not_active", dial=True)
