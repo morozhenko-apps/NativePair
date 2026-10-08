@@ -384,40 +384,120 @@ if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then
   exit 1
 fi
 
-set +e
-busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" Activate >"$ACTIVATE_REPLY" 2>&1
-ACTIVATE_STATUS=$?
-set -e
+# When the remote party answers, the AG may already have opened SCO.
+# Read the transport before invoking Activate: a duplicate method call is
+# not required and PipeWire may legitimately reject it as InvalidState.
+TRANSPORT_STATE_BEFORE_ACTIVATE="$(read_transport_state || true)"
+printf 'transport_state_before_activate=%s\n' "${TRANSPORT_STATE_BEFORE_ACTIVATE:-unknown}"
 
-if [[ $ACTIVATE_STATUS -ne 0 ]]; then
-  echo "transport_activate_accepted=no"
-  ACTIVATE_ERROR_CLASS="$(
-    {
-      grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState|NotSupported|InProgress|Failed|CME)|org\.freedesktop\.DBus\.Error\.(InvalidArgs|Failed)' "$ACTIVATE_REPLY" ||
-        true
-    } |
-      head -n 1
-  )"
-  printf 'activate_error_class=%s\n' "${ACTIVATE_ERROR_CLASS:-unknown}"
+ACTIVATE_INVOKED=no
+ACTIVATE_RESULT=not_needed
+ACTIVATE_STATUS=not_called
+LAST_STATE="$TRANSPORT_STATE_BEFORE_ACTIVATE"
+ACTIVE_SEEN=no
+
+case "$TRANSPORT_STATE_BEFORE_ACTIVATE" in
+  active)
+    echo "transport_already_active_before_activate=yes"
+    ACTIVE_SEEN=yes
+    ACTIVATE_RESULT=already_active
+    ;;
+  pending)
+    echo "transport_already_active_before_activate=no"
+    ACTIVATE_RESULT=pending_wait
+    echo "transport_pending_wait=yes"
+    # Existing SCO negotiation is in progress; do not race it with Activate.
+    for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do
+      LAST_STATE="$(read_transport_state || true)"
+      if [[ "$LAST_STATE" == active ]]; then
+        ACTIVE_SEEN=yes
+        break
+      fi
+      [[ "$LAST_STATE" == idle || "$LAST_STATE" == error ]] && break
+      sleep 0.1
+    done
+    ;;
+  idle)
+    echo "transport_already_active_before_activate=no"
+    ACTIVATE_INVOKED=yes
+    echo "transport_activate_invoked=yes"
+    set +e
+    busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
+      "$TRANSPORT_IFACE" Activate >"$ACTIVATE_REPLY" 2>&1
+    ACTIVATE_STATUS=$?
+    set -e
+
+    if [[ $ACTIVATE_STATUS -ne 0 ]]; then
+      echo "transport_activate_accepted=no"
+      ACTIVATE_RESULT=rejected
+      ACTIVATE_ERROR_CLASS="$(
+        {
+          grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState|InvalidFormat|NotSupported|InProgress|Failed|CME)|org\.freedesktop\.DBus\.Error\.(InvalidArgs|Failed|NoReply|Timeout|AccessDenied|ServiceUnknown)' "$ACTIVATE_REPLY" ||
+            true
+        } | head -n 1
+      )"
+      if [[ -z "$ACTIVATE_ERROR_CLASS" ]]; then
+        if grep -Eqi 'timed out|timeout' "$ACTIVATE_REPLY"; then
+          ACTIVATE_ERROR_CLASS=timeout
+        elif grep -Eqi 'invalid state|already active' "$ACTIVATE_REPLY"; then
+          ACTIVATE_ERROR_CLASS=invalid_state
+        else
+          ACTIVATE_ERROR_CLASS=unknown
+        fi
+      fi
+      printf 'activate_error_class=%s\n' "$ACTIVATE_ERROR_CLASS"
+      LAST_STATE="$(read_transport_state || true)"
+      printf 'transport_state_after_activate_error=%s\n' "${LAST_STATE:-unknown}"
+      # A remote SCO transition can race with a failed/late method reply.
+      # Allow a brief, bounded readback but do not treat method success as proven.
+      for _ in $(seq 1 15); do
+        [[ "$LAST_STATE" == active ]] && { ACTIVE_SEEN=yes; break; }
+        [[ "$LAST_STATE" == error ]] && break
+        sleep 0.1
+        LAST_STATE="$(read_transport_state || true)"
+      done
+      if [[ "$LAST_STATE" == active ]]; then
+        ACTIVE_SEEN=yes
+        ACTIVATE_RESULT=error_but_transport_active
+      fi
+    else
+      echo "transport_activate_accepted=yes"
+      ACTIVATE_RESULT=accepted
+    fi
+    ;;
+  *)
+    echo "transport_already_active_before_activate=unknown"
+    ACTIVATE_RESULT=unavailable_state
+    ;;
+esac
+
+if [[ "$ACTIVATE_INVOKED" != yes ]]; then
+  echo "transport_activate_invoked=no"
+fi
+
+if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" != 0 ]]; then
+  printf 'transport_state_after_activate=%s\n' "${LAST_STATE:-unknown}"
+  echo "transport_active_observed=no"
   echo "probe_complete=no"
-  echo "sco_error=activate_failed"
+  echo "sco_error=activate_failed_transport_inactive"
   exit 1
 fi
-echo "transport_activate_accepted=yes"
 
-ACTIVE_SEEN=no
-LAST_STATE=""
-for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do
-  LAST_STATE="$(read_transport_state || true)"
-  if [[ "$LAST_STATE" == active ]]; then
-    ACTIVE_SEEN=yes
-    break
-  fi
-  sleep 0.1
-done
+if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" == 0 ]]; then
+  for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do
+    LAST_STATE="$(read_transport_state || true)"
+    if [[ "$LAST_STATE" == active ]]; then
+      ACTIVE_SEEN=yes
+      break
+    fi
+    [[ "$LAST_STATE" == error ]] && break
+    sleep 0.1
+  done
+fi
 
 printf 'transport_state_after_activate=%s\n' "${LAST_STATE:-unknown}"
 echo "transport_active_observed=$ACTIVE_SEEN"
+echo "transport_activation_path=$ACTIVATE_RESULT"
 
 if [[ "$ACTIVE_SEEN" != yes ]]; then
   echo "probe_complete=no"
@@ -470,4 +550,8 @@ fi
 HANGUP_DONE=yes
 echo "hangup_all_accepted=yes"
 echo "probe_complete=yes"
-echo "note=sco_transport_and_pipewire_nodes_proven_human_bidirectional_audio_confirmation_required"
+if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then
+  echo "note=sco_transport_and_nodes_observed_despite_activate_error_human_audio_routing_confirmation_required"
+else
+  echo "note=sco_transport_and_nodes_observed_human_audio_routing_confirmation_required"
+fi
