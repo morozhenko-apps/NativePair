@@ -72,6 +72,12 @@ The Debian package gate validates:
 
 The package gate is an integration/contract check, not a substitute for daemon or protocol tests.
 
+## HFP mutation-probe contract tests
+
+HFP real-call probes are never exercised against hardware in CI. Synthetic external-command adapters model `bluetoothctl` and `busctl` for the actual scripts, covering no-call preflight, pre-existing-call rejection, successful dial/hangup, ambiguous Dial failure after side-effect, and SCO activation failure cleanup. Test fixtures must contain only placeholder addresses/numbers and assert that no dialed number appears in stdout/stderr.
+
+The central safety invariant: once a guarded `Dial` has been attempted, a probe must make a bounded `HangupAll` cleanup attempt if no explicit successful hangup was already performed, even when the Dial method reply is missing or fails. Calls are not created by CI.
+
 ## Hardware verification
 
 Hardware tests must document:

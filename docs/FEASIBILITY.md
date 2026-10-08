@@ -286,6 +286,23 @@ Following two failed guarded SCO attempts, game audio exhibited intermittent aud
 
 Each stage must record both the objective PipeWire snapshot and the user's audible observation. A failure must not be attributed to Bluetooth RF quality merely because a Bluetooth reset clears it: BlueZ HFP profile state, SCO transport state, PipeWire graph scheduling, and headset firmware/radio coexistence remain separate hypotheses. Do not automatically flip the entire Bluetooth controller as product cleanup without a scoped recovery design.
 
+### SCO probe safety-hardening plan (no real dial)
+
+The already implemented HFP probes have a cleanup gap: `Dial` can reach the phone before the D-Bus method reply fails or times out, yet the scripts currently mark the call as cleanup-owned only after a successful D-Bus reply. In that uncertain outcome a real call could continue without cleanup.
+
+**Scope / invariants:**
+
+- Preserve default preflight behavior: no Dial, no HangupAll, no SCO activation.
+- Record `DIAL_ATTEMPTED` immediately before attempting the real `Dial` mutation, **after** successfully confirming no pre-existing call objects.
+- For either a confirmed or an ambiguous Dial result, make a bounded best-effort `HangupAll` attempt on error/signal unless an earlier explicit `HangupAll` succeeded.
+- Never call HangupAll when a pre-existing call was detected or `Dial` was not attempted.
+- Never print recipient numbers or call metadata, including mocked outputs.
+- Keep user-visible `--dial` behavior and real-call approval policy unchanged; do not implement or select any duplex routing architecture.
+- Test normal no-dial preflight, active-call refusal, acknowledged call, and ambiguous-Dial cleanup using synthetic/fake D-Bus service replies; hardware calls remain manually approved tests only.
+- Integrate deterministic mock contract tests into the dev CI one pass (not ten-run flaky gate), with shell syntax checking retained.
+
+**Risk / rollback:** `HangupAll` is an AudioGateway-level method; a concurrent unrelated call that begins after the no-call guard might be affected. Scope this recovery only to probes that attempted Dial after an observed empty call list and keep the timeout bounded. The change is independently reversible by reverting its implementation commit. A per-call teardown design belongs in the later M4 lifecycle/ownership architecture and requires separate review.
+
 ## Known BlueZ mpris-proxy interference
 
 On the Ubuntu 26.04 reference host, BlueZ 5.85-4ubuntu0.2 produced an `mpris-proxy` SIGSEGV while MAP feasibility testing was active.
