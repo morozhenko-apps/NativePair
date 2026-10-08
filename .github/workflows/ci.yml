@@ -95,6 +95,9 @@ jobs:
           python3 -m py_compile scripts/probe_call_audio_watch.py
           python3 -m unittest discover -s scripts/tests -p 'test_call_audio_watch.py' -v
 
+      - name: Test guarded HFP call and SCO probes
+        run: python3 -m unittest discover -s scripts/tests -p 'test_hfp_probe_contract.py' -v
+
       - name: Build Debian package
         id: package
         shell: bash
