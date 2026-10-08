@@ -306,6 +306,8 @@ Diagnostic revision, before any further real call:
 
 The new decision logic must be covered by deterministic fake-D-Bus contract tests and pass the dev single-run CI. The next hardware call requires fresh explicit user approval. No PipeWire graph links, system defaults, or call-audio architecture are to be changed in this diagnostic revision.
 
+**Diagnostic revision implemented (dev, 2026-10-08):** `f4cf87b` reads the transport state on the confirmed active call, skips duplicate activation when already `active`, waits for in-flight `pending`, and checks the transport after an error. Method failures remain reported, even when the transport becomes active independently. It still requires observable HFP source/sink nodes before opening a bounded human check window. `21b0059` extends the guarded Bash probe contract suite to 12 synthetic cases, including automatically active SCO, pending-to-active, successful Activate, and error-with-active-transport. [Dev CI run 37838422971](https://github.com/morozhenko-apps/NativePair/actions/runs/37838422971) passed all jobs. No additional physical calls were made. Next evidence gate remains a separately authorized live call plus confirmation of **which physical output and microphone** handled the conversation, not merely that both participants could hear each other.
+
 ### SCO probe safety-hardening plan (no real dial)
 
 The already implemented HFP probes have a cleanup gap: `Dial` can reach the phone before the D-Bus method reply fails or times out, yet the scripts currently mark the call as cleanup-owned only after a successful D-Bus reply. In that uncertain outcome a real call could continue without cleanup.
