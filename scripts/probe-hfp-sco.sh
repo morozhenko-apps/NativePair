@@ -100,15 +100,21 @@ NODE_RESULT="$TMP_DIR/nodes.result"
 AG_PATH=""
 CALL_PATH=""
 CALL_STATE=""
-DIAL_ACCEPTED=no
+DIAL_ATTEMPTED=no
 HANGUP_DONE=no
 
 cleanup() {
   local status=$?
   trap - EXIT INT TERM
 
-  if [[ "$DIAL_ACCEPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then
-    busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"       "$HFP_AG_IFACE" HangupAll >/dev/null 2>&1 || true
+  if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then
+    echo "cleanup_hangup_attempted=yes"
+    if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
+      "$HFP_AG_IFACE" HangupAll >/dev/null 2>&1; then
+      echo "cleanup_hangup_accepted=yes"
+    else
+      echo "cleanup_hangup_accepted=no"
+    fi
   fi
 
   rm -rf "$TMP_DIR"
@@ -322,6 +328,10 @@ fi
 
 echo "actual_dial=yes"
 
+# A remote dial can occur even when the D-Bus method reply fails or times out.
+# Pre-existing calls were already rejected before setting this ownership guard.
+DIAL_ATTEMPTED=yes
+
 set +e
 busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   "$HFP_AG_IFACE" Dial s "$RECIPIENT" >"$DIAL_REPLY" 2>&1
 DIAL_STATUS=$?
@@ -333,7 +343,6 @@ if [[ $DIAL_STATUS -ne 0 ]]; then
   echo "sco_error=dial_failed"
   exit 1
 fi
-DIAL_ACCEPTED=yes
 echo "dial_call_accepted=yes"
 
 CALL_SEEN=no

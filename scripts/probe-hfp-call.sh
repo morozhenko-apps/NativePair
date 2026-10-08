@@ -71,7 +71,7 @@ for command in bluetoothctl busctl grep head mktemp sleep seq timeout; do
 done
 
 TMP_DIR="$(mktemp -d)"
-DIAL_ACCEPTED=no
+DIAL_ATTEMPTED=no
 HANGUP_DONE=no
 AG_PATH=""
 MODEMS_REPLY="$TMP_DIR/modems.reply"
@@ -81,9 +81,16 @@ HANGUP_REPLY="$TMP_DIR/hangup.reply"
 
 cleanup() {
   local status=$?
+  trap - EXIT INT TERM
 
-  if [[ "$DIAL_ACCEPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then
-    busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"       org.pipewire.Telephony.AudioGateway1 HangupAll >/dev/null 2>&1 || true
+  if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then
+    echo "cleanup_hangup_attempted=yes"
+    if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \
+      org.pipewire.Telephony.AudioGateway1 HangupAll >/dev/null 2>&1; then
+      echo "cleanup_hangup_accepted=yes"
+    else
+      echo "cleanup_hangup_accepted=no"
+    fi
   fi
 
   rm -rf "$TMP_DIR"
@@ -175,6 +182,10 @@ fi
 
 echo "actual_dial=yes"
 
+# An outgoing call may be sent before a missing/error D-Bus reply is returned.
+# The no-existing-call check must have succeeded before this point.
+DIAL_ATTEMPTED=yes
+
 set +e
 busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.pipewire.Telephony.AudioGateway1 Dial s "$RECIPIENT" >"$DIAL_REPLY" 2>&1
 DIAL_STATUS=$?
@@ -187,7 +198,6 @@ if [[ $DIAL_STATUS -ne 0 ]]; then
   exit 1
 fi
 echo "dial_call_accepted=yes"
-DIAL_ACCEPTED=yes
 
 CALL_SEEN=no
 for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do
