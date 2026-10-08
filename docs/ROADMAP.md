@@ -45,6 +45,8 @@ Infrastructure:
 
 Deliverable: a capability matrix backed by reproducible commands/logs and no personal payloads in committed fixtures.
 
+The provisional M1 Mode B scope (~196 scenario candidates, including ~40 interaction cases) and ADB automation forecast are in [M1 Mode B Test Matrix](TEST_MATRIX_M1.md). These numbers are not execution or coverage results.
+
 ## M2 - Core daemon
 
 Status: **not started**

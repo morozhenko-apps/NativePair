@@ -80,6 +80,10 @@ Twelve synthetic guarded-call contract cases run once per dev CI pass, without r
 
 The central safety invariant: once a guarded `Dial` has been attempted, a probe must make a bounded `HangupAll` cleanup attempt if no explicit successful hangup was already performed, even when the Dial method reply is missing or fails. Calls are not created by CI.
 
+## M1 Mode B planning baseline
+
+The provisional scenario counts, interaction matrix, N1–N12 plan and local Ubuntu + ADB automation forecast are recorded in [M1 Mode B Test Matrix and Local ADB Automation Plan](TEST_MATRIX_M1.md). They are estimates, not measured coverage, and must be reconciled with a complete per-file inventory.
+
 ## Hardware verification
 
 Hardware tests must document:
