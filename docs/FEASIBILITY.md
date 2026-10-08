@@ -288,6 +288,24 @@ Following two failed guarded SCO attempts, game audio exhibited intermittent aud
 
 Each stage must record both the objective PipeWire snapshot and the user's audible observation. A failure must not be attributed to Bluetooth RF quality merely because a Bluetooth reset clears it: BlueZ HFP profile state, SCO transport state, PipeWire graph scheduling, and headset firmware/radio coexistence remain separate hypotheses. Do not automatically flip the entire Bluetooth controller as product cleanup without a scoped recovery design.
 
+### Third guarded SCO attempt (2026-10-08)
+
+After separately approved real-call testing, the Pixel 6a HFP probe reached `call_state_before_activate=active` and `call_active_observed=yes` for the first time. The subsequent explicit `AudioGatewayTransport1.Activate` invocation returned nonzero. Existing error-name allowlisting printed `activate_error_class=unknown`; the probe immediately ran its bounded `HangupAll` cleanup, which was accepted.
+
+Human observation: both people could hear each other during the very short call. The exact endpoints (phone loudspeaker/microphone versus computer headphones/microphone) were **not independently confirmed**. This is evidence of an audible two-way call, but **not** proof of Linux-routed SCO audio or headset/microphone bridging. Neither the SCO transport state after the error nor HFP node readiness was measured.
+
+Upstream PipeWire `spa/plugins/bluez5/backend-native.c` explicitly returns `BT_TELEPHONY_ERROR_INVALID_STATE` from `hfp_hf_transport_activate` when its transport already has an open SCO file descriptor. Thus an activation error may be benign if the SCO transport auto-activated while the remote party answered. **This has not been established for the observed run:** the error class was unknown and no post-error read was taken.
+
+Diagnostic revision, before any further real call:
+
+- Observe transport `State` after the call becomes `active`, before any `Activate` mutation. If it is already `active`, avoid the redundant method call.
+- If the transport is `pending`, wait a bounded interval for it to become `active`, instead of racing it with a second activation request.
+- If still `idle`, invoke `Activate` at most once. On a rejected method reply, safely classify the error and **read back the resulting transport State** before deciding whether to stop. A method error is never relabelled as a method success.
+- Inspect actual Pixel HFP `Audio/Source` and `Audio/Sink` nodes if the transport becomes active. Do not infer desktop audio routing merely from a successful phone-to-phone conversation.
+- Preserve existing cleanup, privacy suppression, no-call default, and an explicitly approved human verification window.
+
+The new decision logic must be covered by deterministic fake-D-Bus contract tests and pass the dev single-run CI. The next hardware call requires fresh explicit user approval. No PipeWire graph links, system defaults, or call-audio architecture are to be changed in this diagnostic revision.
+
 ### SCO probe safety-hardening plan (no real dial)
 
 The already implemented HFP probes have a cleanup gap: `Dial` can reach the phone before the D-Bus method reply fails or times out, yet the scripts currently mark the call as cleanup-owned only after a successful D-Bus reply. In that uncertain outcome a real call could continue without cleanup.
