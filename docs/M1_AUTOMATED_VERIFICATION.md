@@ -337,32 +337,33 @@ staging is intentionally persistent and cleared by the next build, as before.
 
 ## Canonical implemented inventory
 
-Updated after the [GetCalls correction](M1_GETCALLS_COMPATIBILITY.md) and
-[HFP gateway classification](M1_HFP_NODE_CLASSIFICATION.md).
+Updated after the [GetCalls correction](M1_GETCALLS_COMPATIBILITY.md),
+[HFP gateway classification](M1_HFP_NODE_CLASSIFICATION.md) and
+[direct-uplink observer](M1_HFP_UPLINK_OBSERVATION.md).
 Earlier execution and trace records below retain their original source/counts.
 
 The [canonical Python inventory](evidence/m1-automated-test-inventory.json)
-contains 1665 uniquely named methods, including 17 existing methods. The
-implementation added 1648 Python scenarios and three Rust methods containing
+contains 1869 uniquely named methods, including 17 existing methods. The
+implementation added 1852 Python scenarios and three Rust methods containing
 495 table rows. Method counts, table rows and assertions have separate units;
 do not add them together as a coverage percentage.
 
 | Primary category | Complete Python suite | Added Python scenarios |
 | --- | ---: | ---: |
-| Positive | 292 | 283 |
-| N1 input validation | 294 | 294 |
-| N2 boundaries | 163 | 162 |
-| N3 IPC/tool failures | 152 | 149 |
-| N4 replay/idempotency | 23 | 23 |
-| N5 races/state changes | 23 | 20 |
-| N6 corrupt/stale data | 431 | 431 |
-| N7 permissions/guards/missing tools | 157 | 156 |
+| Positive | 328 | 319 |
+| N1 input validation | 316 | 316 |
+| N2 boundaries | 171 | 170 |
+| N3 IPC/tool failures | 158 | 155 |
+| N4 replay/idempotency | 28 | 28 |
+| N5 races/state changes | 33 | 30 |
+| N6 corrupt/stale data | 517 | 517 |
+| N7 permissions/guards/missing tools | 186 | 185 |
 | N8 reproducible epoch | 3 | 3 |
-| N9 interruption/early hangup | 65 | 65 |
-| N10 privacy | 22 | 22 |
+| N9 interruption/early hangup | 66 | 66 |
+| N10 privacy | 23 | 23 |
 | N11 entitlements | 0 (not applicable) | 0 |
 | N12 storage/cleanup failures | 40 | 40 |
-| **Total** | **1665** | **1648** |
+| **Total** | **1869** | **1852** |
 
 Each method has one primary category. Other invariants asserted by the same
 test (privacy, no duplicate mutation and cleanup) are not counted a second time.
@@ -535,3 +536,26 @@ second canonical-empty check. Six retained wire trials and eight new HFP trials
 were revalidated: all fourteen unchanged selections passed, all fourteen
 mutations failed by assertions. Source hashes are unchanged after stability.
 All owned terminal/process sessions completed and closed (Terminal closed).
+
+## Direct-uplink observer continuation (2026-10-10)
+
+The [bounded addition](M1_HFP_UPLINK_OBSERVATION.md) adds 203 pure/read-adapter
+contracts and one mutation-execution regression. All 1869 Python methods passed
+once in 277.339 seconds on 051cc07; Rust formatting, Clippy, eight Rust methods,
+shell syntax and new-observer compilation passed. Thirteen targeted mutation
+baselines passed and all edits were killed by assertions. The mutation runner
+now prevents stale bytecode from masking equal-length, equal-mtime source edits.
+
+All 22 prior production hashes, the exact 182-case stability inventory and its
+test/harness files are unchanged from the prior ten-pass source. Retain those
+ten successful process passes with zero observed flakes; the current full
+baseline also exercises that lane. New pure/static cases are not repeated ten
+times. The native package payload is unchanged and does not contain probes.
+
+[Current source-bound execution](evidence/m1-hfp-uplink-execution.json) records
+exact counts, hashes, mutation summaries and retained evidence applicability.
+Pixel correlation and all four no-call probes pass; no existing call, idle SCO,
+RejectSCO=false, no HFP nodes and an unmuted ALSA default source are observed.
+No new call, audio capture, mute/default/link mutation or service restart ran.
+Physical uplink remains open pending a fresh approved call and human check.
+Remote CI has not run for these local commits. Terminal closed.

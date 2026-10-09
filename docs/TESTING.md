@@ -162,7 +162,7 @@ run plus six targeted mutation trials. See [the correction record](M1_GETCALLS_C
 
 ## HFP gateway node regression
 
-The current inventory contains 1665 Python methods, including 218 explicit
+The gateway-correction inventory contained 1665 Python methods, including 218 explicit
 profile/class/direction/default-device and early-hangup observation rows in
 `test_hfp_node_classification.py`. Only the external command adapters are fake;
 SCO/routing/health scripts and shared classification execute unchanged.
@@ -201,3 +201,9 @@ For source 39172c9, the complete 1665-method suite passed once and the existing
 182-case process lane passed nine further runs: ten successes including the
 baseline, with zero observed flakes. Static/Rust/pure cases were not repeated.
 Results and source hashes: [execution artifact](evidence/m1-hfp-node-execution.json).
+
+For source 051cc07, all 1869 methods passed once in 277.339 seconds, with 13
+new assertion-killed mutations. All 22 prior production hashes, the exact
+182-case lane and its test/harness sources are unchanged; retain their ten-pass
+evidence and do not repeat new pure/static cases. Rust checks pass again.
+Latest counts, hashes and hardware readiness: [uplink execution](evidence/m1-hfp-uplink-execution.json).

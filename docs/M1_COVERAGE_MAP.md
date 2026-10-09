@@ -1,6 +1,7 @@
 # M1 functional coverage and handoff map
 
-Date: 2026-10-09. Scope: all 22 current production source files.
+Date: 2026-10-10. Scope: all 23 current production source files, including the
+additive uplink observer mapped in its dedicated section below.
 
 Functions include embedded Python and top-level entry behavior. Each row maps
 its independent contract branches to executable assertion families. Exact
@@ -36,7 +37,7 @@ This functional review is not an instrumented 100% branch coverage percentage.
 
 The required artifacts, expected bounds, negative applicability and meaningful
 interactions were inventoried before implementation. The complete inventory
-contains 1665 Python methods (1648 added), and Rust has eight methods including
+contains 1869 Python methods (1852 added), and Rust has eight methods including
 three added methods with 495 explicit domain rows. Pure tests use fake clocks
 and command adapters. Integration fixtures execute the actual scripts with
 hermetic external adapters; no subject under test is mocked.
@@ -101,13 +102,27 @@ Bluetooth source/sink directions from physical default-device classes.
 The new failure path records final call/transport states before owned cleanup;
 failed or malformed reads remain unknown. All 218 planned combinations are
 explicit, with the full [branch/negative/interaction inventory](M1_HFP_NODE_CLASSIFICATION.md).
-Live validation of the corrected classifier remains pending; the original
-human-confirmed duplex call and failed automatic node result retain their
-separate evidence levels. No instrumented 100% branch-coverage claim is made.
+Live validation of the corrected classifier subsequently passed on 2026-10-10;
+the original human-confirmed duplex call and failed automatic node result retain
+their separate evidence levels. Physical uplink confirmation remains open.
+No instrumented 100% branch-coverage claim is made.
 
-Current acceptance evidence: all 1665 Python methods passed once; the same
+Gateway-correction acceptance evidence: all 1665 Python methods passed once; the same
 182-case process lane passed ten consecutive executions (one in the baseline
 and nine process-only runs), with zero observed flakes. Static/Python compile
 and native package checks passed once. Rust is unchanged and retains its prior
-quality gate. [Current source-bound results](evidence/m1-hfp-node-execution.json)
-are separate from the historical source trace. Live revalidation remains open.
+quality gate. [Classification source-bound results](evidence/m1-hfp-node-execution.json)
+are separate from the historical source trace.
+
+## Direct HFP uplink observer
+
+| Production file | Functions / branches | Covered | Remaining / reason |
+| --- | --- | --- | --- |
+| scripts/probe_hfp_uplink.py | target validation; snapshot root/node/target/direction/link/source/default/state; sample decode/default/mute; CLI input/tools/failure/interrupt/exit | 203 explicit contracts in test_hfp_uplink; full branch and interaction map in M1_HFP_UPLINK_OBSERVATION.md | Physical live microphone and indirect/filter routes: outside direct-link classifier scope |
+| scripts/tests/review_mutations.py (verification tool) | Python execution without bytecode writes | Same-size/mtime edit regression in test_mutation_execution and its assertion-killed mutation | No product behavior change; Rust execution retained |
+
+The current 1869-method suite passed once in 277.339 seconds; all 13 new mutation
+trials were killed after passing baselines. Unchanged production hashes, exact
+stability inventory and its test/harness sources retain the earlier ten-pass
+process evidence. New pure/static contracts are not repeated for that lane.
+[Latest source-bound results](evidence/m1-hfp-uplink-execution.json).

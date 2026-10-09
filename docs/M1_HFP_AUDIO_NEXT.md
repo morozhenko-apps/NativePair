@@ -2,6 +2,13 @@
 
 Date: 2026-10-09. Mode: B — hardware verification. Branch: dev.
 
+Current continuation (2026-10-10): corrected endpoint enumeration passed its
+approved live attempt; wired laptop headphones and current internal microphone
+are identified, but the live physical uplink is still unverified. A standalone
+[passive direct-uplink observer](M1_HFP_UPLINK_OBSERVATION.md) is implemented,
+passes the 1869-method full suite and its idle Pixel preflight. Earlier stage
+records below are historical; no additional call is currently authorized.
+
 ## Analysis and scope
 
 The automated source contracts are complete locally. M1 remains open because
@@ -399,3 +406,25 @@ the owned command completed (Terminal closed). No source changes or automated
 test reruns were needed. The next physical-uplink verification requires a freshly
 approved live call with contemporaneous graph observation and a controlled
 physical-source check; do not infer that approval from this clarification.
+
+### Direct-uplink preparation complete (2026-10-10)
+
+The [observer plan and completed verification](M1_HFP_UPLINK_OBSERVATION.md)
+contain the full changed-artifact inventory, branch/negative/interaction map,
+204 added tests, 13 mutation assertion kills and source-bound execution evidence.
+The complete 1869-method Python suite and Rust quality gate pass. Existing
+production/process-lane sources are unchanged; retain their ten-pass stability
+evidence without repeating static/pure cases. Native packaging excludes probes.
+
+The selected Pixel is privately correlated, Bluetooth enabled, GetCalls empty,
+SCO idle and RejectSCO=false. All four preparation probes pass; no HFP nodes or
+orphan endpoints exist while idle. Current ALSA input is unmuted. No call or
+audio setting mutation occurred. [Preparation evidence](evidence/m1-hfp-uplink-preflight.txt).
+
+Ready to ask for one fresh call to the previously supplied private destination,
+both participants ready, and a brief manual Ubuntu input mute/unmute check during
+the existing human window. The agent only observes graph, selected input and mute
+state; it must not perform mute/default/link changes. Observe before owned-call
+cleanup and retain separate graph and human evidence. No new call is authorized
+yet. Reconfirm identity and no-existing-call guard immediately before any newly
+approved attempt. Terminal closed.

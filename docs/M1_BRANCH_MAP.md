@@ -1353,3 +1353,15 @@ Assertion families: [test_binary_contract](../scripts/tests/test_binary_contract
 | --- | --- | --- |
 | 9 | fn main() -> ExitCode { | test_binary_contract |
 | 13 | Some("--version" \| "-V") if args.next().is_none() => { | test_binary_contract |
+
+## scripts/probe_hfp_uplink.py
+
+Assertion family: [test_hfp_uplink](../scripts/tests/test_hfp_uplink.py).
+Full branch/negative/interaction inventory: [uplink observation](M1_HFP_UPLINK_OBSERVATION.md).
+
+| Method | Decisions | Assertion mapping |
+| --- | --- | --- |
+| _valid_target | type, exact ASCII format, length | target_validated, target_rejected |
+| snapshot | valid roots/nodes; exact address/profile/direction; active directed links; strict IDs; distinct sources; default identity/API/state | direction_and_target_checked, unknown_endpoints_ignored, invalid_roots_rejected, invalid_nodes_and_links_ignored, inactive_links_ignored, invalid_link_ids_ignored, uint32_link_boundaries, stale_or_invalid_defaults, default_states_allowlisted, default_and_source_api_checked, distinct_origins_counted, unrelated_links_do_not_prove_uplink, private_fields_never_emitted |
+| sample | target refusal, failed/malformed dump, strict snapshot, missing/default/mute reads | target_rejected, dump_failures_are_unknown, default_read_failure_is_unknown, sample_preserves_classification, empty_or_corrupt_entries_are_unknown_defaults |
+| main | help, generic argument refusal, missing target/tool, sample failure, interrupt, success | cli_success_or_help, cli_rejects_arguments_privately, cli_requires_target_and_tools, cli_read_failure_fails, cli_interrupt_does_not_retry |

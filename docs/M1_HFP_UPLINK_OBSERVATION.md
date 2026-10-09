@@ -63,14 +63,15 @@ reconcile exact categories and scenarios with the executable inventory.
 
 ## Negative matrix
 
-Every applicable cell is planned until execution is recorded below.
+All applicable cells below are covered by the scoped contracts. Whole-suite
+status is recorded separately; inapplicable cells retain their rationale.
 
 | Artifact | Positive | N1 | N2 | N3 | N4 | N5 | N6 | N7 | N8 | N9 | N10 | N11 | N12 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| target | ? valid | ? invalid | ? length | x pure | x pure | x pure | ? types | ? strict address | x no locale/time | x pure | ? no echo | x no billing | x no storage |
-| snapshot | ? links | x target helper | ? uint32/counts | x pure | ? duplicates | ? stale defaults | ? corrupt graph | ? exact target | x no locale/time | x pure | ? allowlist | x no billing | x no storage |
-| sample | ? actual snapshot | x no public input parsing | x inherited IDs | ? read failure | x read-only | ? vanished defaults | ? bad JSON | x inherited target | x no time decisions | x main handles interrupt | ? captured output | x no billing | x no writes |
-| main | ? success/help | ? arguments | x no limits introduced | ? sample failure | x no mutation | x one-shot | x sample handles decode | ? missing tool/target | x no locale/time | ? interrupt | ? generic errors | x no billing | x no writes |
+| target | Covered: valid | Covered: invalid | Covered: length | x pure | x pure | x pure | Covered: types | Covered: strict address | x no locale/time | x pure | Covered: no echo | x no billing | x no storage |
+| snapshot | Covered: links | x target helper | Covered: uint32/counts | x pure | Covered: duplicates | Covered: stale defaults | Covered: corrupt graph | Covered: exact target | x no locale/time | x pure | Covered: allowlist | x no billing | x no storage |
+| sample | Covered: actual snapshot | x no public input parsing | x inherited IDs | Covered: read failure | x read-only | Covered: vanished defaults | Covered: bad JSON | x inherited target | x no time decisions | x main handles interrupt | Covered: captured output | x no billing | x no writes |
+| main | Covered: success/help | Covered: arguments | x no limits introduced | Covered: sample failure | x no mutation | x one-shot | x sample handles decode | Covered: missing tool/target | x no locale/time | Covered: interrupt | Covered: generic errors | x no billing | x no writes |
 
 ## Interaction, coverage and mutation plan
 
@@ -85,8 +86,9 @@ Every applicable cell is planned until execution is recorded below.
 
 Coverage map: target helper — validation branches; snapshot — node/target/source/
 link/state branches; sample — dump/decode/default/mute branches; main — argument/
-target/tool/result/interrupt/exit branches. All are planned, none claimed covered
-yet. Existing unrelated production files retain their documented evidence.
+target/tool/result/interrupt/exit branches. These branches are now covered by the
+scoped contracts; full-suite status is separate. Existing unrelated production
+files retain their documented evidence.
 
 Mutation assertions must kill foreign target inclusion, downlink-as-uplink,
 inactive/reversed/dangling links, duplicate inflation, default substitution,
@@ -95,7 +97,10 @@ non-ALSA classification, malformed IDs, private state leakage and failure succes
 ## Progress
 
 - Analysis, inventory, branch map, negative matrix and plan: complete.
-- Implementation, execution, mutation review and idle hardware snapshot: pending.
+- Implementation and scoped execution: complete (203 uplink + one runner case).
+- Mutation review: complete (13 assertion kills with passing baselines).
+- Full-suite execution: complete, 1869 methods passed in 277.339 seconds.
+- Idle hardware snapshot: complete, selected Pixel correlated and four probes passed.
 - Live microphone proof: pending fresh single-call approval and human check.
 
 ### Mutation runner correction discovered during execution
@@ -131,3 +136,58 @@ All applicable planned matrix cells and coverage-map branches are now covered
 by explicit scoped contracts; full-suite execution and idle hardware readiness
 remain pending. The only production addition is the standalone observer;
 existing call, routing, watcher, decoder and command-adapter behavior is unchanged.
+
+## Next live-check protocol (not yet authorized)
+
+After green automated verification and a fresh ready-state preflight, request
+one call to the previously provided private test destination and readiness of
+both participants. Reconfirm the Pixel/paired-target correlation; preserve the
+existing no-call/RejectSCO guards, answer limits and owned HangupAll cleanup.
+Never print or persist the destination or target address. No automatic retry.
+
+At the existing 20-second human-window marker, take passive uplink and selected
+input-port snapshots while the call is active. The user may manually mute the
+Ubuntu input briefly and then unmute it during that window, with the remote
+participant reporting whether their voice disappeared and returned. Ask for
+readiness for that explicit check before dialing; do not treat covered microphone
+openings as an isolation test. The observer can report source mute changes but
+does not perform them. Do not automate mute/default/link changes or create
+recording streams. The call still ends through the unchanged owned cleanup.
+
+Keep three evidence levels separate: active call/SCO, direct target uplink graph
+and contemporaneous selected input/mute, and the remote participant's physical
+source confirmation. If a direct link is absent, report that limitation rather
+than assuming no filtered audio route. If a user input check is inconclusive,
+leave physical uplink proof open and retain the observations. After the attempt,
+confirm empty calls, idle transport and no orphan HFP endpoints read-only.
+
+## Final preparation state and handoff
+
+Implementation source: 051cc07; mutation execution correction: f2186df. All
+1869 Python methods passed in 277.339 seconds, with 204 new methods counted
+above. Rust fmt/Clippy/eight methods, shell syntax and observer compilation pass.
+All 13 mutation baselines pass and all edits fail by assertions. The 22 previous
+production hashes, 182 stability IDs and their test/harness files are unchanged;
+the prior ten-pass zero-observed-flake evidence remains applicable to that lane.
+No ten-run claim is made for the new pure observer; static checks run once.
+All scoped public functions, decision branches, rules, boundaries, applicable
+negative categories and listed interactions have explicit contracts. This is
+contract coverage, not a measured 100% line/arc percentage.
+
+Exactly one authorized Pixel 6a is available; Bluetooth is enabled and its local
+address matches exactly one paired BlueZ target entirely in memory. Transport,
+no-dial SCO, routing and new uplink probes all exit zero without stderr. There
+is no existing call, transport is idle and RejectSCO is false. Idle codec ID 2
+is not live codec proof. No HFP or orphan nodes exist while idle. The default
+input is ALSA, unmuted and suspended without an audio stream; no direct uplink
+is expected before a call. No call, capture, mute/default/link change, service
+restart or unrelated device operation occurred. All owned sessions closed.
+
+Evidence: [execution](evidence/m1-hfp-uplink-execution.json),
+[canonical inventory](evidence/m1-automated-test-inventory.json),
+[idle readiness](evidence/m1-hfp-uplink-preflight.txt). Remote CI is not run for
+these local commits. Native package payload is unchanged and excludes probes.
+The bounded automated/preparation task is complete; physical microphone proof
+remains pending. Next action: obtain one fresh guarded-call approval and both
+participants' readiness for the manual Ubuntu mute/unmute check described above.
+Do not dial from a generic continuation or reuse a consumed single-call approval.

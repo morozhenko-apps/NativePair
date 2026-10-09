@@ -2756,6 +2756,818 @@
     "category": "Positive"
   },
   {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_0_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_1_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_2_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_3_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_4_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_5_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_6_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_address_7_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_0_origin_42_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_0_origin_43_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_1_origin_42_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_1_origin_43_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_2_origin_42_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_2_origin_43_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_3_origin_42_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_3_origin_43_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_4_origin_42_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_api_4_origin_43_when_default_and_source_api_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_argument_0_when_cli_rejects_arguments_privately_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_argument_1_when_cli_rejects_arguments_privately_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_argument_2_when_cli_rejects_arguments_privately_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_argument_3_when_cli_rejects_arguments_privately_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_bool_alias_default_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_bool_alias_destination_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_bool_alias_origin_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_0_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_10_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_11_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_12_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_13_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_14_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_15_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_16_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_17_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_1_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_2_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_3_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_4_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_5_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_6_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_7_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_8_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_9_when_invalid_nodes_and_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_corrupt_entries_when_empty_or_corrupt_entries_are_unknown_defaults_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dangling_destination_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dangling_origin_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_0_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_1_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_2_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_3_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_4_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_5_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_6_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_7_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_8_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_default_9_when_stale_or_invalid_defaults_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_0_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_1_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_2_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_3_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_4_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_dump_5_when_dump_failures_are_unknown_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_duplicate_channels_when_distinct_origins_counted_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_duplicate_id_last_wins_when_distinct_origins_counted_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_duplicate_nodes_when_distinct_origins_counted_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_empty_graph_when_empty_or_corrupt_entries_are_unknown_defaults_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_0_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_1_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_2_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_3_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_4_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_5_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_6_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_7_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_8_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_0_id_9_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_0_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_1_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_2_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_3_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_4_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_5_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_6_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_7_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_8_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_endpoint_1_id_9_when_invalid_link_ids_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_failed_dump_when_cli_read_failure_fails_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_filter_path_unproven_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_help_when_cli_success_or_help_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_idle_when_cli_success_or_help_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_interrupted_read_when_cli_interrupt_does_not_retry_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_0_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_10_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_11_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_12_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_13_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_14_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_15_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_16_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_17_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_1_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_2_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_3_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_4_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_5_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_6_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_7_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_8_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_invalid_target_9_when_target_rejected_then_contract_holds",
+    "category": "N1"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_lowercase_when_target_validated_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_mixedcase_when_target_validated_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_private_graph_properties_when_private_fields_never_emitted_then_contract_holds",
+    "category": "N10"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_0_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_0_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_1_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_1_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_2_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_2_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_3_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_3_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_4_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_4_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_5_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_5_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_6_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_role_6_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_0_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_0_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_0_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_1_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_1_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_2_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_2_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_3_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_3_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_4_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_4_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_5_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_5_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_6_foreign_False_when_direction_and_target_checked_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_role_6_foreign_True_when_direction_and_target_checked_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_1_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_2_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_3_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_4_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_5_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_profile_6_when_unknown_endpoints_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_reversed_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_0_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_1_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_2_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_3_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_4_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_root_5_when_invalid_roots_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_self_link_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_short_help_when_cli_success_or_help_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_0_boundary_0_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_0_boundary_1_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_0_boundary_4294967294_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_0_boundary_4294967295_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_1_boundary_0_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_1_boundary_1_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_1_boundary_4294967294_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_side_1_boundary_4294967295_when_uint32_link_boundaries_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_mute_0_when_sample_preserves_classification_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_mute_1_when_sample_preserves_classification_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_mute_2_when_sample_preserves_classification_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_mute_3_when_sample_preserves_classification_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_read_0_when_default_read_failure_is_unknown_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_read_1_when_default_read_failure_is_unknown_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_read_2_when_default_read_failure_is_unknown_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_read_3_when_default_read_failure_is_unknown_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_read_4_when_default_read_failure_is_unknown_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_0_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_1_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_2_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_3_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_4_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_5_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_6_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_source_state_7_when_default_states_allowlisted_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_0_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_1_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_2_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_3_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_4_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_5_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_6_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_7_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_8_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_state_9_when_inactive_links_ignored_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_success_when_cli_success_or_help_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_target_0_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_target_1_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_target_2_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_target_3_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_tool_pw-dump_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_tool_wpctl_when_cli_requires_target_and_tools_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_two_endpoints_one_source_when_distinct_origins_counted_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_two_sources_when_distinct_origins_counted_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_uppercase_when_target_validated_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_wrong_default_class_when_unrelated_links_do_not_prove_uplink_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_uplink.UplinkContracts.test_given_zero_when_target_validated_then_contract_holds",
+    "category": "Positive"
+  },
+  {
     "id": "test_map_events_contract.EventParserContracts.test_given_changed_not_added_when_message_counted_then_contract_holds",
     "category": "N4"
   },
@@ -3154,6 +3966,10 @@
   {
     "id": "test_mns_process_contract.MnsProcessContracts.test_given_signatures_1111_when_compiled_profiles_classified_then_contract_holds",
     "category": "Positive"
+  },
+  {
+    "id": "test_mutation_execution.MutationExecutionContracts.test_given_same_size_same_mtime_edit_when_executed_then_assertion_kills_mutation",
+    "category": "N6"
   },
   {
     "id": "test_obex_contract.ObexContracts.test_given_map_folders_0_when_read_operation_rejected_then_contract_holds",

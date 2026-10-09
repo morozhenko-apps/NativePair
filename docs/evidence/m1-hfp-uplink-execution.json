@@ -1,0 +1,226 @@
+{
+  "date": "2026-10-10",
+  "timezone": "Europe/Lisbon",
+  "branch": "dev",
+  "source_commit": "051cc07",
+  "scope": "Additive passive direct HFP uplink observation and mutation bytecode regression",
+  "production_sha256": {
+    "scripts/build-deb.sh": "b165f6c5f1966d12a5a984c394ff851f816684dfb7e13e4f6911e08a0ec98283",
+    "scripts/verify-deb.sh": "7dbf034f18aa44ce032a7a2e3564ef3bed8942cb4265cd080a69380f90f63510",
+    "scripts/probe-audio-health.sh": "9c96f02833c48687d707214125623960d5422c038125dd5b231fff30b53f1c21",
+    "scripts/probe-audio-routing.sh": "f6c726897485c885d96958a2c77087817955513cd25e0335b9510969db547c10",
+    "scripts/probe-bluetooth.sh": "3f2de391212dfdd8536d6f810d3823c2d070ecdfb6576d66891ac0f488a1a886",
+    "scripts/probe-call-audio-watch.sh": "fc99b573fe6bd0c182124d64b633a3efc095713a718a5a579f578bc8f77e156a",
+    "scripts/probe-hfp.sh": "a4d5a855cffe08fbf17dc076bb709e7d7ff61f7b63afe20fdd7d7981b1ac01bc",
+    "scripts/probe-hfp-audio.sh": "abdf08617216b33734bf5f83f5cbb23e7795c9fd77a046e47808b27b0f92a3a5",
+    "scripts/probe-hfp-call.sh": "3b600265527912a0ed402d0e52a10c5b7e33d4e53ad843c0b25ab042cfc28442",
+    "scripts/probe-hfp-sco.sh": "b91936c3e22cf942ac5493b2b41ff6cdaa15f253805455d1aac0a9d1d371d990",
+    "scripts/probe-map-events.sh": "7b96d0a787e66bb489411f5e4edff989540dcad8205e2b4c05cab02af3c0ef8a",
+    "scripts/probe-map-sdp.sh": "09476c31f64e1677c8ec4ab55a3ade36aac424a23a3064725c8552f66785cd12",
+    "scripts/probe-map-send.sh": "d1a082e3c1f5e33af5db2e39860fdb72a98456f1e62349c740280b435c8dc395",
+    "scripts/probe-mns.sh": "ce138f52e2874292297bd7a13579962db50b110b6aff8087e06ce4c893207d57",
+    "scripts/probe-obex-read.sh": "c3960c6367a280a20bc2352c67c4bbbd3b6fd59377c1ba79759cc29dc56e554f",
+    "scripts/probe-obex-session.sh": "de1659e13954d83c8f254ac71aa3deff79e85275a9daa678d3823eb8b74e7c68",
+    "scripts/probe_call_audio_watch.py": "0c43938e47ee0df81aa11d69e3640506534ded2956a408f60293d77e3ff27171",
+    "scripts/probe_audio_graph.py": "2ce30abe8d60df89d7c4b33844fd3aff1de66d44e683dc9f971b4ec8e6cf7cfb",
+    "scripts/probe_obex_monitor.py": "a2c392260717feaf1bf16d025101baa39c754667505b76cb2b25893a4164b57c",
+    "crates/nativepair-core/src/lib.rs": "1eac7172e0dfd9588ae46fc3876e4e058b20d4f6c14e85dc0a581ce1465b87c4",
+    "crates/nativepair-cli/src/main.rs": "ca179bfe66607c36f40d62b36d96ba67c4bc453b01105e9fb91d883aa56893a7",
+    "crates/nativepair-daemon/src/main.rs": "8557863a51550dd0dc662c134bac12004be180648a546da2f2367838e2f5a695",
+    "scripts/probe_hfp_uplink.py": "f1422a3fe5d4a30500b5f4b7e2b6e7d7ba42e4a4994ec48ef267eeac5d35436a"
+  },
+  "verification_sha256": {
+    "scripts/tests/review_mutations.py": "41e595061a241c745211110409de28fe72e8811e3dde0125baf0445e173ecaad",
+    "scripts/tests/test_hfp_uplink.py": "3e7ce7ee110271056864caefb69b773dbc255477f7b6a74d83ca8756d22f34c9",
+    "scripts/tests/test_mutation_execution.py": "32a470b16742122e9147241e85efa9de1062f4bdf46b0d3ea0451d4eb154df2e"
+  },
+  "full_python_suite": {
+    "status": "passed",
+    "tests": 1869,
+    "duration_seconds": 277.339,
+    "category_counts": {
+      "N1": 316,
+      "N10": 23,
+      "N12": 40,
+      "N2": 171,
+      "N3": 158,
+      "N4": 28,
+      "N5": 33,
+      "N6": 517,
+      "N7": 186,
+      "N8": 3,
+      "N9": 66,
+      "Positive": 328
+    }
+  },
+  "new_python_scenarios": {
+    "tests": 204,
+    "category_counts": {
+      "N1": 22,
+      "N10": 1,
+      "N2": 8,
+      "N3": 6,
+      "N4": 5,
+      "N5": 10,
+      "N6": 86,
+      "N7": 29,
+      "N9": 1,
+      "Positive": 36
+    }
+  },
+  "mutation_trials": [
+    {
+      "mutation": "uplink_foreign_target_included",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "direction_and_target_checked",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_downlink_direction_included",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "direction_and_target_checked",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_inactive_link_included",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "inactive_links_ignored",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_link_direction_reversed",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "unrelated_links_do_not_prove_uplink",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_boolean_ids_accepted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "bool_alias",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_sources_overcounted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "distinct_origins_counted",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_unlinked_alsa_sources_counted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "default_and_source_api_checked",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_stale_default_substituted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "stale_or_invalid_defaults",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_alsa_classification_inverted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "default_and_source_api_checked",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_private_state_exposed",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "default_states_allowlisted",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_failure_reported_success",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "cli_read_failure_fails",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "uplink_default_link_inverted",
+      "file": "scripts/probe_hfp_uplink.py",
+      "pattern": "test_hfp_uplink.py",
+      "selector": "default_and_source_api_checked",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "mutation_bytecode_writes_enabled",
+      "file": "scripts/tests/review_mutations.py",
+      "pattern": "test_mutation_execution.py",
+      "selector": "",
+      "baseline": "passed",
+      "result": "killed"
+    }
+  ],
+  "static_checks": {
+    "cargo_fmt": "passed",
+    "cargo_clippy": "passed",
+    "rust_test_methods": 8,
+    "cargo_test": "passed",
+    "shell_syntax": "passed",
+    "new_observer_python_compile": "passed"
+  },
+  "process_stability": {
+    "status": "retained_unchanged_lane",
+    "prior_evidence": "m1-hfp-node-execution.json",
+    "prior_source_commit": "39172c9",
+    "tests_per_pass": 182,
+    "prior_passes": 10,
+    "observed_flakes": 0,
+    "production_hashes_unchanged": 22,
+    "inventory_exactly_unchanged": true,
+    "test_and_harness_files_exactly_unchanged": [
+      "scripts/tests/probe_harness.py",
+      "scripts/tests/run_suite.py",
+      "scripts/tests/scenarios.py",
+      "scripts/tests/test_hfp_contract_extended.py",
+      "scripts/tests/test_map_events_contract.py",
+      "scripts/tests/test_map_send_contract.py",
+      "scripts/tests/test_obex_contract.py",
+      "scripts/tests/test_packaging_branches.py",
+      "scripts/tests/test_remaining_contracts.py"
+    ],
+    "current_full_baseline_passed": true,
+    "new_static_pure_tests_repeated_ten_times": false
+  },
+  "package": {
+    "status": "retained_unchanged_native_payload",
+    "prior_evidence": "m1-hfp-node-execution.json",
+    "feasibility_observer_packaged": false
+  },
+  "hardware": {
+    "preflight": "ready",
+    "evidence": "m1-hfp-uplink-preflight.txt",
+    "additional_call_performed": false,
+    "physical_uplink_proven": false,
+    "fresh_live_call_approval": "required"
+  },
+  "remote_ci": "not_run_for_local_commits",
+  "terminal_closed": true,
+  "completion_gate": {
+    "scoped_automated_contracts": "passed",
+    "physical_microphone": "awaiting_fresh_call_approval_and_human_check"
+  }
+}

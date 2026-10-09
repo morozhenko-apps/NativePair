@@ -251,6 +251,15 @@ The probe bug is that it cached the first call object path and queried that path
 
 Before changing routing, the probe must also report whether the current default PipeWire sink/source correspond to the HFP nodes. Routing inspection is read-only; no default device or link is changed by this diagnostic stage.
 
+The additive [direct-uplink observer](M1_HFP_UPLINK_OBSERVATION.md) is ready after
+automated contracts and an idle Pixel preflight. It reports direct active links
+from local Audio/Source nodes to the selected target's HFP sink, default-source
+identity classification and mute state without exposing identifiers or changing
+audio. Filter/loopback paths and physical audibility are outside that classifier.
+The next separately approved live check combines this observation with the user's
+brief manual Ubuntu input mute/unmute and the remote participant's report.
+No additional live call or automated audio setting mutation has been performed.
+
 Transport activation alone is not sufficient evidence for bidirectional audio. Final SCO audio support requires both system-level evidence that the transport/endpoints are active and human confirmation that audio is usable in both directions.
 
 Rollback point: the Stage A probe is additive and can be removed independently without changing production behavior or the already-proven HFP call-control path.
