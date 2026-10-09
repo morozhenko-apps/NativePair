@@ -1,0 +1,16 @@
+nativepair_hfp_classifier_revalidation_preparation=1
+adb_inventory_available=yes
+adb_device_count=0
+adb_unauthorized_count=0
+adb_offline_count=0
+authorized_pixel_6a_count=0
+pixel_identity_correlated=not_attempted
+hfp_transport_preflight=not_attempted
+sco_no_dial_preflight=not_attempted
+routing_snapshot=not_attempted
+actual_dial=no
+transport_activate_invoked=no
+routing_changed=no
+preparation_complete=no
+blocker=selected_pixel_not_available_over_adb
+terminal_closed=yes

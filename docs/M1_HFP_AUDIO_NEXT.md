@@ -236,3 +236,20 @@ never disconnect user-owned connections or restore global settings automatically
 State: plan recorded before hardware preparation. Matrix progress wording in
 the classifier record is reconciled with the completed 218-row execution;
 no tests or production behavior changed.
+
+### Revalidation preparation result — awaiting Pixel connection
+
+The revalidation plan was committed first (f01bb41). ADB inventory succeeds but
+contains zero devices: no authorized, unauthorized or offline entries. Exactly
+zero authorized Pixel 6a devices are available, so identity correlation and all
+transport/SCO/routing preflights were not attempted. No Bluetooth connection,
+call, Activate, HangupAll, audio stream, routing/default/link change or service
+restart occurred. The selected target remains Pixel 6a; do not substitute an
+unrelated phone automatically. No automated test rerun is needed for this
+hardware-availability blocker. Owned command sessions ended (Terminal closed).
+
+[Sanitized preparation evidence](evidence/m1-hfp-revalidation-preflight.txt).
+Resume stage 1 after the user connects Pixel 6a over USB and authorizes ADB if
+prompted. Repeat identity correlation and the no-call preflights before asking
+for the separate one-call approval. The previously supplied destination must
+remain private and must not be used without fresh live-call authorization.
