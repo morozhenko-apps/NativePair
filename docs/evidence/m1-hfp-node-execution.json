@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-09",
+  "branch": "dev",
+  "source_commit": "39172c9",
+  "scope": "HFP profile/class regression and failed-node-wait diagnostics",
+  "production_sha256": {
+    "scripts/build-deb.sh": "b165f6c5f1966d12a5a984c394ff851f816684dfb7e13e4f6911e08a0ec98283",
+    "scripts/verify-deb.sh": "7dbf034f18aa44ce032a7a2e3564ef3bed8942cb4265cd080a69380f90f63510",
+    "scripts/probe-audio-health.sh": "9c96f02833c48687d707214125623960d5422c038125dd5b231fff30b53f1c21",
+    "scripts/probe-audio-routing.sh": "f6c726897485c885d96958a2c77087817955513cd25e0335b9510969db547c10",
+    "scripts/probe-bluetooth.sh": "3f2de391212dfdd8536d6f810d3823c2d070ecdfb6576d66891ac0f488a1a886",
+    "scripts/probe-call-audio-watch.sh": "fc99b573fe6bd0c182124d64b633a3efc095713a718a5a579f578bc8f77e156a",
+    "scripts/probe-hfp.sh": "a4d5a855cffe08fbf17dc076bb709e7d7ff61f7b63afe20fdd7d7981b1ac01bc",
+    "scripts/probe-hfp-audio.sh": "abdf08617216b33734bf5f83f5cbb23e7795c9fd77a046e47808b27b0f92a3a5",
+    "scripts/probe-hfp-call.sh": "3b600265527912a0ed402d0e52a10c5b7e33d4e53ad843c0b25ab042cfc28442",
+    "scripts/probe-hfp-sco.sh": "b91936c3e22cf942ac5493b2b41ff6cdaa15f253805455d1aac0a9d1d371d990",
+    "scripts/probe-map-events.sh": "7b96d0a787e66bb489411f5e4edff989540dcad8205e2b4c05cab02af3c0ef8a",
+    "scripts/probe-map-sdp.sh": "09476c31f64e1677c8ec4ab55a3ade36aac424a23a3064725c8552f66785cd12",
+    "scripts/probe-map-send.sh": "d1a082e3c1f5e33af5db2e39860fdb72a98456f1e62349c740280b435c8dc395",
+    "scripts/probe-mns.sh": "ce138f52e2874292297bd7a13579962db50b110b6aff8087e06ce4c893207d57",
+    "scripts/probe-obex-read.sh": "c3960c6367a280a20bc2352c67c4bbbd3b6fd59377c1ba79759cc29dc56e554f",
+    "scripts/probe-obex-session.sh": "de1659e13954d83c8f254ac71aa3deff79e85275a9daa678d3823eb8b74e7c68",
+    "scripts/probe_call_audio_watch.py": "0c43938e47ee0df81aa11d69e3640506534ded2956a408f60293d77e3ff27171",
+    "scripts/probe_audio_graph.py": "2ce30abe8d60df89d7c4b33844fd3aff1de66d44e683dc9f971b4ec8e6cf7cfb",
+    "scripts/probe_obex_monitor.py": "a2c392260717feaf1bf16d025101baa39c754667505b76cb2b25893a4164b57c",
+    "crates/nativepair-core/src/lib.rs": "1eac7172e0dfd9588ae46fc3876e4e058b20d4f6c14e85dc0a581ce1465b87c4",
+    "crates/nativepair-cli/src/main.rs": "ca179bfe66607c36f40d62b36d96ba67c4bc453b01105e9fb91d883aa56893a7",
+    "crates/nativepair-daemon/src/main.rs": "8557863a51550dd0dc662c134bac12004be180648a546da2f2367838e2f5a695"
+  },
+  "full_python_suite": {
+    "status": "passed",
+    "tests": 1665,
+    "duration_seconds": 322.559,
+    "category_counts": {
+      "Positive": 292,
+      "N1": 294,
+      "N2": 163,
+      "N3": 152,
+      "N4": 23,
+      "N5": 23,
+      "N6": 431,
+      "N7": 157,
+      "N8": 3,
+      "N9": 65,
+      "N10": 22,
+      "N11": 0,
+      "N12": 40
+    }
+  },
+  "new_python_scenarios": {
+    "tests": 218,
+    "category_counts": {
+      "Positive": 37,
+      "N1": 0,
+      "N2": 30,
+      "N3": 1,
+      "N4": 0,
+      "N5": 0,
+      "N6": 115,
+      "N7": 6,
+      "N8": 0,
+      "N9": 29,
+      "N10": 0,
+      "N11": 0,
+      "N12": 0
+    },
+    "unit": 135,
+    "contract": 83
+  },
+  "mutation_trials": [
+    {
+      "mutation": "call_dictionary_reply_rejected",
+      "file": "scripts/probe-hfp-call.sh",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "empty_guard_accepts",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "sco_dictionary_reply_rejected",
+      "file": "scripts/probe-hfp-sco.sh",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "empty_guard_accepts",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "watcher_dictionary_reply_rejected",
+      "file": "scripts/probe_call_audio_watch.py",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "observer_recognizes",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "passive_dictionary_reply_rejected",
+      "file": "scripts/probe-hfp.sh",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "observer_recognizes",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "call_noncanonical_empty_reply_accepted",
+      "file": "scripts/probe-hfp-call.sh",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "malformed_empty_reply_blocks",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "sco_noncanonical_empty_reply_accepted",
+      "file": "scripts/probe-hfp-sco.sh",
+      "pattern": "test_getcalls_compatibility.py",
+      "selector": "malformed_empty_reply_blocks",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "hfp_gateway_profile_ignored",
+      "file": "scripts/probe_audio_graph.py",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "hfp_direction_classified",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "hfp_gateway_downlink_inverted",
+      "file": "scripts/probe_audio_graph.py",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "hfp_direction_classified",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "hfp_gateway_uplink_inverted",
+      "file": "scripts/probe_audio_graph.py",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "hfp_direction_classified",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "hfp_stream_proves_default_source",
+      "file": "scripts/probe-audio-routing.sh",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "family_2_duplex_probe_audio_routing_sh",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "sco_gateway_profile_ignored",
+      "file": "scripts/probe-hfp-sco.sh",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "family_2_duplex_probe_hfp_sco_sh",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "health_gateway_profile_ignored",
+      "file": "scripts/probe-audio-health.sh",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "health_1",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "watcher_gateway_profile_ignored",
+      "file": "scripts/probe_call_audio_watch.py",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "watcher_1",
+      "baseline": "passed",
+      "result": "killed"
+    },
+    {
+      "mutation": "unknown_node_wait_call_reported_absent",
+      "file": "scripts/probe-hfp-sco.sh",
+      "pattern": "test_hfp_node_classification.py",
+      "selector": "node_wait_failed_query_preserved",
+      "baseline": "passed",
+      "result": "killed"
+    }
+  ],
+  "static_checks": {
+    "shell_syntax": "passed_once",
+    "python_compilation": "passed_once",
+    "rust": "unchanged; prior quality gate retained"
+  },
+  "package": {
+    "architecture": "amd64",
+    "build": "passed",
+    "verification": "passed",
+    "host_installation": false,
+    "contains_feasibility_probes": false,
+    "sha256": "b3d62bec50ac9c494daa426001c8e88193118c4910873389dbfb60cfe6139153"
+  },
+  "hardware": {
+    "new_live_call": false,
+    "corrected_classifier_live_validation": "pending",
+    "historical_zero_count_cause": "unresolved; early hangup and representation mismatch not distinguishable"
+  },
+  "remote_ci": "not executed for this unpublished fix",
+  "process_stability_inventory": "evidence/m1-process-stability-inventory.json",
+  "process_stability": {
+    "tests_per_pass": 182,
+    "passes": 10,
+    "status": "passed",
+    "observed_flakes": 0,
+    "runs": [
+      {
+        "run": 1,
+        "status": "passed",
+        "within_full_python_baseline": true,
+        "full_suite_duration_seconds": 322.559
+      },
+      {
+        "run": 2,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 73.344
+      },
+      {
+        "run": 3,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 97.215
+      },
+      {
+        "run": 4,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 52.347
+      },
+      {
+        "run": 5,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 51.584
+      },
+      {
+        "run": 6,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 56.608
+      },
+      {
+        "run": 7,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 57.765
+      },
+      {
+        "run": 8,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 57.265
+      },
+      {
+        "run": 9,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 57.511
+      },
+      {
+        "run": 10,
+        "lane": "process-stability",
+        "status": "passed",
+        "duration_seconds": 57.148
+      }
+    ]
+  },
+  "verification_tool_commit": "72de7a6",
+  "mutation_summary": {
+    "new_hfp_trials": 8,
+    "retained_wire_trials_revalidated": 6,
+    "killed": 14,
+    "invalid_or_survived": 0
+  },
+  "completion_gate": {
+    "all_218_planned_scenarios_implemented_and_passed": true,
+    "changed_helpers_and_consumer_branches_mapped": true,
+    "applicable_boundaries_and_interactions_tested": true,
+    "ten_process_passes": true,
+    "observed_flakes": 0,
+    "hardware_revalidation": "pending separate authorization"
+  }
+}

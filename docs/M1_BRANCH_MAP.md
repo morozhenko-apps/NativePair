@@ -1,6 +1,6 @@
 # M1 current source branch map
 
-Date: 2026-10-09. Status: HFP gateway classification and failed-node-wait observations implemented; complete 1665-method Python suite passed; process-stability verification pending.
+Date: 2026-10-09. Status: HFP gateway classification and failed-node-wait observations implemented; 1665 Python methods and ten 182-case process-stability passes succeeded.
 
 This source decision index links methods, conditions, loops, command substitutions,
 returns and cleanup exits to executable assertion families. It is an audit index,

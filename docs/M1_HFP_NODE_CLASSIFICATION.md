@@ -139,12 +139,38 @@ Each of the eight unchanged mutation selections passed before mutation. All
 eight modified selections failed by assertions, rather than syntax/import
 errors. Full mutation logs remain under ignored work/. No real phone was used.
 
-## Verification-tool follow-up plan
+## Verification-tool follow-up — complete
 
-Audit found that the new end-of-wait canonical-empty check duplicates the old
-SCO mutation anchors. Before completing verification, qualify the two existing
-SCO GetCalls trial anchors with their preflight grep context; preserve each
-mutation and selected assertions. This is a reversible test-tool repair, not
-a production change. After process runs finish, re-run the six retained wire
-mutations plus the eight new HFP trials, and recheck tool compilation. The
-182-case process selection and all production source hashes remain unchanged.
+Audit found that the new end-of-wait canonical-empty check duplicated the old
+SCO mutation anchors. The repair plan was documented before editing tooling.
+The two retained SCO anchors now include their preflight grep context; each
+mutation and selected assertion is preserved. Commit 72de7a6 records this
+reversible test-tool repair. Production hashes and process selection did not
+change. Tool compilation passed. All six retained wire mutations and all eight
+new HFP mutations were then revalidated: fourteen passing unmodified selections
+and fourteen assertion-level kills, with zero invalid/surviving trials.
+
+## Completion and handoff
+
+All milestones are complete for the scoped automated correction. The inventory
+contains all 218 planned scenarios, with every changed helper/rule and branch
+mapped to explicit rows. Public methods, independent planned branches, invariants,
+boundaries, applicable negative categories and inventoried interactions in the
+changed scope have executable coverage. This is not an instrumented 100% branch
+coverage claim or a hardware completion claim.
+
+[Current evidence](evidence/m1-hfp-node-execution.json) binds full-suite results,
+all ten process passes and fourteen mutation trials to source hashes. Production
+source is 39172c9; verification-tool repair is 72de7a6. The corrected classifier
+has not been exercised in another live call. Historical zero-count timing is
+still unresolved; preserve the previous automatic failure and human computer
+duplex confirmation separately. No new call, routing mutation, service restart,
+phone payload recording or host package installation occurred. All owned
+terminal/process sessions completed and closed (Terminal closed).
+
+Rollback the implementation with 39172c9 and the tooling repair with 72de7a6;
+revert the associated documentation/evidence when rolling back source. No
+persistent host/phone state needs restoration. Next hardware step, if requested,
+is one separately approved call with final call/transport observations and human
+computer-audio confirmation; iPhone ANCS and recovery/permission UX remain open
+M1 gates. Remote CI has not been executed for these unpublished commits.

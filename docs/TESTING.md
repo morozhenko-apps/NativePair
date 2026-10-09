@@ -178,3 +178,8 @@ Full-suite and process-only stability evidence are recorded there separately.
 A failed node wait now records fresh anonymous call/transport states before
 cleanup; `unknown` never means an absent call. This does not establish the
 timing of the earlier live attempt or authorize a new call.
+
+For source 39172c9, the complete 1665-method suite passed once and the existing
+182-case process lane passed nine further runs: ten successes including the
+baseline, with zero observed flakes. Static/Rust/pure cases were not repeated.
+Results and source hashes: [execution artifact](evidence/m1-hfp-node-execution.json).

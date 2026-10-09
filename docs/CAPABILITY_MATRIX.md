@@ -24,7 +24,7 @@ Initial evidence date: 2026-10-06; HFP audio update: 2026-10-09 (Pixel Android 1
 | Messages send | MAP | 5 | Proven | Corrected bMessage passed local structure validation, PushMessage returned a transfer, the transfer reached complete, and the intended recipient confirmed exactly one SMS with the expected fixed probe text. |
 | Message events | MAP | 5 | Proven | A real incoming SMS produced a new Message1 object through the MAP/MNS path. Registration Transfer1 was observed; explicit completion status was not captured, but end-to-end event delivery proves registration was effective. |
 | Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
-| Calls | HFP (phone AG, Linux HF) | 5 | Call control proven; computer duplex human-confirmed | One authorized 2026-10-09 call reached active; SCO was already active, so no Activate call was required. The user explicitly confirmed sound and microphone in both directions through the computer. The probe nevertheless found zero matching HFP nodes and exited with hfp_nodes_not_ready; endpoint enumeration remains unresolved. Owned-call cleanup succeeded and post-call GetCalls was empty with transport idle. See [live result](M1_HFP_AUDIO_NEXT.md). This establishes feasibility for the observed setup, not repeatability, recovery or a successful automated audio gate. |
+| Calls | HFP (phone AG, Linux HF) | 5 | Call control proven; computer duplex human-confirmed | One authorized 2026-10-09 call reached active; SCO was already active, so no Activate call was required. The user explicitly confirmed sound and microphone in both directions through the computer. The probe nevertheless found zero matching HFP nodes and exited with hfp_nodes_not_ready; the gateway classifier has since been corrected and regression-tested, with live revalidation pending. Owned-call cleanup succeeded and post-call GetCalls was empty with transport idle. See [live result](M1_HFP_AUDIO_NEXT.md). This establishes feasibility for the observed setup, not repeatability, recovery or a successful automated audio gate. |
 | App notifications | Generic Android Bluetooth | — | No baseline mechanism selected | Android has no project-approved generic equivalent to iPhone ANCS for arbitrary app notifications. |
 | Apple notifications | ANCS | — | Not applicable | ANCS was not advertised by the Android reference device, as expected. |
 
@@ -48,6 +48,11 @@ For the Pixel 6a, NativePair's no-companion-app Android foundation is currently 
 
 Remaining gaps include:
 
-- automated HFP endpoint enumeration and graph-level route evidence;
+- live revalidation of corrected HFP endpoint enumeration and graph-level route evidence;
 - repeatable call/audio lifecycle across reconnects;
 - reconnect/recovery behavior.
+
+The [HFP node correction](M1_HFP_NODE_CLASSIFICATION.md) preserves the original
+failed probe result and the separate human-confirmed duplex evidence. Final
+call/transport snapshots can help identify an early remote/manual hangup on a
+future authorized run; they cannot reconstruct the historical timing.

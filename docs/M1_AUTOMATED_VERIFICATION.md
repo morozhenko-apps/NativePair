@@ -523,6 +523,15 @@ Shell syntax, Python compilation and native package rebuild/verification passed
 once. New categories: Positive 37, N2 30, N3 1, N6 115, N7 6, N9 29. N1 property
 types use N6; N4/N5/N10/N12 retain existing coverage and cross-cutting asserts;
 N8/N11 add no applicable date/billing behavior. All planned rows are implemented.
-Nine additional runs of the existing 182-case process lane are pending; the full
-baseline already provides its first successful pass. Previous source-specific
-stability/trace evidence remains historical. Remote CI has not run for this fix.
+The existing 182-case process lane passed nine further runs in 51.584–97.215
+seconds. With its full-baseline pass, this is ten consecutive successes on the
+corrected production source (39172c9), with zero observed flakes. Previous
+source-specific evidence remains historical. The [current execution artifact](evidence/m1-hfp-node-execution.json)
+records source hashes, full-suite counts, mutation results and all ten process
+passes. Remote CI has not run for this unpublished fix.
+
+Final mutation-tool audit preserved unique preflight anchors after adding a
+second canonical-empty check. Six retained wire trials and eight new HFP trials
+were revalidated: all fourteen unchanged selections passed, all fourteen
+mutations failed by assertions. Source hashes are unchanged after stability.
+All owned terminal/process sessions completed and closed (Terminal closed).

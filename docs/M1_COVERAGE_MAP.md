@@ -41,14 +41,16 @@ three added methods with 495 explicit domain rows. Pure tests use fake clocks
 and command adapters. Integration fixtures execute the actual scripts with
 hermetic external adapters; no subject under test is mocked.
 
-Minimal testability changes: the shared graph normalizer exposes two pure
-functions; the bus monitor parser exposes framing/correlation functions; the
+Minimal testability changes: the shared graph module separates strict
+normalization and pure profile/direction classification from local snapshot
+loading; the bus monitor parser exposes framing/correlation functions; the
 watcher accepts injected command/clock/output adapters. These internal seams
-have no new transport API, output schema or runtime dependency. Malformed data
+have no new transport API or runtime dependency. Failed SCO readiness adds two
+anonymous enum fields to diagnostics, preserving the existing failure result. Malformed data
 now fails closed and owned resources are cleaned after cancellation. Each fix
 and rationale is in the [execution record](M1_AUTOMATED_VERIFICATION.md).
 
-Acceptance evidence: the full Python baseline (1363 methods) and Rust suite
+Previous acceptance evidence (5d72c31): the full Python baseline (1363 methods) and Rust suite
 (eight methods) passed once; the 182-scenario process stability lane passed ten
 consecutive executions, including its baseline pass. Zero failures were observed.
 Static checks, final native package verification and 29 assertion-level mutation
@@ -102,3 +104,10 @@ explicit, with the full [branch/negative/interaction inventory](M1_HFP_NODE_CLAS
 Live validation of the corrected classifier remains pending; the original
 human-confirmed duplex call and failed automatic node result retain their
 separate evidence levels. No instrumented 100% branch-coverage claim is made.
+
+Current acceptance evidence: all 1665 Python methods passed once; the same
+182-case process lane passed ten consecutive executions (one in the baseline
+and nine process-only runs), with zero observed flakes. Static/Python compile
+and native package checks passed once. Rust is unchanged and retains its prior
+quality gate. [Current source-bound results](evidence/m1-hfp-node-execution.json)
+are separate from the historical source trace. Live revalidation remains open.
