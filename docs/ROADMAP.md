@@ -32,7 +32,7 @@ Experiments:
 - [x] PBAP session can be created.
 - [x] PBAP contact listing is characterized.
 - [x] HFP call-control feasibility is characterized.
-- [ ] HFP physical audio paths are fully characterized: active SCO and corrected source/sink enumeration are proven on Pixel 6a; the latest physical microphone and headphone attachment remain unverified (see [live result](M1_HFP_AUDIO_NEXT.md)).
+- [ ] HFP physical audio paths are fully characterized: active SCO and corrected source/sink enumeration are proven on Pixel 6a; headphone attachment is wired to the laptop and the current input is its internal microphone, but the latest call's physical uplink remains unverified (see [live result](M1_HFP_AUDIO_NEXT.md)).
 - [ ] iPhone ANCS discovery and event flow is characterized.
 - [ ] Failure cases and permission UX are documented.
 

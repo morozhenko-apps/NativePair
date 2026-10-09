@@ -317,8 +317,9 @@ closed). The new single-call approval is consumed; no repeat is authorized.
 Evidence: [live automatic gate](evidence/m1-hfp-revalidation-live-attempt.txt)
 and [post-call state](evidence/m1-hfp-revalidation-post-call.txt). This closes
 the corrected classifier's live node-enumeration gate on the observed setup.
-The user reports headphone output but cannot identify the microphone. Headphone
-attachment and human confirmation of automatic completion are not established. Previous explicit human
+The user reports headphone output but cannot identify the microphone. A later
+clarification establishes wired laptop attachment (see below); human confirmation
+of automatic completion is not established. Previous explicit human
 computer-duplex evidence remains valid and separate. The successful current
 run cannot establish whether the earlier zero was caused by representation,
 early hangup or both; preserve that historical uncertainty.
@@ -332,8 +333,8 @@ The user reports sound through connected headphones. They covered computer
 microphone openings, yet the remote participant still heard them, and ask
 whether the phone microphone was used. This does not establish the microphone
 identity: a headphone microphone, another computer input or sound passing the
-physical obstruction remain possible. Headphone attachment (computer/phone)
-and whether the headphones contain a microphone are awaiting clarification.
+physical obstruction remain possible. Headphone attachment and microphone
+availability were initially unknown and are clarified in the later follow-up.
 Do not promote this report to confirmed computer duplex for this attempt.
 
 A passive snapshot after the call shows the current default source is an
@@ -351,3 +352,50 @@ human evidence; it is not independent graph-level microphone proof. A future
 approved call should observe the active uplink graph and identify the physical
 source before claiming that gate complete. No further live call is authorized
 by this uncertainty report; the latest one-call approval is consumed.
+
+### Wired headphone clarification — passive verification plan (2026-10-10)
+
+The user identifies Sony ULT WEAR connected by cable to the Ubuntu laptop.
+Ubuntu shows Headphones selected for output and Internal microphone selected
+for input; Microphone and Headset are other displayed input options. These
+labels alone do not establish the historical call graph.
+
+1. Read the official Sony wired-use contract. The supplied cable permits
+   headphone playback; Sony instructs callers to use the connected phone's
+   microphone and disables Bluetooth while the cable is attached. This supports
+   treating the built-in headset microphone as unavailable over that cable.
+2. Inspect only the current default source/sink and selected ports using the
+   local audio API. Emit bounded classifications, never device names or IDs.
+3. Record the current route and user clarification in sanitized evidence and
+   capability tracking. Preserve the distinction between current input selection
+   and physical uplink proof during the ended call.
+
+No production changes, new tests, call, capture, mute, audio setting or service
+restart are planned. Risk: confusing a current snapshot with historical proof;
+retain that limitation explicitly. Rollback: revert this documentation-only
+continuation commit. The existing automated gate remains valid without reruns.
+
+Reference: [Sony ULT WEAR supplied cable guide](https://helpguide.sony.net/mdr/2981/v1/en/contents/TP1001293829.html).
+
+All three passive verification steps are complete. A successful read-only
+PulseAudio-compatible API snapshot confirms the current default source port is
+internal_microphone, unmuted, and default sink port is headphones, unmuted. This
+matches the user's Ubuntu selection report. Sony's supplied-cable contract
+supports using the laptop input rather than the headphones' built-in call
+microphone in this setup. An aftermarket inline cable microphone has not been
+asserted or investigated; do not generalize beyond Sony's supplied cable.
+
+The laptop internal microphone is the likely physical input, but the snapshot
+was taken after the call. Covering its openings is not a reliable isolation test
+and does not establish that the phone microphone was used. Historical active
+SCO uplink links and physical microphone identity remain unverified for this
+attempt. Headphone attachment is now resolved as wired to the laptop; no further
+clarification is pending for that item.
+
+Evidence: [selected ports and user clarification](evidence/m1-hfp-revalidation-selected-ports.txt).
+The earlier snapshot remains unchanged as a record of its observation time.
+No audio configuration changed, no recording or additional call occurred, and
+the owned command completed (Terminal closed). No source changes or automated
+test reruns were needed. The next physical-uplink verification requires a freshly
+approved live call with contemporaneous graph observation and a controlled
+physical-source check; do not infer that approval from this clarification.
