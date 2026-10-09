@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      echo "Unknown argument: $1" >&2
+      echo "Unknown argument." >&2
       usage >&2
       exit 2
       ;;
@@ -93,7 +93,6 @@ TMP_DIR="$(mktemp -d)"
 OBEX_LOG="$TMP_DIR/obexctl.log"
 MONITOR_LOG="$TMP_DIR/busctl-monitor.log"
 OBEX_INPUT="$TMP_DIR/obexctl.in"
-mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
@@ -102,6 +101,8 @@ SESSION_PATH=""
 
 cleanup() {
   local status=$?
+  trap - EXIT INT TERM
+  trap '' PIPE
 
   if [[ -n "$OBEX_FD" ]]; then
     printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null || true
@@ -125,15 +126,26 @@ cleanup() {
   rm -rf "$TMP_DIR"
   exit "$status"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+mkfifo "$OBEX_INPUT"
 
 # Transfer1 can be created and removed before obexctl publishes a proxy for it.
 # Start the monitor before the MAP session so that short lifetime is observable.
 stdbuf -oL -eL busctl --user monitor org.bluez.obex >"$MONITOR_LOG" 2>&1 &
 MONITOR_PID=$!
-sleep 0.3
+MONITOR_READY=no
+for _ in {1..50}; do
+  if grep -Fq 'Monitoring bus message stream' "$MONITOR_LOG"; then
+    MONITOR_READY=yes
+    break
+  fi
+  kill -0 "$MONITOR_PID" 2>/dev/null || break
+  sleep 0.1
+done
 
-if ! kill -0 "$MONITOR_PID" 2>/dev/null; then
+if [[ "$MONITOR_READY" != yes ]] || ! kill -0 "$MONITOR_PID" 2>/dev/null; then
   echo "dbus_monitor_ready=no"
   exit 1
 fi

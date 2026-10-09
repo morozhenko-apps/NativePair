@@ -42,7 +42,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      echo "Unknown argument: $1" >&2
+      echo "Unknown argument." >&2
       usage >&2
       exit 2
       ;;
@@ -103,7 +103,6 @@ echo "device_paired=yes"
 TMP_DIR="$(mktemp -d)"
 OBEX_LOG="$TMP_DIR/obexctl.log"
 OBEX_INPUT="$TMP_DIR/obexctl.in"
-mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
@@ -111,6 +110,8 @@ SESSION_PATH=""
 
 cleanup() {
   local status=$?
+  trap - EXIT INT TERM
+  trap '' PIPE
 
   if [[ -n "$OBEX_FD" ]]; then
     printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null || true
@@ -129,7 +130,10 @@ cleanup() {
   rm -rf "$TMP_DIR"
   exit "$status"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+mkfifo "$OBEX_INPUT"
 
 stdbuf -oL -eL obexctl <"$OBEX_INPUT" >"$OBEX_LOG" 2>&1 &
 OBEX_PID=$!
@@ -172,8 +176,7 @@ fi
 
 if grep -Fq 'Failed to connect' "$OBEX_LOG"; then
   echo "session_created=no"
-  failure="$(grep -F 'Failed to connect' "$OBEX_LOG" | tail -n 1 | sed -E 's/[[:space:]]+/ /g' | cut -c1-220)"
-  printf 'error=%s\n' "$failure"
+  echo "error=connect_failed"
   exit 1
 fi
 
@@ -209,6 +212,9 @@ if [[ $TARGET_STATUS -eq 0 ]]; then
     sed -n 's/^s "\([^"]*\)".*/\1/p' <<<"$TARGET_PROPERTY" |
       tr '[:upper:]' '[:lower:]'
   )"
+  if [[ ! "$SESSION_TARGET_UUID" =~ ^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$ ]]; then
+    SESSION_TARGET_UUID=""
+  fi
   printf 'session_target_uuid=%s\n' "${SESSION_TARGET_UUID:-unknown}"
   if [[ "$SESSION_TARGET_UUID" == "$EXPECTED_TARGET_UUID" ]]; then
     echo "session_target_matches=yes"

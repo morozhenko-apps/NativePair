@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      echo "Unknown argument: $1" >&2
+      echo "Unknown argument." >&2
       usage >&2
       exit 2
       ;;
@@ -66,7 +66,7 @@ for value_name in CONNECT_TIMEOUT TRANSFER_TIMEOUT; do
   fi
 done
 
-for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr; do
+for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr python3; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -95,7 +95,6 @@ MONITOR_LOG="$TMP_DIR/busctl-monitor.log"
 PUSH_REPLY="$TMP_DIR/push.reply"
 BMSG_FILE="$TMP_DIR/nativepair-send.bmsg"
 OBEX_INPUT="$TMP_DIR/obexctl.in"
-mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
@@ -104,6 +103,8 @@ SESSION_PATH=""
 
 cleanup() {
   local status=$?
+  trap - EXIT INT TERM
+  trap '' PIPE
 
   if [[ -n "$OBEX_FD" ]]; then
     printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null || true
@@ -127,13 +128,24 @@ cleanup() {
   rm -rf "$TMP_DIR"
   exit "$status"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+mkfifo "$OBEX_INPUT"
 
 stdbuf -oL -eL busctl --user monitor org.bluez.obex >"$MONITOR_LOG" 2>&1 &
 MONITOR_PID=$!
-sleep 0.3
+MONITOR_READY=no
+for _ in {1..50}; do
+  if grep -Fq 'Monitoring bus message stream' "$MONITOR_LOG"; then
+    MONITOR_READY=yes
+    break
+  fi
+  kill -0 "$MONITOR_PID" 2>/dev/null || break
+  sleep 0.1
+done
 
-if ! kill -0 "$MONITOR_PID" 2>/dev/null; then
+if [[ "$MONITOR_READY" != yes ]] || ! kill -0 "$MONITOR_PID" 2>/dev/null; then
   echo "dbus_monitor_ready=no"
   exit 1
 fi
@@ -308,15 +320,8 @@ while (( elapsed < TRANSFER_TIMEOUT * 10 )); do
   NEW_LOG="$TMP_DIR/monitor-new.log"
   tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null || true
 
-  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
-    grep -Fq 'STRING "complete"'; then
-    transfer_result=complete
-    break
-  fi
-
-  if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" |
-    grep -Fq 'STRING "error"'; then
-    transfer_result=error
+  transfer_result="$(python3 "$(dirname -- "${BASH_SOURCE[0]}")/probe_obex_monitor.py" "$NEW_LOG" "$TRANSFER_PATH")"
+  if [[ "$transfer_result" == complete || "$transfer_result" == error ]]; then
     break
   fi
 

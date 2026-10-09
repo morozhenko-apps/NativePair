@@ -32,7 +32,7 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 fi
 
 if [[ $# -ne 0 ]]; then
-  echo "Unknown argument: $1" >&2
+  echo "Unknown argument." >&2
   usage >&2
   exit 2
 fi

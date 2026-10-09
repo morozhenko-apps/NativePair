@@ -40,7 +40,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      echo "Unknown argument: $1" >&2
+      echo "Unknown argument." >&2
       usage >&2
       exit 2
       ;;
@@ -99,7 +99,6 @@ echo "device_paired=yes"
 TMP_DIR="$(mktemp -d)"
 OBEX_LOG="$TMP_DIR/obexctl.log"
 OBEX_INPUT="$TMP_DIR/obexctl.in"
-mkfifo "$OBEX_INPUT"
 
 OBEX_PID=""
 OBEX_FD=""
@@ -107,6 +106,8 @@ SESSION_PATH=""
 
 cleanup() {
   local status=$?
+  trap - EXIT INT TERM
+  trap '' PIPE
 
   if [[ -n "$OBEX_FD" ]]; then
     printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null || true
@@ -125,7 +126,10 @@ cleanup() {
   rm -rf "$TMP_DIR"
   exit "$status"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+mkfifo "$OBEX_INPUT"
 
 stdbuf -oL -eL obexctl <"$OBEX_INPUT" >"$OBEX_LOG" 2>&1 &
 OBEX_PID=$!
@@ -197,7 +201,11 @@ echo "session_established=yes"
 
 array_count() {
   local file="$1"
-  awk 'NR == 1 { if ($2 ~ /^[0-9]+$/) print $2; else print "unknown" }' "$file"
+  local signature="$2"
+  awk -v signature="$signature" '
+    NR == 1 && $1 == signature && $2 ~ /^[0-9]+$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { print $2; found = 1 }
+    END { if (!found) print "unknown" }
+  ' "$file"
 }
 
 dbus_error_name() {
@@ -221,7 +229,7 @@ if [[ "$TARGET" == "map" ]]; then
   FOLDERS_OUT="$TMP_DIR/map-folders.out"
   if call_to_file "$FOLDERS_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListFolders 'a{sv}' 1 MaxCount q 16; then
     echo "map_folders_listed=yes"
-    count="$(array_count "$FOLDERS_OUT")"
+    count="$(array_count "$FOLDERS_OUT" 'aa{sv}')"
     if [[ "$count" == "unknown" ]]; then
       echo "map_folder_list_nonempty=unknown"
     elif (( count > 0 )); then
@@ -259,7 +267,7 @@ if [[ "$TARGET" == "map" ]]; then
   MESSAGES_OUT="$TMP_DIR/map-messages.out"
   if call_to_file "$MESSAGES_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListMessages 'sa{sv}' inbox 2 MaxCount q 1 Fields as 1 type; then
     echo "map_messages_listed=yes"
-    count="$(array_count "$MESSAGES_OUT")"
+    count="$(array_count "$MESSAGES_OUT" 'a{oa{sv}}')"
     if [[ "$count" == "unknown" ]]; then
       echo "map_message_list_nonempty=unknown"
     elif (( count > 0 )); then
@@ -291,7 +299,7 @@ fi
 SIZE_OUT="$TMP_DIR/pbap-size.out"
 if call_to_file "$SIZE_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1 GetSize; then
   echo "pbap_size_read=yes"
-  size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^[0-9]+$/ { print $2 }' "$SIZE_OUT")"
+  size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^[0-9]+$/ && length($2) <= 5 && $2 + 0 <= 65535 { print $2 }' "$SIZE_OUT")"
   if [[ -z "$size" ]]; then
     echo "pbap_phonebook_nonempty=unknown"
   elif (( size > 0 )); then
@@ -309,7 +317,7 @@ fi
 LIST_OUT="$TMP_DIR/pbap-list.out"
 if call_to_file "$LIST_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1   List 'a{sv}' 1 MaxCount q 1; then
   echo "pbap_contacts_listed=yes"
-  count="$(array_count "$LIST_OUT")"
+  count="$(array_count "$LIST_OUT" 'a(ss)')"
   if [[ "$count" == "unknown" ]]; then
     echo "pbap_contact_list_nonempty=unknown"
   elif (( count > 0 )); then
