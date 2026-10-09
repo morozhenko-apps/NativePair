@@ -1,0 +1,730 @@
+[
+  {
+    "id": "test_hfp_contract_extended.HfpContracts.test_given_probe_hfp_call_sh_dial_terminated_when_call_cleanup_owned_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_contract_extended.HfpContracts.test_given_probe_hfp_call_sh_pre_dial_terminated_when_call_cleanup_owned_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_contract_extended.HfpContracts.test_given_probe_hfp_sco_sh_dial_terminated_when_call_cleanup_owned_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_contract_extended.HfpContracts.test_given_probe_hfp_sco_sh_pre_dial_terminated_when_call_cleanup_owned_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_busctl_monitor_when_event_sources_exited_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_complete_monitor_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_complete_obex_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_error_monitor_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_error_obex_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_existing_monitor_object_when_replayed_event_ignored_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_no_registration_when_event_window_empty_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_not_seen_monitor_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_not_seen_obex_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_obexctl_when_event_sources_exited_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_other_session_monitor_object_when_replayed_event_ignored_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_registration_complete_when_event_window_empty_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_remove_readd_object_when_replayed_event_ignored_then_contract_holds",
+    "category": "N4"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_unknown_monitor_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_events_contract.MapEventContracts.test_given_unknown_obex_when_incoming_event_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_matching_complete_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_matching_error_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_matching_then_unrelated_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_message_folder_failure_when_send_prerequisite_rejected_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_monitor_failure_when_send_prerequisite_rejected_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_no_status_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_path_0_when_missing_transfer_cannot_confirm_send_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_path_1_when_missing_transfer_cannot_confirm_send_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_path_2_when_missing_transfer_cannot_confirm_send_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_path_3_when_missing_transfer_cannot_confirm_send_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_preflight_when_bmessage_prepared_then_private_crlf_framing_and_length_are_exact",
+    "category": "Positive"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_private_mode_failed_when_payload_write_failure_stops_send_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_push_failure_when_ambiguous_push_not_retried_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_recipient_length_14_when_recipient_boundary_accepted_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_recipient_length_15_when_recipient_boundary_accepted_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_recipient_length_7_when_recipient_boundary_accepted_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_recipient_length_8_when_recipient_boundary_accepted_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_registration_replay_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_repeated_send_flag_when_send_invoked_then_exactly_one_push_with_retry_disabled",
+    "category": "N4"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_session_lost_when_ambiguous_push_not_retried_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_supported_types_failure_when_send_prerequisite_rejected_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_telecom_failure_when_send_prerequisite_rejected_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_unrelated_complete_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_unrelated_error_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_unrelated_then_matching_when_transfer_evidence_correlated_then_contract_holds",
+    "category": "N5"
+  },
+  {
+    "id": "test_map_send_contract.SendContracts.test_given_unsupported_type_when_send_prerequisite_rejected_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_folders_0_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_folders_1_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_empty_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_invalid_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_large_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_leading_zero_00_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_leading_zero_01_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_leading_zero_08_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_malformed_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_negative_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_one_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_two_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_folder_zero_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_empty_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_invalid_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_large_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_leading_zero_00_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_leading_zero_01_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_leading_zero_08_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_malformed_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_negative_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_one_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_two_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_map_message_zero_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_messages_6_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_messages_7_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_msg_4_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_msg_5_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_telecom_2_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_telecom_3_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_when_read_requested_then_only_bounded_allowlisted_fields_are_requested",
+    "category": "Positive"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_map_when_session_created_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_optional_proxy_absent_when_session_created_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_list_12_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_list_13_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_empty_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_invalid_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_large_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_leading_zero_00_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_leading_zero_01_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_leading_zero_08_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_malformed_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_negative_count_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_one_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_two_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_pbap_contact_zero_when_array_count_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_select_8_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_select_9_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_size_10_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_size_11_when_read_operation_rejected_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_when_read_requested_then_only_one_contact_is_requested",
+    "category": "Positive"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_pbap_when_session_created_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_corrupt_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_empty_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_leading_zero_00_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_leading_zero_01_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_leading_zero_08_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_max_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_missing_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_negative_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_one_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_phonebook_overflow_when_phonebook_size_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_connect_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_connect_timeout_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_device_query_failed_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_missing_session_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_not_ready_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_service_absent_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_service_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_unpaired_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_when_fifo_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_events_sh_when_temporary_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_connect_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_connect_timeout_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_device_query_failed_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_missing_session_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_not_ready_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_service_absent_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_service_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_unpaired_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_when_fifo_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_map_send_sh_when_temporary_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_connect_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_connect_timeout_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_device_query_failed_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_missing_session_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_not_ready_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_service_absent_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_service_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_unpaired_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_when_fifo_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_read_sh_when_temporary_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_connect_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_connect_timeout_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_device_query_failed_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_missing_session_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_not_ready_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_service_absent_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_service_error_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_unpaired_when_session_fails_cleanly_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_when_fifo_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_probe_obex_session_sh_when_temporary_creation_fails_then_contract_holds",
+    "category": "N12"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_read_interface_absent_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_read_proxy_absent_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_session_interface_absent_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_target_interface_absent_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_target_property_corrupt_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_target_property_mismatch_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_obex_contract.ObexContracts.test_given_target_property_unavailable_when_session_interfaces_checked_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_packaging_branches.PackagingBranches.test_given_INT_when_packaging_interrupted_before_build_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_packaging_branches.PackagingBranches.test_given_INT_when_packaging_interrupted_during_verify_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_packaging_branches.PackagingBranches.test_given_TERM_when_packaging_interrupted_before_build_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_packaging_branches.PackagingBranches.test_given_TERM_when_packaging_interrupted_during_verify_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_interrupt_probe_map_events_sh_when_obex_session_interrupted_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_interrupt_probe_map_send_sh_when_obex_session_interrupted_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_interrupt_probe_obex_read_sh_when_obex_session_interrupted_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_interrupt_probe_obex_session_sh_when_obex_session_interrupted_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_audio_health_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_audio_health_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_audio_routing_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_audio_routing_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_audio_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_audio_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_call_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_call_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_sco_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_sco_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_shSIGINT_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_hfp_shSIGTERM_when_diagnostic_interrupted_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_map_events_sh_when_obex_int_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_map_sdp_shSIGINT_when_diagnostic_int_defaults_overridden_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_map_sdp_shSIGTERM_when_diagnostic_int_defaults_overridden_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_map_send_sh_when_obex_int_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_mns_shSIGINT_when_diagnostic_int_defaults_overridden_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_mns_shSIGTERM_when_diagnostic_int_defaults_overridden_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_obex_read_sh_when_obex_int_after_trap_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_probe_obex_session_sh_when_obex_int_after_trap_then_contract_holds",
+    "category": "N9"
+  }
+]

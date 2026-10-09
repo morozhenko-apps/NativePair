@@ -1,826 +1,1340 @@
-# M1 source branch map
+# M1 current source branch map
 
-Status: planned, 2026-10-09. All existing source branches below require both outcomes or each case arm in the named contract family. Loop zero/one/exhaustion, short-circuit guards and cleanup exits are included. This source index is supplementary to the semantic inventory in M1_AUTOMATED_VERIFICATION.md; line numbers describe the planning baseline, not measured coverage.
+Date: 2026-10-09. Status: implementation and local verification complete.
+
+This source decision index links methods, conditions, loops, command substitutions,
+returns and cleanup exits to executable assertion families. It is an audit index,
+not a denominator for instrumented branch coverage. Python scenario IDs are in
+[the canonical inventory](evidence/m1-automated-test-inventory.json); exact inputs
+and assertions are in linked tests. The original pre-implementation map is
+preserved in Git commit a3718b3.
+
+See [the functional coverage map](M1_COVERAGE_MAP.md) for per-file functions,
+covered contracts, remaining interoperability checks and their reasons.
 
 ## scripts/build-deb.sh
 
-| Source line | Decision / method | Planned assertion family |
+Assertion families: [test_packaging_contract](../scripts/tests/test_packaging_contract.py), [test_packaging_branches](../scripts/tests/test_packaging_branches.py).
+
+| Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 4 | ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)" | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 7 | for command in cargo dpkg dpkg-deb python3 sha256sum; do | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 8 | if ! command -v "$command" >/dev/null 2>&1; then | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 15 | if [[ -z "$VERSION" ]]; then | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 22 | if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 28 | case "$ARCH" in | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | amd64&#124;arm64) | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 31 | *) | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | if [[ -z "${SOURCE_DATE_EPOCH:-}" ]] && command -v git >/dev/null 2>&1; then | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | SOURCE_DATE_EPOCH="$(git log -1 --format=%ct 2>/dev/null &#124;&#124; true)" | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 63 | if [[ -n "${SOURCE_DATE_EPOCH:-}" ]]; then | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 65 | while IFS= read -r -d '' path; do | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 67 | done < <(find "$PACKAGE_ROOT" -print0) | BUILD-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-audio-health.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 8 | if [[ ! "$ITERATIONS" =~ ^[0-9]+$ ]] &#124;&#124; (( ITERATIONS < 2 &#124;&#124; ITERATIONS > 60 )); then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 13 | for command in grep journalctl mktemp pw-dump python3 pw-top sed systemctl timeout wpctl; do | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 14 | if ! command -v "$command" >/dev/null 2>&1; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | cleanup() { | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 39 | if systemctl --user is-active --quiet pipewire.service 2>/dev/null; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 45 | if systemctl --user is-active --quiet wireplumber.service 2>/dev/null; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 51 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | if wpctl inspect @DEFAULT_AUDIO_SINK@ >"$DEFAULT_SINK_REPLY" 2>/dev/null; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 64 | if wpctl inspect @DEFAULT_AUDIO_SOURCE@ >"$DEFAULT_SOURCE_REPLY" 2>/dev/null; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 73 | if [[ $PW_TOP_STATUS -ne 0 ]]; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 90 | seen_ids = set() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 95 | nonzero_pairs = set() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 98 | for raw in handle: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 99 | line = raw.strip() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 100 | if not line: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 102 | if line.startswith("S   ID  QUANT"): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 106 | parts = line.split() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 107 | if len(parts) < 9: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 116 | if state not in {"E", "C", "S", "I", "R", "t", "T", "!"}: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 118 | if not node_id.isdigit() or not err.isdigit(): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | if state in {"R", "t", "T"}: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 124 | if state == "E": | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 127 | nid = int(node_id) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 128 | value = int(err) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 129 | seen_ids.add(nid) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 130 | states_seen.setdefault(nid, set()).add(state) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 131 | first_err.setdefault(nid, value) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 133 | max_err[nid] = max(max_err.get(nid, value), value) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 135 | if quant.isdigit() and rate.isdigit(): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | q = int(quant) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 137 | r = int(rate) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 138 | if q > 0 and r > 0: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | nonzero_pairs.add((q, r)) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 142 | nid: max_err.get(nid, 0) - first_err.get(nid, 0) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 143 | for nid in seen_ids | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 144 | if max_err.get(nid, 0) - first_err.get(nid, 0) > 0 | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 148 | dump = json.load(handle) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 151 | for obj in dump: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 152 | if obj.get("type") != "PipeWire:Interface:Node": | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 154 | obj_id = obj.get("id") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 155 | if obj_id is None: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 160 | def props_for(nid): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 161 | return props_by_id.get(str(nid), {}) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 163 | def is_bluetooth(props): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 165 | bool(props.get("api.bluez5.address")) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 167 | or bool(props.get("api.bluez5.profile")) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 170 | def is_hfp(props): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 173 | def media_class(props): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 174 | return str(props.get("media.class") or "") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 176 | def default_kind(node_id): | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 177 | if not node_id: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 179 | props = props_by_id.get(node_id) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 180 | if props is None: | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 186 | for nid, delta in growth.items() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 187 | if states_seen.get(nid, set()) & {"R", "t", "T"} | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 190 | nid: delta for nid, delta in growth.items() if is_bluetooth(props_for(nid)) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 193 | nid: delta for nid, delta in growth.items() if is_hfp(props_for(nid)) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 197 | for nid, delta in growth.items() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 198 | if media_class(props_for(nid)).startswith("Stream/Output/Audio") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 202 | for nid, delta in growth.items() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 203 | if media_class(props_for(nid)) == "Audio/Sink" | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 207 | for nid, delta in growth.items() | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 208 | if media_class(props_for(nid)) == "Audio/Source" | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 211 | set(bluetooth_growth) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 212 | &#124; set(output_stream_growth) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 213 | &#124; set(audio_sink_growth) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 214 | &#124; set(audio_source_growth) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 221 | positive_now = sum(1 for value in last_err.values() if value > 0) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 222 | max_delta = max(growth.values(), default=0) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 223 | max_value = max(last_err.values(), default=0) | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 225 | print(f"pw_top_snapshots={snapshots}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 226 | print(f"pw_top_rows_parsed={rows}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 227 | print(f"running_rows_observed={running_rows}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 228 | print(f"error_state_rows_observed={error_state_rows}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 229 | print(f"nodes_with_nonzero_err_at_end={positive_now}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 230 | print(f"nodes_with_err_growth={len(growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 231 | print(f"nodes_with_err_growth_while_running={len(running_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 232 | print(f"max_single_node_err_delta={max_delta}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 233 | print(f"max_err_value_at_end={max_value}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 234 | print(f"xrun_or_error_growth_observed={'yes' if growth else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 235 | print(f"nonzero_quantum_rate_pair_count={len(nonzero_pairs)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 237 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 238 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 239 | print(f"default_sink_is_bluetooth={default_kind(default_sink_id)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 240 | print(f"default_source_is_bluetooth={default_kind(default_source_id)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 241 | print(f"default_sink_err_growth={'yes' if default_sink_delta > 0 else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 242 | print(f"default_sink_err_delta={default_sink_delta}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 243 | print(f"default_source_err_growth={'yes' if default_source_delta > 0 else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 244 | print(f"default_source_err_delta={default_source_delta}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 246 | print(f"bluetooth_nodes_with_err_growth={len(bluetooth_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 247 | print(f"hfp_nodes_with_err_growth={len(hfp_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 248 | print(f"output_stream_nodes_with_err_growth={len(output_stream_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 249 | print(f"audio_sink_nodes_with_err_growth={len(audio_sink_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 250 | print(f"audio_source_nodes_with_err_growth={len(audio_source_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 251 | print(f"unclassified_nodes_with_err_growth={len(unclassified_growth)}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 252 | print(f"bluetooth_err_growth_observed={'yes' if bluetooth_growth else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 253 | print(f"hfp_err_growth_observed={'yes' if hfp_growth else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 254 | print(f"output_stream_err_growth_observed={'yes' if output_stream_growth else 'no'}") | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 259 | journalctl --user -u pipewire.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$PIPEWIRE_LOG" 2>/dev/null &#124;&#124; true | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 260 | journalctl --user -u wireplumber.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$WIREPLUMBER_LOG" 2>/dev/null &#124;&#124; true | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 262 | PIPEWIRE_WARNINGS="$(grep -cve '^[[:space:]]*$' "$PIPEWIRE_LOG" &#124;&#124; true)" | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 263 | WIREPLUMBER_WARNINGS="$(grep -cve '^[[:space:]]*$' "$WIREPLUMBER_LOG" &#124;&#124; true)" | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 268 | if grep -Eqi 'xrun&#124;underrun&#124;overrun&#124;deadline&#124;missed' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 274 | if grep -Eqi 'bluez&#124;bluetooth&#124;sco&#124;hfp&#124;transport' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | AUDIO-HEALTH: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-audio-routing.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 10 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 15 | for command in busctl grep head mktemp python3 pw-dump sed wpctl; do | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 16 | if ! command -v "$command" >/dev/null 2>&1; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 30 | cleanup() { | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 40 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"   org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 43 | grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" &#124;&#124; true | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 49 | if [[ -n "$AG_PATH" ]]; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 51 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 62 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 71 | if wpctl inspect @DEFAULT_AUDIO_SINK@ >"$DEFAULT_SINK_REPLY" 2>/dev/null; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 75 | if wpctl inspect @DEFAULT_AUDIO_SOURCE@ >"$DEFAULT_SOURCE_REPLY" 2>/dev/null; then | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 85 | data = json.load(handle) | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 88 | for obj in data: | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 89 | if obj.get("type") != "PipeWire:Interface:Node": | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 93 | if props.get("api.bluez5.address") != device: | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 95 | if props.get("api.bluez5.profile") != "headset-head-unit": | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 97 | hfp_nodes.append((str(obj.get("id")), props.get("media.class"))) | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 102 | print(f"hfp_node_count={len(hfp_nodes)}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 103 | print(f"hfp_source_node_present={'yes' if source_ids else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 104 | print(f"hfp_sink_node_present={'yes' if sink_ids else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 105 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 106 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 107 | print(f"default_sink_is_phone_hfp={'yes' if default_sink_id in sink_ids else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | print(f"default_source_is_phone_hfp={'yes' if default_source_id in source_ids else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-| 109 | print(f"orphan_hfp_nodes_present={'yes' if hfp_nodes else 'no'}") | AUDIO-ROUTING: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-bluetooth.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 8 | usage() { | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 25 | while [[ $# -gt 0 ]]; do | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 26 | case "$1" in | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 27 | --device) | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 28 | if [[ $# -lt 2 ]]; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 35 | --host-only) | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 40 | --help&#124;-h) | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 44 | *) | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 52 | if [[ -n "$DEVICE" ]] && [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 57 | command_present() { | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 58 | if command -v "$1" >/dev/null 2>&1; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 65 | bool_line() { | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 70 | echo "probe_scope=host$([[ -n "$DEVICE" ]] && printf '+device')" | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 76 | if command -v bluetoothctl >/dev/null 2>&1; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 88 | bluetoothctl devices Paired 2>/dev/null &#124;&#124; | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 89 | bluetoothctl paired-devices 2>/dev/null &#124;&#124; | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 101 | if command -v systemctl >/dev/null 2>&1 && | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | if command -v busctl >/dev/null 2>&1 && | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 115 | if command -v systemctl >/dev/null 2>&1 && | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | if [[ "$HOST_ONLY" == yes &#124;&#124; -z "$DEVICE" ]]; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 126 | if ! command -v bluetoothctl >/dev/null 2>&1; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 131 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null &#124;&#124; true)" | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 132 | if [[ -z "$info" ]]; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | property_is_yes() { | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 141 | if grep -Eq "^[[:space:]]*$property:[[:space:]]+yes$" <<<"$info"; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 154 | uuid_present() { | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-| 156 | if grep -Fq "$uuid" <<<"$lower_info"; then | BLUETOOTH: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-call-audio-watch.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-
-## scripts/probe-hfp-audio.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 12 | usage() { | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | if [[ "${1:-}" == "--help" &#124;&#124; "${1:-}" == "-h" ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 34 | if [[ $# -ne 0 ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 40 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 45 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 50 | for command in bluetoothctl busctl grep head mktemp sed seq sleep timeout; do | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 51 | if ! command -v "$command" >/dev/null 2>&1; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 65 | cleanup() { | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 70 | bool_line() { | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 80 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null &#124;&#124; true)" | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 81 | if [[ -z "$info" ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 87 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 94 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 101 | if command -v systemctl >/dev/null 2>&1 && | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | if command -v systemctl >/dev/null 2>&1 && | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 120 | if [[ $CONNECT_STATUS -eq 124 ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 123 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 125 | elif grep -Eqi 'already connected&#124;connected: yes' "$CONNECT_LOG"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 132 | for _ in $(seq 1 50); do | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 133 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" &#124;&#124; true | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 140 | [[ -n "$AG_PATH" ]] && break | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 145 | if [[ -z "$AG_PATH" ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 151 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" >"$AG_INTROSPECT" 2>/dev/null; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 156 | if grep -Fq "$TRANSPORT_IFACE" "$AG_INTROSPECT"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 163 | if grep -Fq 'Activate' "$AG_INTROSPECT"; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 169 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 176 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" Codec >"$CODEC_REPLY" 2>/dev/null; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 183 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 197 | case "${CODEC:-}" in | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 198 | 1) echo "transport_codec=cvsd" ;; | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 199 | 2) echo "transport_codec=msbc" ;; | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 200 | 3) echo "transport_codec=lc3_swb" ;; | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 201 | *) echo "transport_codec=unknown" ;; | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 204 | case "${REJECT_SCO:-}" in | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 205 | true) | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 209 | false) | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 213 | *) | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 219 | if [[ -n "$STATE" && -n "$CODEC" && -n "$REJECT_SCO" ]]; then | HFP-AUDIO: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-hfp-call.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 13 | usage() { | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 32 | while [[ $# -gt 0 ]]; do | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 33 | case "$1" in | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 34 | --dial) | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 38 | --help&#124;-h) | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 42 | *) | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 55 | if [[ ! "$OBSERVE_SECONDS" =~ ^[1-9][0-9]*$ ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | if [[ "$DO_DIAL" == yes ]] && | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | [[ ! "$RECIPIENT" =~ ^[0-9+*#,A-D]{1,80}$ ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 66 | for command in bluetoothctl busctl grep head mktemp sleep seq timeout; do | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 67 | if ! command -v "$command" >/dev/null 2>&1; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 82 | cleanup() { | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 86 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 88 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 101 | bool_line() { | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 109 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null &#124;&#124; true)" | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 110 | if [[ -z "$info" ]] &#124;&#124; | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 111 | ! grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 117 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 128 | if [[ $CONNECT_STATUS -eq 124 ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 135 | for _ in $(seq 1 50); do | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" &#124;&#124; true | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 143 | [[ -n "$AG_PATH" ]] && break | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 148 | if [[ -z "$AG_PATH" ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 154 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null &#124; | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 161 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 167 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 175 | if [[ "$DO_DIAL" != yes ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 194 | if [[ $DIAL_STATUS -ne 0 ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 203 | for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 204 | if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null && | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 219 | if [[ $HANGUP_STATUS -eq 0 ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-| 231 | if [[ "$CALL_SEEN" == yes ]]; then | HFP-CALL: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-hfp-sco.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 19 | usage() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 43 | while [[ $# -gt 0 ]]; do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 44 | case "$1" in | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 45 | --dial) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 49 | --help&#124;-h) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 53 | *) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 66 | for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 68 | if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 74 | if [[ "$DO_DIAL" == yes ]] && | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 75 | [[ ! "$RECIPIENT" =~ ^[0-9+*#,A-D]{1,80}$ ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 80 | for command in bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 81 | if ! command -v "$command" >/dev/null 2>&1; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 106 | cleanup() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 110 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 112 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 125 | bool_line() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 129 | read_transport_state() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 130 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | refresh_call_snapshot() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 140 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 147 | grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" &#124;&#124; true | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 152 | if [[ -z "$CALL_PATH" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 156 | for state in active dialing alerting incoming waiting held disconnected; do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 157 | if grep -Eq "\"State\"[[:space:]]+s[[:space:]]+\"$state\"" "$CALLS_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 163 | for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 164 | if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \ | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 167 | if [[ -n "$CALL_STATE" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 176 | inspect_hfp_nodes() { | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 177 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 187 | data = json.load(handle) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 193 | for obj in data: | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 194 | if obj.get("type") != "PipeWire:Interface:Node": | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 198 | if props.get("api.bluez5.address") != device: | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 200 | if props.get("api.bluez5.profile") != "headset-head-unit": | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 204 | media_class = props.get("media.class") | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 205 | if media_class == "Audio/Source": | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 207 | elif media_class == "Audio/Sink": | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 210 | print(f"hfp_node_count={count}") | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 211 | print(f"hfp_source_node_present={'yes' if source else 'no'}") | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 212 | print(f"hfp_sink_node_present={'yes' if sink else 'no'}") | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 213 | print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}") | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 221 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 222 | if [[ -z "$info" ]] &#124;&#124; | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 223 | ! grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 229 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 240 | if [[ $CONNECT_STATUS -eq 124 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 243 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 245 | elif grep -Eqi 'already connected&#124;connected: yes' "$CONNECT_LOG"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 251 | for _ in $(seq 1 50); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 252 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 255 | grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" &#124;&#124; true | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 259 | [[ -n "$AG_PATH" ]] && break | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 264 | if [[ -z "$AG_PATH" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 270 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 276 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 284 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null &#124; | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 291 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null &#124; | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 298 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 304 | if grep -Fq 'b true' "$REJECT_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 309 | elif grep -Fq 'b false' "$REJECT_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 317 | INITIAL_STATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 320 | if [[ "$DO_DIAL" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 340 | if [[ $DIAL_STATUS -ne 0 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 349 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 350 | if refresh_call_snapshot && [[ -n "$CALL_PATH" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 358 | if [[ "$CALL_SEEN" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 367 | for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 368 | if refresh_call_snapshot; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 370 | if [[ "$LAST_CALL_STATE" == active ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 381 | if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 390 | TRANSPORT_STATE_BEFORE_ACTIVATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 399 | case "$TRANSPORT_STATE_BEFORE_ACTIVATE" in | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 400 | active) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 405 | pending) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 410 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 411 | LAST_STATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 412 | if [[ "$LAST_STATE" == active ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 416 | [[ "$LAST_STATE" == idle &#124;&#124; "$LAST_STATE" == error ]] && break | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 420 | idle) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 430 | if [[ $ACTIVATE_STATUS -ne 0 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 435 | grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState&#124;InvalidFormat&#124;NotSupported&#124;InProgress&#124;Failed&#124;CME)&#124;org\.freedesktop\.DBus\.Error\.(InvalidArgs&#124;Failed&#124;NoReply&#124;Timeout&#124;AccessDenied&#124;ServiceUnknown)' "$ACTIVATE_REPLY" &#124;&#124; | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 439 | if [[ -z "$ACTIVATE_ERROR_CLASS" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 440 | if grep -Eqi 'timed out&#124;timeout' "$ACTIVATE_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 442 | elif grep -Eqi 'invalid state&#124;already active' "$ACTIVATE_REPLY"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 449 | LAST_STATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 453 | for _ in $(seq 1 15); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 454 | [[ "$LAST_STATE" == active ]] && { ACTIVE_SEEN=yes; break; } | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 455 | [[ "$LAST_STATE" == error ]] && break | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 457 | LAST_STATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 459 | if [[ "$LAST_STATE" == active ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 468 | *) | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 474 | if [[ "$ACTIVATE_INVOKED" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 478 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" != 0 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 486 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" == 0 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 487 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 488 | LAST_STATE="$(read_transport_state &#124;&#124; true)" | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 489 | if [[ "$LAST_STATE" == active ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 493 | [[ "$LAST_STATE" == error ]] && break | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 502 | if [[ "$ACTIVE_SEEN" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 509 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 510 | if inspect_hfp_nodes && grep -Fq 'hfp_nodes_ready=yes' "$NODE_RESULT"; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 517 | if [[ -s "$NODE_RESULT" ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 528 | if [[ "$NODES_READY" != yes ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 543 | if [[ $HANGUP_STATUS -ne 0 ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-| 553 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | HFP-SCO: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-hfp.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 11 | usage() { | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 25 | if [[ "${1:-}" == "--help" &#124;&#124; "${1:-}" == "-h" ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 30 | if [[ $# -ne 0 ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 36 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 41 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 46 | for command in bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep; do | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 47 | if ! command -v "$command" >/dev/null 2>&1; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | cleanup() { | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 66 | bool_line() { | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 75 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null &#124;&#124; true)" | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 76 | if [[ -z "$info" ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 82 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 89 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 96 | if command -v systemctl >/dev/null 2>&1 && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 103 | if command -v systemctl >/dev/null 2>&1 && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 110 | if command -v pipewire >/dev/null 2>&1; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 117 | if command -v wireplumber >/dev/null 2>&1; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 124 | if busctl --user introspect "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER" >"$MANAGER_INTROSPECT" 2>/dev/null; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 130 | if grep -Fq 'org.ofono.Manager' "$MANAGER_INTROSPECT" 2>/dev/null && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 146 | if [[ $CONNECT_STATUS -eq 124 ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 148 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 150 | elif grep -Eqi 'already connected&#124;connected: yes' "$CONNECT_LOG"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 157 | for _ in $(seq 1 50); do | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 158 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 161 | grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" &#124;&#124; | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 166 | if [[ -n "$AG_PATH" ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 173 | if [[ -n "$AG_PATH" ]]; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 181 | if [[ -n "$AG_PATH" ]] && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 183 | if grep -Fq 'org.pipewire.Telephony.AudioGateway1' "$AG_INTROSPECT" && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 184 | grep -Fq 'Dial' "$AG_INTROSPECT" && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 185 | grep -Fq 'HangupAll' "$AG_INTROSPECT" && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 192 | if grep -Fq 'org.ofono.VoiceCallManager' "$AG_INTROSPECT" && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 203 | if [[ -n "$AG_PATH" ]] && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 206 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 216 | if command -v pw-dump >/dev/null 2>&1 && | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 218 | if grep -Fqi "$DEVICE" "$PW_DUMP"; then | HFP: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-map-events.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 9 | usage() { | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 34 | while [[ $# -gt 0 ]]; do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 35 | case "$1" in | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 36 | --help&#124;-h) | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 40 | *) | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 48 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 53 | for value_name in EVENT_TIMEOUT CONNECT_TIMEOUT; do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 55 | if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | for command in busctl bluetoothctl obexctl stdbuf mktemp; do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 62 | if ! command -v "$command" >/dev/null 2>&1; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 72 | if ! busctl --user list 2>/dev/null &#124; awk '{print $1}' &#124; grep -Fxq org.bluez.obex; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 78 | if ! bluetoothctl info "$DEVICE" 2>/dev/null &#124; grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 84 | if bluetoothctl show 2>/dev/null &#124; | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 103 | cleanup() { | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 106 | if [[ -n "$OBEX_FD" ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 107 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | exec {OBEX_FD}>&- 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 111 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 112 | for _ in 1 2 3 4 5; do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 113 | kill -0 "$OBEX_PID" 2>/dev/null &#124;&#124; break | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 116 | kill "$OBEX_PID" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 117 | wait "$OBEX_PID" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 120 | if [[ -n "$MONITOR_PID" ]] && kill -0 "$MONITOR_PID" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 121 | kill "$MONITOR_PID" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | wait "$MONITOR_PID" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | if ! kill -0 "$MONITOR_PID" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 146 | wait_for_log() { | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 152 | while (( elapsed < timeout_seconds * 10 )); do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 153 | if grep -Eq "$pattern" "$file" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 157 | ((elapsed += 1)) | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 163 | if ! wait_for_log "$OBEX_LOG" 'Client .*/org/bluez/obex&#124;\[NEW\].*Client' 5; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 171 | if ! wait_for_log "$OBEX_LOG" 'Connection successful&#124;Failed to connect' "$CONNECT_TIMEOUT"; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 177 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 188 | if [[ -z "$SESSION_PATH" ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 194 | if ! wait_for_log "$OBEX_LOG" 'MessageAccess /org/bluez/obex/client/session&#124;\[NEW\].*MessageAccess' 2; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 206 | if wait_for_log "$MONITOR_LOG" 'org\.bluez\.obex\.Transfer1' 3; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 209 | for _ in {1..30}; do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 210 | if grep -Eqi 'Status.*complete&#124;complete.*Status' "$MONITOR_LOG"; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 214 | if grep -Eqi 'Status.*error&#124;error.*Status' "$MONITOR_LOG"; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 221 | if [[ "$registration_transfer_status" == not_seen ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 232 | grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 235 | grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 240 | while (( elapsed < EVENT_TIMEOUT * 10 )); do | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 242 | grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 245 | grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null &#124;&#124; true | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 248 | if (( current_monitor_messages > baseline_monitor_messages &#124;&#124; | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 254 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 261 | if ! kill -0 "$MONITOR_PID" 2>/dev/null; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 269 | ((elapsed += 1)) | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 274 | if [[ "$event_observed" == yes ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 277 | if [[ "$registration_transfer_status" == complete ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 284 | if [[ "$registration_transfer_status" != complete ]]; then | MAP-EVENTS: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-map-sdp.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 7 | usage() { | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 23 | while [[ $# -gt 0 ]]; do | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 24 | case "$1" in | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 25 | --help&#124;-h) | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | *) | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 37 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 42 | for command in sdptool timeout mktemp; do | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 43 | if ! command -v "$command" >/dev/null 2>&1; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | if [[ $SDP_STATUS -eq 124 ]]; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 64 | elif [[ $SDP_STATUS -ne 0 ]]; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 72 | if grep -Eqi '<attribute[^>]+id="0x0315"&#124;<attribute[^>]+id="0x315"' "$SDP_OUT"; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 78 | if grep -Eqi '<attribute[^>]+id="0x0316"&#124;<attribute[^>]+id="0x316"' "$SDP_OUT"; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 84 | if grep -Eqi '<attribute[^>]+id="0x0317"&#124;<attribute[^>]+id="0x317"' "$SDP_OUT"; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-| 90 | if grep -Eqi 'uuid[^>]+value="0x1132"&#124;uuid[^>]+value="00001132' "$SDP_OUT"; then | MAP-SDP: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-map-send.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 12 | usage() { | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 33 | while [[ $# -gt 0 ]]; do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 34 | case "$1" in | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 35 | --send) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 39 | --help&#124;-h) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 43 | *) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 51 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 56 | if [[ ! "$RECIPIENT" =~ ^\+[1-9][0-9]{6,14}$ ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | for value_name in CONNECT_TIMEOUT TRANSFER_TIMEOUT; do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 63 | if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 69 | for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr; do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 70 | if ! command -v "$command" >/dev/null 2>&1; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 80 | if ! busctl --user list 2>/dev/null &#124; awk '{print $1}' &#124; grep -Fxq org.bluez.obex; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 86 | if ! bluetoothctl info "$DEVICE" 2>/dev/null &#124; grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 105 | cleanup() { | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | if [[ -n "$OBEX_FD" ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 109 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 110 | exec {OBEX_FD}>&- 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 113 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 114 | for _ in 1 2 3 4 5; do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 115 | kill -0 "$OBEX_PID" 2>/dev/null &#124;&#124; break | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 118 | kill "$OBEX_PID" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 119 | wait "$OBEX_PID" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | if [[ -n "$MONITOR_PID" ]] && kill -0 "$MONITOR_PID" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 123 | kill "$MONITOR_PID" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 124 | wait "$MONITOR_PID" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 136 | if ! kill -0 "$MONITOR_PID" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 146 | wait_for_log() { | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 152 | while (( elapsed < timeout_seconds * 10 )); do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 153 | if grep -Eq "$pattern" "$file" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 156 | if [[ "$file" == "$OBEX_LOG" ]] && ! kill -0 "$OBEX_PID" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 160 | ((elapsed += 1)) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 166 | if ! wait_for_log "$OBEX_LOG" 'Client .*/org/bluez/obex&#124;\[NEW\].*Client' 5; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 174 | if ! wait_for_log "$OBEX_LOG" 'Connection successful&#124;Failed to connect' "$CONNECT_TIMEOUT"; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 180 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 191 | if [[ -z "$SESSION_PATH" ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 197 | if ! wait_for_log "$OBEX_LOG" 'MessageAccess /org/bluez/obex/client/session&#124;\[NEW\].*MessageAccess' 2; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 205 | if busctl --user get-property org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SupportedTypes >"$SUPPORTED_TYPES" 2>/dev/null && | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 213 | if ! busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SetFolder s telecom >/dev/null 2>&1; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 219 | if ! busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SetFolder s msg >/dev/null 2>&1; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 255 | if ! grep -Fqx $'BEGIN:MSG\r' "$BMSG_FILE" &#124;&#124; | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 256 | ! grep -Fqx $'END:MSG\r' "$BMSG_FILE" &#124;&#124; | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 257 | ! grep -Fqx $'END:BBODY\r' "$BMSG_FILE" &#124;&#124; | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 258 | [[ "$(tail -c 2 "$BMSG_FILE" &#124; od -An -t x1 &#124; tr -d '[:space:]')" != "0d0a" ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 270 | if [[ "$DO_SEND" != yes ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 286 | if [[ $PUSH_STATUS -ne 0 ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 299 | if [[ -n "$TRANSFER_PATH" ]]; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 307 | while (( elapsed < TRANSFER_TIMEOUT * 10 )); do | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 309 | tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null &#124;&#124; true | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 311 | if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" &#124; | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 317 | if grep -A 8 -F 'STRING "Status"' "$NEW_LOG" &#124; | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 323 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 329 | ((elapsed += 1)) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 334 | case "$transfer_result" in | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 335 | complete) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 339 | error) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 344 | session_lost) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-| 349 | *) | MAP-SEND: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-mns.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 7 | command_present() { | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 8 | if command -v "$1" >/dev/null 2>&1; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 15 | bool_line() { | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 25 | if command -v dpkg-query >/dev/null 2>&1; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 26 | package_version="$(dpkg-query -W -f='${Version}' bluez-obexd 2>/dev/null &#124;&#124; true)" | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 32 | if command -v busctl >/dev/null 2>&1 && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 39 | if command -v busctl >/dev/null 2>&1 && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 48 | head -n 1 &#124;&#124; | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 52 | if [[ -n "$OBEX_PID" && -r "/proc/$OBEX_PID/exe" ]]; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 54 | OBEX_EXE="$(readlink -f "/proc/$OBEX_PID/exe" 2>/dev/null &#124;&#124; true)" | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | if [[ -n "$OBEX_PID" && -r "/proc/$OBEX_PID/cmdline" ]]; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 62 | if grep -Eq -- '--noplugin([=[:space:]][^ ]*,?)*mns&#124;--noplugin[=[:space:]]+mns' <<<"$CMDLINE"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 71 | if [[ -n "$OBEX_EXE" && -r "$OBEX_EXE" ]] && command -v strings >/dev/null 2>&1; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 77 | if grep -Fq 'x-bt/MAP-NotificationRegistration' "$STRINGS_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 83 | if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 89 | if grep -Fq 'Message Notification server' "$STRINGS_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 95 | if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT" &#124;&#124; | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 110 | if command -v bluetoothctl >/dev/null 2>&1 && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 119 | if command -v sdptool >/dev/null 2>&1; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 127 | if [[ $SDP_STATUS -eq 0 ]]; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 130 | if grep -Eqi 'Message Notification&#124;0x1133&#124;00001133-0000-1000-8000-00805f9b34fb' "$SDP_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 137 | if grep -Eqi 'permission&#124;not permitted&#124;access denied' "$SDP_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | elif grep -Eqi 'connection refused&#124;failed to connect&#124;no such file&#124;not available&#124;not found' "$SDP_OUT"; then | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 153 | if [[ "${OBEX_EXE:-}" != "" ]] && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 154 | command -v strings >/dev/null 2>&1 && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 155 | strings "$OBEX_EXE" &#124; grep -Fq 'x-bt/MAP-NotificationRegistration' && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-| 156 | strings "$OBEX_EXE" &#124; grep -Fq 'x-bt/MAP-event-report' && | MNS: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-obex-read.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 9 | usage() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 26 | while [[ $# -gt 0 ]]; do | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 27 | case "$1" in | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 28 | --device) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | [[ $# -ge 2 ]] &#124;&#124; { echo "--device requires a Bluetooth address." >&2; exit 2; } | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 33 | --target) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 34 | [[ $# -ge 2 ]] &#124;&#124; { echo "--target requires map or pbap." >&2; exit 2; } | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 38 | --help&#124;-h) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 42 | *) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 55 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 60 | case "$TARGET" in | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 61 | map) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 65 | pbap) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 69 | *) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 75 | for command in busctl bluetoothctl obexctl stdbuf mktemp; do | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 76 | if ! command -v "$command" >/dev/null 2>&1; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 87 | if ! busctl --user list 2>/dev/null &#124; awk '{print $1}' &#124; grep -Fxq org.bluez.obex; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 93 | if ! bluetoothctl info "$DEVICE" 2>/dev/null &#124; grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 108 | cleanup() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 111 | if [[ -n "$OBEX_FD" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 112 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null &#124;&#124; true | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 113 | exec {OBEX_FD}>&- 2>/dev/null &#124;&#124; true | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 116 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 117 | for _ in 1 2 3 4 5; do | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 118 | kill -0 "$OBEX_PID" 2>/dev/null &#124;&#124; break | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 121 | kill "$OBEX_PID" 2>/dev/null &#124;&#124; true | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | wait "$OBEX_PID" 2>/dev/null &#124;&#124; true | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 134 | wait_for_log() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | while (( elapsed < timeout_seconds * 10 )); do | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 140 | if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 143 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 147 | ((elapsed += 1)) | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 153 | if ! wait_for_log 'Client .*/org/bluez/obex&#124;\[NEW\].*Client' 5; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 161 | if ! wait_for_log 'Connection successful&#124;Failed to connect' "$CONNECT_TIMEOUT"; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 167 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 178 | if [[ -z "$SESSION_PATH" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 184 | if ! wait_for_log "\[NEW\].*$EXPECTED_PROXY_LABEL&#124;$EXPECTED_PROXY_LABEL /org/bluez/obex/client/session" 2; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 190 | if ! busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 198 | array_count() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 203 | dbus_error_name() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 205 | grep -Eo 'org\.bluez\.obex\.Error\.[A-Za-z]+' "$file" &#124; head -n 1 &#124;&#124; true | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 208 | call_to_file() { | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 220 | if [[ "$TARGET" == "map" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 222 | if call_to_file "$FOLDERS_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListFolders 'a{sv}' 1 MaxCount q 16; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 225 | if [[ "$count" == "unknown" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 227 | elif (( count > 0 )); then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 240 | if call_to_file "$TELECOM_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     SetFolder s telecom; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 250 | if call_to_file "$MSG_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     SetFolder s msg; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 260 | if call_to_file "$MESSAGES_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListMessages 'sa{sv}' inbox 2 MaxCount q 1 Fields as 1 type; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 263 | if [[ "$count" == "unknown" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 265 | elif (( count > 0 )); then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 282 | if call_to_file "$SELECT_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1   Select ss int pb; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 292 | if call_to_file "$SIZE_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1 GetSize; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 294 | size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^[0-9]+$/ { print $2 }' "$SIZE_OUT")" | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 295 | if [[ -z "$size" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 297 | elif (( size > 0 )); then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 310 | if call_to_file "$LIST_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1   List 'a{sv}' 1 MaxCount q 1; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 313 | if [[ "$count" == "unknown" ]]; then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-| 315 | elif (( count > 0 )); then | OBEX-READ: success, rejection, unavailable/malformed and cleanup as applicable |
-
-## scripts/probe-obex-session.sh
-
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 9 | usage() { | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 28 | while [[ $# -gt 0 ]]; do | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 29 | case "$1" in | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 30 | --device) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 31 | [[ $# -ge 2 ]] &#124;&#124; { echo "--device requires a Bluetooth address." >&2; exit 2; } | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 35 | --target) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 36 | [[ $# -ge 2 ]] &#124;&#124; { echo "--target requires map or pbap." >&2; exit 2; } | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 40 | --help&#124;-h) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 44 | *) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 52 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 57 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 62 | case "$TARGET" in | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 63 | map) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 68 | pbap) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 73 | *) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 79 | for command in busctl bluetoothctl obexctl stdbuf mktemp; do | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 80 | if ! command -v "$command" >/dev/null 2>&1; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 89 | if ! busctl --user list 2>/dev/null &#124; awk '{print $1}' &#124; grep -Fxq org.bluez.obex; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 96 | if ! bluetoothctl info "$DEVICE" 2>/dev/null &#124; grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 112 | cleanup() { | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 115 | if [[ -n "$OBEX_FD" ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 116 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null &#124;&#124; true | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 117 | exec {OBEX_FD}>&- 2>/dev/null &#124;&#124; true | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 120 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 121 | for _ in 1 2 3 4 5; do | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 122 | kill -0 "$OBEX_PID" 2>/dev/null &#124;&#124; break | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 125 | kill "$OBEX_PID" 2>/dev/null &#124;&#124; true | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 126 | wait "$OBEX_PID" 2>/dev/null &#124;&#124; true | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 139 | wait_for_log() { | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 144 | while (( elapsed < timeout_seconds * 10 )); do | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 145 | if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 148 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 152 | ((elapsed += 1)) | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 158 | if ! wait_for_log 'Client .*/org/bluez/obex&#124;\[NEW\].*Client' 5; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 167 | if ! wait_for_log 'Connection successful&#124;Failed to connect' "$CONNECT_TIMEOUT"; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 173 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 175 | failure="$(grep -F 'Failed to connect' "$OBEX_LOG" &#124; tail -n 1 &#124; sed -E 's/[[:space:]]+/ /g' &#124; cut -c1-220)" | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 185 | if [[ -z "$SESSION_PATH" ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 193 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   org.bluez.obex.Session1 >/dev/null 2>&1; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 207 | if [[ $TARGET_STATUS -eq 0 ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 213 | if [[ "$SESSION_TARGET_UUID" == "$EXPECTED_TARGET_UUID" ]]; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 223 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 229 | if wait_for_log "\[NEW\].*$EXPECTED_PROXY_LABEL&#124;$EXPECTED_PROXY_LABEL /org/bluez/obex/client/session" 2; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
-| 235 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | OBEX-SESSION: success, rejection, unavailable/malformed and cleanup as applicable |
+| 3 | trap 'exit 130' INT | test_packaging_contract, test_packaging_branches |
+| 4 | trap 'exit 143' TERM | test_packaging_contract, test_packaging_branches |
+| 6 | ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)" | test_packaging_contract, test_packaging_branches |
+| 9 | for command in cargo dpkg dpkg-deb python3 sha256sum; do | test_packaging_contract, test_packaging_branches |
+| 10 | if ! command -v "$command" >/dev/null 2>&1; then | test_packaging_contract, test_packaging_branches |
+| 12 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 17 | if [[ -z "$VERSION" ]]; then | test_packaging_contract, test_packaging_branches |
+| 18 | VERSION="$( | test_packaging_contract, test_packaging_branches |
+| 20 | python3 -c 'import json, sys; data = json.load(sys.stdin); print(next(p["version"] for p in data["packages"] if p["name"] == "nativepair-core"))' | test_packaging_contract, test_packaging_branches |
+| 24 | if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then | test_packaging_contract, test_packaging_branches |
+| 26 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 29 | HOST_ARCH="$(dpkg --print-architecture)" | test_packaging_contract, test_packaging_branches |
+| 31 | case "$ARCH" in | test_packaging_contract, test_packaging_branches |
+| 36 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 39 | if [[ "$ARCH" != "$HOST_ARCH" ]]; then | test_packaging_contract, test_packaging_branches |
+| 41 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 64 | installed_size="$(du -sk "$PACKAGE_ROOT/usr" \| awk '{print $1}')" | test_packaging_contract, test_packaging_branches |
+| 67 | if [[ -z "${SOURCE_DATE_EPOCH:-}" ]] && command -v git >/dev/null 2>&1; then | test_packaging_contract, test_packaging_branches |
+| 68 | SOURCE_DATE_EPOCH="$(git log -1 --format=%ct 2>/dev/null \|\| true)" | test_packaging_contract, test_packaging_branches |
+| 70 | if [[ -n "${SOURCE_DATE_EPOCH:-}" ]]; then | test_packaging_contract, test_packaging_branches |
+| 72 | while IFS= read -r -d '' path; do | test_packaging_contract, test_packaging_branches |
 
 ## scripts/verify-deb.sh
 
-| Source line | Decision / method | Planned assertion family |
+Assertion families: [test_packaging_contract](../scripts/tests/test_packaging_contract.py), [test_packaging_branches](../scripts/tests/test_packaging_branches.py).
+
+| Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 4 | if [[ $# -ne 1 ]]; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 10 | if [[ ! -f "$PACKAGE_PATH" ]]; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 15 | for command in dpkg-deb sha256sum; do | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 16 | if ! command -v "$command" >/dev/null 2>&1; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 23 | if [[ ! -f "$SIDE_CAR" ]]; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 33 | assert_field() { | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 39 | if [[ "$actual" != "$expected" ]]; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 48 | if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 54 | case "$architecture" in | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 55 | amd64&#124;arm64) | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 57 | *) | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 64 | dependency_present() { | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 68 | sed 's/^[[:space:]]*//' &#124; | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 69 | grep -Eq "^$dependency([[:space:](]&#124;$)" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 72 | for dependency in bluez bluez-obexd; do | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 73 | if ! dependency_present "$dependency"; then | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 84 | test -x "$TEMP_DIR/usr/bin/nativepair" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 85 | test -x "$TEMP_DIR/usr/libexec/nativepair-daemon" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 86 | test -f "$TEMP_DIR/usr/share/doc/nativepair/LICENSE" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 87 | test -f "$TEMP_DIR/usr/share/doc/nativepair/NOTICE" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
-| 88 | test -f "$TEMP_DIR/usr/share/doc/nativepair/README.md" | VERIFY-DEB: success, rejection, unavailable/malformed and cleanup as applicable |
+| 3 | trap 'exit 130' INT | test_packaging_contract, test_packaging_branches |
+| 4 | trap 'exit 143' TERM | test_packaging_contract, test_packaging_branches |
+| 6 | if [[ $# -ne 1 ]]; then | test_packaging_contract, test_packaging_branches |
+| 8 | exit 2 | test_packaging_contract, test_packaging_branches |
+| 11 | PACKAGE_PATH="$(readlink -f "$1")" | test_packaging_contract, test_packaging_branches |
+| 12 | if [[ ! -f "$PACKAGE_PATH" ]]; then | test_packaging_contract, test_packaging_branches |
+| 14 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 17 | for command in dpkg-deb sha256sum awk; do | test_packaging_contract, test_packaging_branches |
+| 18 | if ! command -v "$command" >/dev/null 2>&1; then | test_packaging_contract, test_packaging_branches |
+| 20 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 25 | if [[ ! -f "$SIDE_CAR" ]]; then | test_packaging_contract, test_packaging_branches |
+| 27 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 30 | if ! awk -v name="$(basename "$PACKAGE_PATH")" ' | test_packaging_contract, test_packaging_branches |
+| 31 | NR == 1 { valid = length($1) == 64 && $1 ~ /^[[:xdigit:]]+$/ && NF == 2 && ($2 == name \|\| $2 == "*" name) } | test_packaging_contract, test_packaging_branches |
+| 32 | END { exit !(NR == 1 && valid) } | test_packaging_contract, test_packaging_branches |
+| 34 | echo "Invalid checksum sidecar: expected one checksum for this package." >&2 | test_packaging_contract, test_packaging_branches |
+| 35 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 39 | cd "$(dirname "$PACKAGE_PATH")" | test_packaging_contract, test_packaging_branches |
+| 40 | sha256sum --check "$(basename "$SIDE_CAR")" | test_packaging_contract, test_packaging_branches |
+| 43 | assert_field() { | test_packaging_contract, test_packaging_branches |
+| 48 | actual="$(dpkg-deb --field "$PACKAGE_PATH" "$field")" | test_packaging_contract, test_packaging_branches |
+| 49 | if [[ "$actual" != "$expected" ]]; then | test_packaging_contract, test_packaging_branches |
+| 51 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 57 | version="$(dpkg-deb --field "$PACKAGE_PATH" Version)" | test_packaging_contract, test_packaging_branches |
+| 58 | if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then | test_packaging_contract, test_packaging_branches |
+| 60 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 63 | architecture="$(dpkg-deb --field "$PACKAGE_PATH" Architecture)" | test_packaging_contract, test_packaging_branches |
+| 64 | case "$architecture" in | test_packaging_contract, test_packaging_branches |
+| 69 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 73 | depends="$(dpkg-deb --field "$PACKAGE_PATH" Depends)" | test_packaging_contract, test_packaging_branches |
+| 74 | dependency_present() { | test_packaging_contract, test_packaging_branches |
+| 82 | for dependency in bluez bluez-obexd; do | test_packaging_contract, test_packaging_branches |
+| 83 | if ! dependency_present "$dependency"; then | test_packaging_contract, test_packaging_branches |
+| 85 | exit 1 | test_packaging_contract, test_packaging_branches |
+| 89 | TEMP_DIR="$(mktemp -d)" | test_packaging_contract, test_packaging_branches |
+| 90 | trap 'rm -rf "$TEMP_DIR"' EXIT | test_packaging_contract, test_packaging_branches |
+| 103 | echo "Debian package verification passed: $(basename "$PACKAGE_PATH")" | test_packaging_contract, test_packaging_branches |
+
+## scripts/probe-audio-health.sh
+
+Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 8 | if [[ ! "$ITERATIONS" =~ ^0*([2-9]\|[1-5][0-9]\|60)$ ]]; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 10 | exit 2 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 13 | ITERATIONS=$((10#$ITERATIONS)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 15 | for command in grep journalctl mktemp pw-dump python3 pw-top sed systemctl timeout wpctl; do | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 16 | if ! command -v "$command" >/dev/null 2>&1; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 18 | exit 1 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 22 | TMP_DIR="$(mktemp -d)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 31 | cleanup() { | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | trap cleanup EXIT | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 35 | trap 'exit 130' INT | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 36 | trap 'exit 143' TERM | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 43 | if systemctl --user is-active --quiet pipewire.service 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 45 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 49 | if systemctl --user is-active --quiet wireplumber.service 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 51 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 55 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | exit 1 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 64 | if wpctl inspect @DEFAULT_AUDIO_SINK@ >"$DEFAULT_SINK_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 65 | DEFAULT_SINK_ID="$(sed -nE 's/^id ([0-9]+),.*/\1/p' "$DEFAULT_SINK_REPLY" \| head -n 1)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 68 | if wpctl inspect @DEFAULT_AUDIO_SOURCE@ >"$DEFAULT_SOURCE_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 69 | DEFAULT_SOURCE_ID="$(sed -nE 's/^id ([0-9]+),.*/\1/p' "$DEFAULT_SOURCE_REPLY" \| head -n 1)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 73 | timeout "$((ITERATIONS + 8))s" pw-top -b -n "$ITERATIONS" >"$PW_TOP_RAW" 2>/dev/null | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 77 | if [[ $PW_TOP_STATUS -ne 0 ]]; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | exit 1 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 84 | python3 - "$PW_TOP_RAW" "$PW_DUMP" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(dirname -- "${BASH_SOURCE[0]}")" >"$PW_TOP_RESULT" <<'PY' \|\| { cat "$PW_TOP_RESULT"; exit 1; } | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 104 | for raw in handle: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 106 | if not line: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 108 | if line.startswith("S   ID  QUANT"): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 113 | if len(parts) < 9: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 122 | if state not in {"E", "C", "S", "I", "R", "t", "T", "!"}: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 124 | if not node_id.isdigit() or not err.isdigit(): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 128 | if state in {"R", "t", "T"}: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 130 | if state == "E": | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 141 | if quant.isdigit() and rate.isdigit(): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 144 | if q > 0 and r > 0: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 149 | for nid in seen_ids | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | if max_err.get(nid, 0) - first_err.get(nid, 0) > 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 157 | sys.exit(1) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 160 | for obj in dump: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | def props_for(nid): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 166 | return props_by_id.get(str(nid), {}) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 168 | def is_bluetooth(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 169 | return ( | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 175 | def is_hfp(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 176 | return props.get("api.bluez5.profile") == "headset-head-unit" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 178 | def media_class(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 179 | return str(props.get("media.class") or "") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 181 | def default_kind(node_id): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 182 | if not node_id: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 183 | return "unknown" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 185 | if props is None: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 186 | return "unknown" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 187 | return "yes" if is_bluetooth(props) else "no" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 191 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 192 | if states_seen.get(nid, set()) & {"R", "t", "T"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 195 | nid: delta for nid, delta in growth.items() if is_bluetooth(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 198 | nid: delta for nid, delta in growth.items() if is_hfp(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 202 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 203 | if media_class(props_for(nid)).startswith("Stream/Output/Audio") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 207 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 208 | if media_class(props_for(nid)) == "Audio/Sink" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 212 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 213 | if media_class(props_for(nid)) == "Audio/Source" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 223 | default_sink_delta = growth.get(int(default_sink_id), 0) if default_sink_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 224 | default_source_delta = growth.get(int(default_source_id), 0) if default_source_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 226 | positive_now = sum(1 for value in last_err.values() if value > 0) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 239 | print(f"xrun_or_error_growth_observed={'yes' if growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 242 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 243 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 246 | print(f"default_sink_err_growth={'yes' if default_sink_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 248 | print(f"default_source_err_growth={'yes' if default_source_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 257 | print(f"bluetooth_err_growth_observed={'yes' if bluetooth_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 258 | print(f"hfp_err_growth_observed={'yes' if hfp_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 259 | print(f"output_stream_err_growth_observed={'yes' if output_stream_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 264 | journalctl --user -u pipewire.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$PIPEWIRE_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 265 | journalctl --user -u wireplumber.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$WIREPLUMBER_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 267 | PIPEWIRE_WARNINGS="$(grep -cve '^[[:space:]]*$' "$PIPEWIRE_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 268 | WIREPLUMBER_WARNINGS="$(grep -cve '^[[:space:]]*$' "$WIREPLUMBER_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 273 | if grep -Eqi 'xrun\|underrun\|overrun\|deadline\|missed' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 275 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 279 | if grep -Eqi 'bluez\|bluetooth\|sco\|hfp\|transport' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 281 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-audio-routing.sh
+
+Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 10 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 12 | exit 2 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 15 | for command in awk busctl grep head mktemp python3 pw-dump sed wpctl; do | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 16 | if ! command -v "$command" >/dev/null 2>&1; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 18 | exit 1 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 22 | TMP_DIR="$(mktemp -d)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 30 | cleanup() { | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 33 | trap cleanup EXIT | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | trap 'exit 130' INT | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 35 | trap 'exit 143' TERM | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 42 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"   org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 43 | AG_PATH="$(awk -F'"' ' | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 44 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 45 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 49 | if [[ -n "$AG_PATH" ]]; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 51 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 52 | STATE="$(sed -nE 's/^s "(idle\|pending\|active\|error)"$/\1/p' "$STATE_REPLY")" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 54 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 62 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 64 | exit 1 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 71 | if wpctl inspect @DEFAULT_AUDIO_SINK@ >"$DEFAULT_SINK_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 72 | DEFAULT_SINK_ID="$(sed -nE 's/^id ([0-9]+),.*/\1/p' "$DEFAULT_SINK_REPLY" \| head -n 1)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 75 | if wpctl inspect @DEFAULT_AUDIO_SOURCE@ >"$DEFAULT_SOURCE_REPLY" 2>/dev/null; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 76 | DEFAULT_SOURCE_ID="$(sed -nE 's/^id ([0-9]+),.*/\1/p' "$DEFAULT_SOURCE_REPLY" \| head -n 1)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 79 | python3 - "$PW_DUMP" "$DEVICE" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(dirname -- "${BASH_SOURCE[0]}")" >"$ROUTING_RESULT" <<'PY' \|\| { cat "$ROUTING_RESULT"; exit 1; } | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 90 | sys.exit(1) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 93 | for obj in data: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 96 | if props.get("api.bluez5.address") != device: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 98 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 102 | source_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Source"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 103 | sink_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Sink"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 106 | print(f"hfp_source_node_present={'yes' if source_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 107 | print(f"hfp_sink_node_present={'yes' if sink_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 108 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 109 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 110 | print(f"default_sink_is_phone_hfp={'yes' if default_sink_id in sink_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | print(f"default_source_is_phone_hfp={'yes' if default_source_id in source_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | print(f"orphan_hfp_nodes_present={'yes' if hfp_nodes else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-bluetooth.sh
+
+Assertion families: [test_discovery_contract](../scripts/tests/test_discovery_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 8 | usage() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 25 | while [[ $# -gt 0 ]]; do | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 26 | case "$1" in | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 28 | if [[ $# -lt 2 ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 30 | exit 2 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 42 | exit 0 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 47 | exit 2 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 52 | if [[ -n "$DEVICE" ]] && [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 54 | exit 2 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | command_present() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 58 | if command -v "$1" >/dev/null 2>&1; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 60 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 65 | bool_line() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 70 | echo "probe_scope=host$([[ -n "$DEVICE" ]] && printf '+device')" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 72 | bool_line bluetoothctl_present "$(command_present bluetoothctl)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 73 | bool_line busctl_present "$(command_present busctl)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 74 | bool_line obexctl_present "$(command_present obexctl)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 76 | if command -v bluetoothctl >/dev/null 2>&1; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 77 | version="$(bluetoothctl --version 2>/dev/null \| head -n 1 \| tr -cd '[:alnum:].:_ -')" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | adapter_count="$( | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 86 | paired_count="$( | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 88 | bluetoothctl devices Paired 2>/dev/null \|\| | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 89 | bluetoothctl paired-devices 2>/dev/null \|\| | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 95 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 101 | if command -v systemctl >/dev/null 2>&1 && | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 104 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 108 | if command -v busctl >/dev/null 2>&1 && | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 115 | if command -v systemctl >/dev/null 2>&1 && | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 118 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 122 | if [[ "$HOST_ONLY" == yes \|\| -z "$DEVICE" ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | exit 0 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 126 | if ! command -v bluetoothctl >/dev/null 2>&1; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 128 | exit 1 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 132 | if [[ -z "$info" ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 134 | exit 1 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 139 | property_is_yes() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 141 | if grep -Eq "^[[:space:]]*$property:[[:space:]]+yes$" <<<"$info"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 143 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | bool_line device_paired "$(property_is_yes Paired)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 149 | bool_line device_trusted "$(property_is_yes Trusted)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | bool_line device_connected "$(property_is_yes Connected)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 152 | lower_info="$(tr '[:upper:]' '[:lower:]' <<<"$info")" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 154 | uuid_present() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 156 | if grep -Fq "$uuid" <<<"$lower_info"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 158 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 163 | bool_line advertised_map_mse "$(uuid_present 00001132-0000-1000-8000-00805f9b34fb)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 164 | bool_line advertised_pbap_pse "$(uuid_present 0000112f-0000-1000-8000-00805f9b34fb)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | bool_line advertised_hfp_ag "$(uuid_present 0000111f-0000-1000-8000-00805f9b34fb)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 166 | bool_line advertised_ancs "$(uuid_present 7905f431-b5ce-4e99-a40f-4b1e122d00d0)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-call-audio-watch.sh
+
+Assertion families: [test_watcher_entry](../scripts/tests/test_watcher_entry.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 3 | exec python3 "$(dirname -- "$0")/probe_call_audio_watch.py" "$@" | test_watcher_entry |
+
+## scripts/probe-hfp.sh
+
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 11 | usage() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 25 | if [[ "${1:-}" == "--help" \|\| "${1:-}" == "-h" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 27 | exit 0 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 30 | if [[ $# -ne 0 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 33 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 36 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 38 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 41 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 43 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 46 | for command in bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep; do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 47 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 49 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 53 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 61 | cleanup() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 64 | trap cleanup EXIT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 65 | trap 'exit 130' INT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 66 | trap 'exit 143' TERM | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 68 | bool_line() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 77 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 78 | if [[ -z "$info" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 80 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 84 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 86 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 88 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 91 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 93 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 95 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 98 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 101 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 105 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 108 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 112 | if command -v pipewire >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 113 | pipewire_version="$(pipewire --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 115 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 119 | if command -v wireplumber >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 120 | wireplumber_version="$(wireplumber --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 122 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 126 | if busctl --user introspect "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER" >"$MANAGER_INTROSPECT" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 128 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 132 | if grep -Fq 'org.ofono.Manager' "$MANAGER_INTROSPECT" 2>/dev/null && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 135 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 148 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 150 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 152 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 154 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 159 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 160 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 161 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 162 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 163 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 165 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 172 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 175 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 180 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 182 | if grep -Fq 'org.pipewire.Telephony.AudioGateway1' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 183 | grep -Fq 'Dial' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 184 | grep -Fq 'HangupAll' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 187 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 191 | if grep -Fq 'org.ofono.VoiceCallManager' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 194 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 197 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 202 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 205 | CALL_PRESENCE="$(awk -v gateway="$AG_PATH" ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 206 | NR == 1 && $1 == "a(oa{sv})" && $2 ~ /^(0\|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 207 | if ($2 == "0" && NF == 2) print "no"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 208 | else if ($2 + 0 > 0 && $3 ~ "^\"" gateway "/call[0-9]+\"$") print "yes"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 209 | else print "unknown"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 212 | END { if (!found) print "unknown" } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 215 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 220 | if command -v pw-dump >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 222 | if grep -Fqi "$DEVICE" "$PW_DUMP"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 224 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 227 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-hfp-audio.sh
+
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 12 | usage() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 29 | if [[ "${1:-}" == "--help" \|\| "${1:-}" == "-h" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 31 | exit 0 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 34 | if [[ $# -ne 0 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 37 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 40 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 42 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 45 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 47 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 50 | for command in awk bluetoothctl busctl grep head mktemp sed seq sleep timeout; do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 51 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 53 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 57 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 65 | cleanup() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 68 | trap cleanup EXIT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 69 | trap 'exit 130' INT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 70 | trap 'exit 143' TERM | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 72 | bool_line() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 82 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 83 | if [[ -z "$info" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 85 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 89 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 91 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 93 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 96 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 98 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 100 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 103 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 106 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 110 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 113 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 122 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 124 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 125 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 127 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 129 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 134 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 135 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 136 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 137 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 138 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 140 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 145 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 147 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 151 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" >"$AG_INTROSPECT" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 153 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 156 | if grep -Fq "$TRANSPORT_IFACE" "$AG_INTROSPECT"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 158 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 160 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 163 | if grep -Fq 'Activate' "$AG_INTROSPECT"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 165 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 169 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 171 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 173 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 176 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" Codec >"$CODEC_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 178 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 180 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 183 | if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 185 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 187 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 190 | STATE="$(sed -nE 's/^s "(idle\|pending\|active\|error)"$/\1/p' "$STATE_REPLY")" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 191 | CODEC="$(sed -nE 's/^y ([0-9]+)$/\1/p' "$CODEC_REPLY")" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 192 | REJECT_SCO="$(sed -nE 's/^b (true\|false)$/\1/p' "$REJECT_REPLY")" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 197 | case "${CODEC:-}" in | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 204 | case "${REJECT_SCO:-}" in | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 219 | if [[ -n "$STATE" && -n "$CODEC" && -n "$REJECT_SCO" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 222 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-hfp-call.sh
+
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 13 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 27 | The destination is never printed. The probe refuses to dial if any call object | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 32 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 33 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 40 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 45 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 52 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 55 | if [[ ! "$OBSERVE_SECONDS" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( OBSERVE_SECONDS > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 60 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 66 | for command in awk bluetoothctl busctl grep head mktemp sleep seq timeout; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 67 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 69 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 73 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 82 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 84 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 86 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 88 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 91 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 97 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 99 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 100 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 101 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 103 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 115 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 119 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 121 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 130 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 132 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 133 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 137 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 138 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 139 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 140 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 141 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 143 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 154 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 157 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 161 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 163 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 168 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 172 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 176 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 180 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 185 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 199 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 203 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 208 | for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 209 | if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 224 | if [[ $HANGUP_STATUS -eq 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 227 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 231 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 236 | if [[ "$CALL_SEEN" == yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 239 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-hfp-sco.sh
+
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 19 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | NATIVEPAIR_SCO_STATE_TIMEOUT    Condition wait limit for SCO activation (default 15). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 30 | NATIVEPAIR_CALL_ACTIVE_TIMEOUT  Condition wait limit for remote answer (default 30). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 43 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 44 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 51 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 56 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 61 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 66 | for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 68 | if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( value > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 70 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 74 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 77 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | for command in awk bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 81 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 83 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 87 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 106 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 108 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 110 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 115 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 121 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 124 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 125 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 127 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | read_transport_state() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 132 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 133 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 138 | refresh_call_snapshot() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 142 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 144 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 147 | CALL_PATH="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 149 | grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" \|\| true | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 154 | if [[ -z "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 155 | return 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 158 | for state in active dialing alerting incoming waiting held disconnected; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 159 | if grep -Eq "\"State\"[[:space:]]+s[[:space:]]+\"$state\"" "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 161 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 166 | if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 168 | CALL_STATE="$(sed -nE 's/^s "(active\|dialing\|alerting\|incoming\|waiting\|held\|disconnected)"$/\1/p' "$CALL_STATE_REPLY")" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 169 | if [[ -n "$CALL_STATE" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 170 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 175 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 178 | inspect_hfp_nodes() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 179 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 180 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 183 | python3 - "$PW_DUMP" "$DEVICE" "$(dirname -- "${BASH_SOURCE[0]}")" >"$NODE_RESULT" <<'PY' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 194 | sys.exit(1) | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 200 | for obj in data: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 203 | if props.get("api.bluez5.address") != device: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 205 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 210 | if media_class == "Audio/Source": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 212 | elif media_class == "Audio/Sink": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 216 | print(f"hfp_source_node_present={'yes' if source else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 217 | print(f"hfp_sink_node_present={'yes' if sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 218 | print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 226 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 227 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 230 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 234 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 236 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 245 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 247 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 248 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 250 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 252 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 256 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 257 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 258 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 259 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 260 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 262 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 267 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 269 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 273 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 275 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 277 | if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 280 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 284 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 288 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 292 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 295 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 299 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 302 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 306 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 308 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 312 | if grep -Fq 'b true' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 316 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 317 | elif grep -Fq 'b false' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 319 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 322 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 325 | INITIAL_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 328 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 334 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 348 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 352 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 357 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 358 | if refresh_call_snapshot && [[ -n "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 366 | if [[ "$CALL_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 369 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 375 | for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 376 | if refresh_call_snapshot; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 378 | if [[ "$LAST_CALL_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 389 | if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 392 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 398 | TRANSPORT_STATE_BEFORE_ACTIVATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 407 | case "$TRANSPORT_STATE_BEFORE_ACTIVATE" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 418 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 419 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 420 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 424 | [[ "$LAST_STATE" == idle \|\| "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 438 | if [[ $ACTIVATE_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 441 | ACTIVATE_ERROR_CLASS="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 443 | grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState\|InvalidFormat\|NotSupported\|InProgress\|Failed\|CME)\|org\.freedesktop\.DBus\.Error\.(InvalidArgs\|Failed\|NoReply\|Timeout\|AccessDenied\|ServiceUnknown)' "$ACTIVATE_REPLY" \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 447 | if [[ -z "$ACTIVATE_ERROR_CLASS" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 448 | if grep -Eqi 'timed out\|timeout' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 450 | elif grep -Eqi 'invalid state\|already active' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 452 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 457 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 461 | for _ in $(seq 1 15); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 462 | [[ "$LAST_STATE" == active ]] && { ACTIVE_SEEN=yes; break; } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 463 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 465 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 467 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 471 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 482 | if [[ "$ACTIVATE_INVOKED" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 486 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" != 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 491 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 494 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" == 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 495 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 496 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 497 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 501 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 510 | if [[ "$ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 513 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 517 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 518 | if inspect_hfp_nodes && grep -Fq 'hfp_nodes_ready=yes' "$NODE_RESULT"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 525 | if [[ -s "$NODE_RESULT" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 527 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 536 | if [[ "$NODES_READY" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 539 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 551 | if [[ $HANGUP_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 555 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 561 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 563 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-map-events.sh
+
+Assertion families: [test_map_events_contract](../scripts/tests/test_map_events_contract.py), [test_obex_contract](../scripts/tests/test_obex_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 9 | usage() { | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 24 | waits for BlueZ to expose a new org.bluez.obex.Message1 object. | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | deleted on exit. The script never prints Bluetooth addresses, phone aliases, | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | while [[ $# -gt 0 ]]; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 35 | case "$1" in | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 38 | exit 0 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 43 | exit 2 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 48 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 50 | exit 2 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 53 | for value_name in EVENT_TIMEOUT CONNECT_TIMEOUT; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 55 | if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( value > 922337203685477580 )); then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | exit 2 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 61 | for command in busctl bluetoothctl obexctl stdbuf mktemp python3; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 62 | if ! command -v "$command" >/dev/null 2>&1; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 64 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 72 | if ! busctl --user list 2>/dev/null \| awk '{print $1}' \| grep -Fxq org.bluez.obex; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 74 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 78 | if ! bluetoothctl info "$DEVICE" 2>/dev/null \| grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 84 | if bluetoothctl show 2>/dev/null \| | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 88 | else | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 92 | TMP_DIR="$(mktemp -d)" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 102 | cleanup() { | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 104 | trap - EXIT INT TERM | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 105 | trap '' PIPE | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 107 | if [[ -n "$OBEX_FD" ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 108 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 109 | exec {OBEX_FD}>&- 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 113 | for _ in 1 2 3 4 5; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 114 | kill -0 "$OBEX_PID" 2>/dev/null \|\| break | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 117 | kill "$OBEX_PID" 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 118 | wait "$OBEX_PID" 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 121 | if [[ -n "$MONITOR_PID" ]] && kill -0 "$MONITOR_PID" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 122 | kill "$MONITOR_PID" 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | wait "$MONITOR_PID" 2>/dev/null \|\| true | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 127 | exit "$status" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 129 | trap cleanup EXIT | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 130 | trap 'exit 130' INT | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | trap 'exit 143' TERM | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 139 | for _ in {1..50}; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 140 | if grep -Fq 'Monitoring bus message stream' "$MONITOR_LOG"; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 144 | kill -0 "$MONITOR_PID" 2>/dev/null \|\| break | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | if [[ "$MONITOR_READY" != yes ]] \|\| ! kill -0 "$MONITOR_PID" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 158 | wait_for_log() { | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 164 | while (( elapsed < timeout_seconds * 10 )); do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | if grep -Eq "$pattern" "$file" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 166 | return 0 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 172 | return 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 175 | if ! wait_for_log "$OBEX_LOG" 'Client .*/org/bluez/obex\|\[NEW\].*Client' 5; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 177 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 183 | if ! wait_for_log "$OBEX_LOG" 'Connection successful\|Failed to connect' "$CONNECT_TIMEOUT"; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 186 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 189 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 192 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 195 | SESSION_PATH="$( | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 200 | if [[ -z "$SESSION_PATH" ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 203 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 206 | if ! wait_for_log "$OBEX_LOG" 'MessageAccess /org/bluez/obex/client/session\|\[NEW\].*MessageAccess' 2; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 209 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 215 | MONITOR_PARSER="$(dirname -- "${BASH_SOURCE[0]}")/probe_obex_monitor.py" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 218 | for _ in {1..30}; do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 222 | [[ "$registration_transfer_status" == complete \|\| "$registration_transfer_status" == error ]] && break | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 231 | baseline_monitor_messages="$(python3 "$MONITOR_PARSER" --messages "$MONITOR_LOG" "$SESSION_PATH")" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 232 | baseline_obexctl_messages="$(python3 "$MONITOR_PARSER" --obex-messages "$OBEX_LOG" "$SESSION_PATH")" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 236 | while (( elapsed < EVENT_TIMEOUT * 10 )); do | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 237 | current_monitor_messages="$(python3 "$MONITOR_PARSER" --messages "$MONITOR_LOG" "$SESSION_PATH")" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 238 | current_obexctl_messages="$(python3 "$MONITOR_PARSER" --obex-messages "$OBEX_LOG" "$SESSION_PATH")" | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 240 | if (( current_monitor_messages > baseline_monitor_messages \|\| | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 246 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 250 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 253 | if ! kill -0 "$MONITOR_PID" 2>/dev/null; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 257 | exit 1 | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 266 | if [[ "$event_observed" == yes ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 269 | if [[ "$registration_transfer_status" == complete ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 271 | else | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 274 | else | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 276 | if [[ "$registration_transfer_status" != complete ]]; then | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 278 | else | test_map_events_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-map-sdp.sh
+
+Assertion families: [test_discovery_contract](../scripts/tests/test_discovery_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 3 | trap 'exit 130' INT | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 4 | trap 'exit 143' TERM | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 9 | usage() { | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 20 | temporary file and deleted on exit. The Bluetooth address and service payload | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 25 | while [[ $# -gt 0 ]]; do | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 26 | case "$1" in | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | exit 0 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | exit 2 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 39 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 41 | exit 2 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 44 | for command in sdptool timeout mktemp; do | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 45 | if ! command -v "$command" >/dev/null 2>&1; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 47 | exit 1 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 54 | SDP_OUT="$(mktemp)" | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 55 | trap 'rm -f "$SDP_OUT"' EXIT | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 62 | if [[ $SDP_STATUS -eq 124 ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 65 | exit 1 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 66 | elif [[ $SDP_STATUS -ne 0 ]]; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 69 | exit 1 | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 74 | if grep -Eqi '<attribute[^>]+id="0x0315"\|<attribute[^>]+id="0x315"' "$SDP_OUT"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 76 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | if grep -Eqi '<attribute[^>]+id="0x0316"\|<attribute[^>]+id="0x316"' "$SDP_OUT"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 82 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 86 | if grep -Eqi '<attribute[^>]+id="0x0317"\|<attribute[^>]+id="0x317"' "$SDP_OUT"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 88 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 92 | if grep -Eqi 'uuid[^>]+value="0x1132"\|uuid[^>]+value="00001132' "$SDP_OUT"; then | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+| 94 | else | test_discovery_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-map-send.sh
+
+Assertion families: [test_map_send_contract](../scripts/tests/test_map_send_contract.py), [test_obex_contract](../scripts/tests/test_obex_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 12 | usage() { | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | risk. Temporary payload and D-Bus logs are deleted on exit. | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 33 | while [[ $# -gt 0 ]]; do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | case "$1" in | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 41 | exit 0 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 46 | exit 2 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 51 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 53 | exit 2 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 56 | if [[ ! "$RECIPIENT" =~ ^\+[1-9][0-9]{6,14}$ ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 58 | exit 2 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 61 | for value_name in CONNECT_TIMEOUT TRANSFER_TIMEOUT; do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 63 | if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( value > 922337203685477580 )); then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 65 | exit 2 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 69 | for command in busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr python3; do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 70 | if ! command -v "$command" >/dev/null 2>&1; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 72 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | if ! busctl --user list 2>/dev/null \| awk '{print $1}' \| grep -Fxq org.bluez.obex; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 82 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 86 | if ! bluetoothctl info "$DEVICE" 2>/dev/null \| grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 88 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 92 | TMP_DIR="$(mktemp -d)" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 104 | cleanup() { | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 106 | trap - EXIT INT TERM | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 107 | trap '' PIPE | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 109 | if [[ -n "$OBEX_FD" ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 110 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | exec {OBEX_FD}>&- 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 114 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 115 | for _ in 1 2 3 4 5; do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 116 | kill -0 "$OBEX_PID" 2>/dev/null \|\| break | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 119 | kill "$OBEX_PID" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 120 | wait "$OBEX_PID" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | if [[ -n "$MONITOR_PID" ]] && kill -0 "$MONITOR_PID" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 124 | kill "$MONITOR_PID" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 125 | wait "$MONITOR_PID" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 129 | exit "$status" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | trap cleanup EXIT | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 132 | trap 'exit 130' INT | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 133 | trap 'exit 143' TERM | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 139 | for _ in {1..50}; do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 140 | if grep -Fq 'Monitoring bus message stream' "$MONITOR_LOG"; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 144 | kill -0 "$MONITOR_PID" 2>/dev/null \|\| break | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | if [[ "$MONITOR_READY" != yes ]] \|\| ! kill -0 "$MONITOR_PID" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 158 | wait_for_log() { | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 164 | while (( elapsed < timeout_seconds * 10 )); do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | if grep -Eq "$pattern" "$file" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 166 | return 0 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 168 | if [[ "$file" == "$OBEX_LOG" ]] && ! kill -0 "$OBEX_PID" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 169 | return 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 175 | return 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 178 | if ! wait_for_log "$OBEX_LOG" 'Client .*/org/bluez/obex\|\[NEW\].*Client' 5; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 180 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 186 | if ! wait_for_log "$OBEX_LOG" 'Connection successful\|Failed to connect' "$CONNECT_TIMEOUT"; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 189 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 192 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 195 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 198 | SESSION_PATH="$( | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 203 | if [[ -z "$SESSION_PATH" ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 206 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 209 | if ! wait_for_log "$OBEX_LOG" 'MessageAccess /org/bluez/obex/client/session\|\[NEW\].*MessageAccess' 2; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 212 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 217 | if busctl --user get-property org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SupportedTypes >"$SUPPORTED_TYPES" 2>/dev/null && | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 220 | else | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 222 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 225 | if ! busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SetFolder s telecom >/dev/null 2>&1; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 227 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 231 | if ! busctl --user call org.bluez.obex "$SESSION_PATH"   org.bluez.obex.MessageAccess1 SetFolder s msg >/dev/null 2>&1; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 233 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 237 | MESSAGE_BYTES="$(printf '%s' "$MESSAGE_TEXT" \| wc -c)" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 240 | MSG_LENGTH="$((MESSAGE_BYTES + 22))" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 267 | if ! grep -Fqx $'BEGIN:MSG\r' "$BMSG_FILE" \|\| | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 268 | ! grep -Fqx $'END:MSG\r' "$BMSG_FILE" \|\| | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 269 | ! grep -Fqx $'END:BBODY\r' "$BMSG_FILE" \|\| | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 270 | [[ "$(tail -c 2 "$BMSG_FILE" \| od -An -t x1 \| tr -d '[:space:]')" != "0d0a" ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 273 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 282 | if [[ "$DO_SEND" != yes ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 286 | exit 0 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 291 | MONITOR_BASELINE="$(wc -l <"$MONITOR_LOG")" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 298 | if [[ $PUSH_STATUS -ne 0 ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 302 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 306 | TRANSFER_PATH="$( | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 311 | if [[ -n "$TRANSFER_PATH" ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 313 | else | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 319 | while (( elapsed < TRANSFER_TIMEOUT * 10 )); do | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 321 | tail -n "+$((MONITOR_BASELINE + 1))" "$MONITOR_LOG" >"$NEW_LOG" 2>/dev/null \|\| true | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 323 | transfer_result="$(python3 "$(dirname -- "${BASH_SOURCE[0]}")/probe_obex_monitor.py" "$NEW_LOG" "$TRANSFER_PATH")" | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 324 | if [[ "$transfer_result" == complete \|\| "$transfer_result" == error ]]; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 328 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 339 | case "$transfer_result" in | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 347 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 352 | exit 1 | test_map_send_contract, test_obex_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-mns.sh
+
+Assertion families: [test_discovery_contract](../scripts/tests/test_discovery_contract.py), [test_mns_process_contract](../scripts/tests/test_mns_process_contract.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 3 | trap 'exit 130' INT | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 4 | trap 'exit 143' TERM | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 9 | command_present() { | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 10 | if command -v "$1" >/dev/null 2>&1; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 12 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 17 | bool_line() { | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 21 | bool_line bluetoothctl_present "$(command_present bluetoothctl)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 22 | bool_line busctl_present "$(command_present busctl)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 23 | bool_line sdptool_present "$(command_present sdptool)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 24 | bool_line strings_present "$(command_present strings)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 25 | bool_line dpkg_query_present "$(command_present dpkg-query)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 27 | if command -v dpkg-query >/dev/null 2>&1; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 28 | package_version="$(dpkg-query -W -f='${Version}' bluez-obexd 2>/dev/null \|\| true)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 30 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 34 | if command -v busctl >/dev/null 2>&1 && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 37 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 41 | if command -v busctl >/dev/null 2>&1 && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 44 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 48 | OBEX_PID="$( | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 50 | head -n 1 \|\| | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 54 | if [[ -n "$OBEX_PID" && -r "/proc/$OBEX_PID/exe" ]]; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 56 | OBEX_EXE="$(readlink -f "/proc/$OBEX_PID/exe" 2>/dev/null \|\| true)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 57 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 63 | if [[ -n "$OBEX_PID" && -r "/proc/$OBEX_PID/cmdline" ]]; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 64 | CMDLINE="$(tr '\0' ' ' < "/proc/$OBEX_PID/cmdline")" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 65 | if grep -Eq -- '(^\|[[:space:]])--noplugin(=\|[[:space:]]+)([^[:space:],]+,)*mns(,\|[[:space:]]\|$)' <<<"$CMDLINE"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 67 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 73 | if [[ -n "$OBEX_EXE" && -r "$OBEX_EXE" ]] && command -v strings >/dev/null 2>&1; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 74 | STRINGS_OUT="$(mktemp)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 76 | trap 'rm -f "$STRINGS_OUT" "${SDP_OUT:-}"' EXIT | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 79 | if grep -Fq 'x-bt/MAP-NotificationRegistration' "$STRINGS_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 81 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 85 | if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 87 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 91 | if grep -Fq 'Message Notification server' "$STRINGS_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 93 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 97 | if grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT" \|\| | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 100 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 103 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 109 | trap 'rm -f "${SDP_OUT:-}"' EXIT | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 112 | if command -v bluetoothctl >/dev/null 2>&1 && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 117 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 121 | if command -v sdptool >/dev/null 2>&1; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 122 | SDP_OUT="$(mktemp)" | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 129 | if [[ $SDP_STATUS -eq 0 ]]; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 132 | if grep -Eqi 'Message Notification\|0x1133\|00001133-0000-1000-8000-00805f9b34fb' "$SDP_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 134 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 137 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 139 | if grep -Eqi 'permission\|not permitted\|access denied' "$SDP_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 141 | elif grep -Eqi 'connection refused\|failed to connect\|no such file\|not available\|not found' "$SDP_OUT"; then | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 143 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 148 | else | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 155 | if [[ -n "${STRINGS_OUT:-}" && "$MNS_EXPLICITLY_DISABLED" == no ]] && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 156 | grep -Fq 'x-bt/MAP-NotificationRegistration' "$STRINGS_OUT" && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+| 157 | grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT" && | test_discovery_contract, test_mns_process_contract, test_remaining_contracts |
+
+## scripts/probe-obex-read.sh
+
+Assertion families: [test_obex_contract](../scripts/tests/test_obex_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 9 | usage() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 20 | Raw D-Bus responses are kept only in a temporary directory and deleted on exit. | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 26 | while [[ $# -gt 0 ]]; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 27 | case "$1" in | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | [[ $# -ge 2 ]] \|\| { echo "--device requires a Bluetooth address." >&2; exit 2; } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 34 | [[ $# -ge 2 ]] \|\| { echo "--target requires map or pbap." >&2; exit 2; } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 40 | exit 0 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 45 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 52 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 55 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 60 | case "$TARGET" in | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 71 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 75 | for command in busctl bluetoothctl obexctl stdbuf mktemp; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 76 | if ! command -v "$command" >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 78 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 87 | if ! busctl --user list 2>/dev/null \| awk '{print $1}' \| grep -Fxq org.bluez.obex; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 89 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 93 | if ! bluetoothctl info "$DEVICE" 2>/dev/null \| grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 95 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 99 | TMP_DIR="$(mktemp -d)" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 107 | cleanup() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 109 | trap - EXIT INT TERM | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 110 | trap '' PIPE | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | if [[ -n "$OBEX_FD" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 113 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 114 | exec {OBEX_FD}>&- 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 117 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 118 | for _ in 1 2 3 4 5; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 119 | kill -0 "$OBEX_PID" 2>/dev/null \|\| break | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 122 | kill "$OBEX_PID" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | wait "$OBEX_PID" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 127 | exit "$status" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 129 | trap cleanup EXIT | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 130 | trap 'exit 130' INT | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | trap 'exit 143' TERM | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 138 | wait_for_log() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 143 | while (( elapsed < timeout_seconds * 10 )); do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 144 | if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 145 | return 0 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 147 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | return 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 154 | return 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 157 | if ! wait_for_log 'Client .*/org/bluez/obex\|\[NEW\].*Client' 5; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 159 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | if ! wait_for_log 'Connection successful\|Failed to connect' "$CONNECT_TIMEOUT"; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 168 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 171 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 174 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 177 | SESSION_PATH="$( | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 182 | if [[ -z "$SESSION_PATH" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 185 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 188 | if ! wait_for_log "\[NEW\].*$EXPECTED_PROXY_LABEL\|$EXPECTED_PROXY_LABEL /org/bluez/obex/client/session" 2; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 191 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 194 | if ! busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 197 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 202 | array_count() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 206 | NR == 1 && $1 == signature && $2 ~ /^(0\|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { print $2; found = 1 } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 207 | END { if (!found) print "unknown" } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 211 | dbus_error_name() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 213 | grep -Eo 'org\.bluez\.obex\.Error\.[A-Za-z]+' "$file" \| head -n 1 \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 216 | call_to_file() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 225 | return "$status" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 228 | if [[ "$TARGET" == "map" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 230 | if call_to_file "$FOLDERS_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListFolders 'a{sv}' 1 MaxCount q 16; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 232 | count="$(array_count "$FOLDERS_OUT" 'aa{sv}')" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 233 | if [[ "$count" == "unknown" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 235 | elif (( count > 0 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 237 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 240 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 242 | error_name="$(dbus_error_name "$FOLDERS_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 244 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 248 | if call_to_file "$TELECOM_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     SetFolder s telecom; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 250 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 252 | error_name="$(dbus_error_name "$TELECOM_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 254 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 258 | if call_to_file "$MSG_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     SetFolder s msg; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 260 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 262 | error_name="$(dbus_error_name "$MSG_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 264 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 268 | if call_to_file "$MESSAGES_OUT"     org.bluez.obex "$SESSION_PATH" org.bluez.obex.MessageAccess1     ListMessages 'sa{sv}' inbox 2 MaxCount q 1 Fields as 1 type; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 270 | count="$(array_count "$MESSAGES_OUT" 'a{oa{sv}}')" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 271 | if [[ "$count" == "unknown" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 273 | elif (( count > 0 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 275 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 278 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 280 | error_name="$(dbus_error_name "$MESSAGES_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 282 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 286 | exit 0 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 290 | if call_to_file "$SELECT_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1   Select ss int pb; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 292 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 294 | error_name="$(dbus_error_name "$SELECT_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 296 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 300 | if call_to_file "$SIZE_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1 GetSize; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 302 | size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^(0\|[1-9][0-9]*)$/ && length($2) <= 5 && $2 + 0 <= 65535 { print $2 }' "$SIZE_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 303 | if [[ -z "$size" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 305 | elif (( size > 0 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 307 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 310 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 312 | error_name="$(dbus_error_name "$SIZE_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 314 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 318 | if call_to_file "$LIST_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1   List 'a{sv}' 1 MaxCount q 1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 320 | count="$(array_count "$LIST_OUT" 'a(ss)')" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 321 | if [[ "$count" == "unknown" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 323 | elif (( count > 0 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 325 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 328 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 330 | error_name="$(dbus_error_name "$LIST_OUT")" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 332 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+
+## scripts/probe-obex-session.sh
+
+Assertion families: [test_obex_contract](../scripts/tests/test_obex_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 9 | usage() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 22 | The probe keeps one obexctl process alive for the full session lifetime, | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 28 | while [[ $# -gt 0 ]]; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 29 | case "$1" in | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 31 | [[ $# -ge 2 ]] \|\| { echo "--device requires a Bluetooth address." >&2; exit 2; } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 36 | [[ $# -ge 2 ]] \|\| { echo "--target requires map or pbap." >&2; exit 2; } | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 42 | exit 0 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 47 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 52 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 54 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 57 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 59 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 62 | case "$TARGET" in | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 75 | exit 2 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 79 | for command in busctl bluetoothctl obexctl stdbuf mktemp; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 80 | if ! command -v "$command" >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 82 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 89 | if ! busctl --user list 2>/dev/null \| awk '{print $1}' \| grep -Fxq org.bluez.obex; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 92 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 96 | if ! bluetoothctl info "$DEVICE" 2>/dev/null \| grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$'; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 99 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 103 | TMP_DIR="$(mktemp -d)" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | cleanup() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 113 | trap - EXIT INT TERM | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 114 | trap '' PIPE | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 116 | if [[ -n "$OBEX_FD" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 117 | printf 'disconnect\nquit\n' >&"$OBEX_FD" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 118 | exec {OBEX_FD}>&- 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 121 | if [[ -n "$OBEX_PID" ]] && kill -0 "$OBEX_PID" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 122 | for _ in 1 2 3 4 5; do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 123 | kill -0 "$OBEX_PID" 2>/dev/null \|\| break | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 126 | kill "$OBEX_PID" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 127 | wait "$OBEX_PID" 2>/dev/null \|\| true | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 131 | exit "$status" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 133 | trap cleanup EXIT | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 134 | trap 'exit 130' INT | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 135 | trap 'exit 143' TERM | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 143 | wait_for_log() { | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 148 | while (( elapsed < timeout_seconds * 10 )); do | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 149 | if grep -Eq "$pattern" "$OBEX_LOG" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 150 | return 0 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 152 | if ! kill -0 "$OBEX_PID" 2>/dev/null; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 153 | return 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 159 | return 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 162 | if ! wait_for_log 'Client .*/org/bluez/obex\|\[NEW\].*Client' 5; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 165 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 171 | if ! wait_for_log 'Connection successful\|Failed to connect' "$CONNECT_TIMEOUT"; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 173 | echo "error=OBEX connection timed out waiting for phone authorization" | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 174 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 177 | if grep -Fq 'Failed to connect' "$OBEX_LOG"; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 180 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 183 | SESSION_PATH="$( | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 188 | if [[ -z "$SESSION_PATH" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 191 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 196 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   org.bluez.obex.Session1 >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 198 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 200 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 204 | TARGET_PROPERTY="$( | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 210 | if [[ $TARGET_STATUS -eq 0 ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 211 | SESSION_TARGET_UUID="$( | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 215 | if [[ ! "$SESSION_TARGET_UUID" =~ ^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$ ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 219 | if [[ "$SESSION_TARGET_UUID" == "$EXPECTED_TARGET_UUID" ]]; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 221 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 224 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 229 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 231 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 235 | if wait_for_log "\[NEW\].*$EXPECTED_PROXY_LABEL\|$EXPECTED_PROXY_LABEL /org/bluez/obex/client/session" 2; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 237 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 241 | if busctl --user introspect   org.bluez.obex   "$SESSION_PATH"   "$EXPECTED_INTERFACE" >/dev/null 2>&1; then | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 244 | else | test_obex_contract, test_probe_parameters, test_remaining_contracts |
+| 247 | exit 1 | test_obex_contract, test_probe_parameters, test_remaining_contracts |
 
 ## scripts/probe_call_audio_watch.py
 
-| Source line | Decision / method | Planned assertion family |
-| --- | --- | --- |
-| 16 | def command(args): | WATCH: both outcomes, boundary variants and malformed data |
-| 21 | except (OSError, subprocess.TimeoutExpired): | WATCH: both outcomes, boundary variants and malformed data |
-| 23 | return result.stdout if result.returncode == 0 else None | WATCH: both outcomes, boundary variants and malformed data |
-| 26 | def parse_wpctl_id(output): | WATCH: both outcomes, boundary variants and malformed data |
-| 28 | return int(match.group(1)) if match else None | WATCH: both outcomes, boundary variants and malformed data |
-| 31 | def parse_sink_mute(output): | WATCH: both outcomes, boundary variants and malformed data |
-| 32 | if output is None or not output.startswith("Volume:"): | WATCH: both outcomes, boundary variants and malformed data |
-| 34 | return "yes" if "[MUTED]" in output else "no" | WATCH: both outcomes, boundary variants and malformed data |
-| 37 | def is_bluetooth(props): | WATCH: both outcomes, boundary variants and malformed data |
-| 43 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | WATCH: both outcomes, boundary variants and malformed data |
-| 47 | for obj in objects: | WATCH: both outcomes, boundary variants and malformed data |
-| 49 | if obj.get("type") == "PipeWire:Interface:Node": | WATCH: both outcomes, boundary variants and malformed data |
-| 51 | elif obj.get("type") == "PipeWire:Interface:Link": | WATCH: both outcomes, boundary variants and malformed data |
-| 54 | def props(nid): | WATCH: both outcomes, boundary variants and malformed data |
-| 70 | if sink_state not in ("running", "idle", "suspended", "error"): | WATCH: both outcomes, boundary variants and malformed data |
-| 74 | "default_sink_present": "yes" if sink_id is not None else "no", | WATCH: both outcomes, boundary variants and malformed data |
-| 75 | "default_sink_is_bluetooth": "yes" if is_bluetooth(props(sink_id)) else "no", | WATCH: both outcomes, boundary variants and malformed data |
-| 78 | "default_source_present": "yes" if source_id is not None else "no", | WATCH: both outcomes, boundary variants and malformed data |
-| 79 | "default_source_is_bluetooth": "yes" if is_bluetooth(props(source_id)) else "no", | WATCH: both outcomes, boundary variants and malformed data |
-| 91 | def find_gateway(): | WATCH: both outcomes, boundary variants and malformed data |
-| 95 | return gateways[0] if len(gateways) == 1 else None | WATCH: both outcomes, boundary variants and malformed data |
-| 98 | def call_present(gateway): | WATCH: both outcomes, boundary variants and malformed data |
-| 99 | if gateway is None: | WATCH: both outcomes, boundary variants and malformed data |
-| 103 | if output is None: | WATCH: both outcomes, boundary variants and malformed data |
-| 105 | return "yes" if CALL_PATH.search(output) else "no" | WATCH: both outcomes, boundary variants and malformed data |
-| 108 | def sample(gateway): | WATCH: both outcomes, boundary variants and malformed data |
-| 110 | if raw is None: | WATCH: both outcomes, boundary variants and malformed data |
-| 114 | except json.JSONDecodeError: | WATCH: both outcomes, boundary variants and malformed data |
-| 116 | if not isinstance(objects, list): | WATCH: both outcomes, boundary variants and malformed data |
-| 124 | def emit(index, elapsed, state, first_sink, sink, first_source, source): | WATCH: both outcomes, boundary variants and malformed data |
-| 127 | print("default_sink_changed=" + ("yes" if sink != first_sink else "no"), flush=True) | WATCH: both outcomes, boundary variants and malformed data |
-| 128 | print("default_source_changed=" + ("yes" if source != first_source else "no"), flush=True) | WATCH: both outcomes, boundary variants and malformed data |
-| 129 | for name, value in state.items(): | WATCH: both outcomes, boundary variants and malformed data |
-| 134 | def main(): | WATCH: both outcomes, boundary variants and malformed data |
-| 139 | if not (5 <= args.seconds <= 90) or not (250 <= args.interval_ms <= 2000): | WATCH: both outcomes, boundary variants and malformed data |
-| 141 | if not all(shutil.which(cmd) for cmd in ("pw-dump", "wpctl", "busctl")): | WATCH: both outcomes, boundary variants and malformed data |
-| 151 | print("telephony_gateway_resolved=" + ("yes" if gateway else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 158 | while time.monotonic() - start < args.seconds: | WATCH: both outcomes, boundary variants and malformed data |
-| 160 | if result is None: | WATCH: both outcomes, boundary variants and malformed data |
-| 164 | if count == 0: | WATCH: both outcomes, boundary variants and malformed data |
-| 175 | if comparison != previous: | WATCH: both outcomes, boundary variants and malformed data |
-| 181 | except KeyboardInterrupt: | WATCH: both outcomes, boundary variants and malformed data |
-| 187 | print("call_observed=" + ("yes" if call_seen else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 188 | print("sink_muted_at_any_time=" + ("yes" if mute_seen else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 189 | print("default_sink_changed_at_any_time=" + ("yes" if sink_changed else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 190 | print("hfp_nodes_observed=" + ("yes" if hfp_seen else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 192 | ("yes" if stream_disruption else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 193 | print("probe_complete=" + ("yes" if count else "no")) | WATCH: both outcomes, boundary variants and malformed data |
-| 195 | return 0 if count else 1 | WATCH: both outcomes, boundary variants and malformed data |
-| 198 | if __name__ == "__main__": | WATCH: both outcomes, boundary variants and malformed data |
+Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contract.py), [test_call_audio_watch](../scripts/tests/test_call_audio_watch.py), [test_watcher_entry](../scripts/tests/test_watcher_entry.py).
 
-## crates/nativepair-cli/src/main.rs
-
-| Source line | Decision / method | Planned assertion family |
+| Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 18 | fn main() -> ExitCode { | CLI/DAEMON: argv and exit-code matrix |
-| 21 | match args.next().as_deref() { | CLI/DAEMON: argv and exit-code matrix |
-| 22 | Some("--version" &#124; "-V") if args.next().is_none() => { | CLI/DAEMON: argv and exit-code matrix |
-| 26 | Some("--help" &#124; "-h") if args.next().is_none() => { | CLI/DAEMON: argv and exit-code matrix |
+| 16 | def command(args): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 22 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 23 | return result.stdout if result.returncode == 0 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 26 | def parse_wpctl_id(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 27 | if not isinstance(output, str): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 28 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 30 | if not match: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 31 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 33 | return value if value <= MAX_NODE_ID else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 36 | def parse_sink_mute(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 37 | if not isinstance(output, str) or not re.fullmatch( | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 39 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 40 | return "yes" if "[MUTED]" in output else "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 43 | def is_bluetooth(props): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 44 | return bool(props.get("api.bluez5.address") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 49 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 53 | for obj in objects: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 54 | if not isinstance(obj, dict): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 57 | if info is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 59 | if not isinstance(info, dict) or (info.get("props") is not None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 62 | if obj.get("type") == "PipeWire:Interface:Node": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 64 | if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 66 | elif obj.get("type") == "PipeWire:Interface:Link": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 67 | if all(type(info.get(key)) is int for key in | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 71 | def props(nid): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 72 | return (nodes.get(nid) or {}).get("props") or {} | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 74 | outputs = {nid: info for nid, info in nodes.items() | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 75 | if str((info.get("props") or {}).get("media.class") or "") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 77 | connected_outputs = {link.get("output-node-id") for link in links | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 78 | if link.get("input-node-id") == sink_id | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 81 | bt_nodes = [info for info in nodes.values() | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 82 | if is_bluetooth(info.get("props") or {})] | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 83 | hfp_nodes = [info for info in bt_nodes | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 84 | if (info.get("props") or {}).get("api.bluez5.profile") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 87 | if sink_state not in ("running", "idle", "suspended", "error"): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 89 | return { | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 91 | "default_sink_present": "yes" if sink_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 92 | "default_sink_is_bluetooth": "yes" if is_bluetooth(props(sink_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 95 | "default_source_present": "yes" if source_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 96 | "default_source_is_bluetooth": "yes" if is_bluetooth(props(source_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 99 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 101 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 108 | def find_gateway(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 112 | return gateways[0] if len(gateways) == 1 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 115 | def call_present(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 116 | if gateway is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 117 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 120 | if output is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 121 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 122 | if re.fullmatch(r'a\(oa\{sv\}\) 0\s*', output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 123 | return "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 126 | if match and int(match.group(1)) <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 127 | return "yes" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 128 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 131 | def sample(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 133 | if raw is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 134 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 138 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 139 | if not isinstance(objects, list): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 140 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 144 | return graph_snapshot(objects, sink, source, muted, call_present(gateway)), sink, source | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 147 | def emit(index, elapsed, state, first_sink, sink, first_source, source): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 150 | print("default_sink_changed=" + ("yes" if sink != first_sink else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 151 | print("default_source_changed=" + ("yes" if source != first_source else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 152 | for name, value in state.items(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 157 | def main(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 162 | if not (5 <= args.seconds <= 90) or not (250 <= args.interval_ms <= 2000): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 164 | if not all(shutil.which(cmd) for cmd in ("pw-dump", "wpctl", "busctl")): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 167 | return 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 174 | print("telephony_gateway_resolved=" + ("yes" if gateway else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 181 | while time.monotonic() - start < args.seconds: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 183 | if result is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 185 | else: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 187 | if count == 0: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 198 | if comparison != previous: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 206 | return 130 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 210 | print("call_observed=" + ("yes" if call_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 211 | print("sink_muted_at_any_time=" + ("yes" if mute_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 212 | print("default_sink_changed_at_any_time=" + ("yes" if sink_changed else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 213 | print("hfp_nodes_observed=" + ("yes" if hfp_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 215 | ("yes" if stream_disruption else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 216 | print("probe_complete=" + ("yes" if count else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 218 | return 0 if count else 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 221 | if __name__ == "__main__": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+
+## scripts/probe_audio_graph.py
+
+Assertion families: [test_audio_graph](../scripts/tests/test_audio_graph.py), [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 1 | """Shared strict node decoding for read-only feasibility audio classifiers.""" | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 5 | def valid_nodes(data): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 7 | if not isinstance(data, list): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 10 | for obj in data: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 11 | if not isinstance(obj, dict) or obj.get("type") != "PipeWire:Interface:Node": | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 14 | if type(identifier) is not int or not 0 <= identifier <= 4294967295: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 17 | if info is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 19 | if not isinstance(info, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 22 | if props is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 24 | if not isinstance(props, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 28 | return list(nodes.values()) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 31 | def load_nodes(path): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 34 | return valid_nodes(json.load(handle)) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+
+## scripts/probe_obex_monitor.py
+
+Assertion families: [test_obex_monitor](../scripts/tests/test_obex_monitor.py), [test_map_events_contract](../scripts/tests/test_map_events_contract.py), [test_map_send_contract](../scripts/tests/test_map_send_contract.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 10 | def transfer_status(text, path): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 12 | if not TRANSFER.fullmatch(path): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 13 | return "unknown" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 15 | for block in re.split(r"(?m)^\s*(?=(?:‣\s*)?Type=)", text): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 16 | if not re.search(r"\bType=signal\b", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 18 | if not re.search(r"\bPath=" + re.escape(path) + r"(?=\s\|$)", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 20 | if not re.search(r"\bInterface=org\.freedesktop\.DBus\.Properties(?=\s\|$)", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 22 | if not re.search(r"\bMember=PropertiesChanged(?=\s\|$)", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 24 | if not re.search(r'STRING "org\.bluez\.obex\.Transfer1";', block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 27 | if "error" in statuses: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 28 | return "error" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 30 | return "complete" if complete else "unknown" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 33 | def registration(text, session): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 34 | """Return registration transfer presence/status for this owned session.""" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 35 | if not SESSION.fullmatch(session): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 36 | return "no not_seen" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 38 | for block in re.split(r"(?m)^\s*(?=(?:‣\s*)?Type=)", text): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 39 | if not re.search(r"\bType=signal\b", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 45 | if not (changed or added): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 47 | if 'STRING "org.bluez.obex.Transfer1";' not in block: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 50 | if not paths: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 51 | return "no not_seen" | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 52 | statuses = {transfer_status(text, path) for path in paths} | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 53 | return "yes " + ("error" if "error" in statuses else "complete" if "complete" in statuses else "unknown") | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 56 | def message_count(text, session, obexctl=False): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 58 | if not SESSION.fullmatch(session): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 59 | return 0 | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 63 | if obexctl: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 65 | else: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 67 | for block in re.split(r"(?m)^\s*(?=(?:‣\s*)?Type=)", text): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 68 | if not re.search(r"\bType=signal\b", block) or 'STRING "org.bluez.obex.Message1";' not in block: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 70 | if not re.search(r"\bInterface=org\.freedesktop\.DBus\.ObjectManager(?=\s\|$)", block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 73 | if not member: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 75 | for path in re.findall(r'OBJECT_PATH "(' + pattern + r')";', block): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 76 | events.append(("NEW" if member[1] == "Added" else "DEL", path)) | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 77 | for kind, path in events: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 78 | if kind == "DEL": | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 80 | elif path not in active: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 83 | return count | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 86 | def main(argv=None): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 87 | args = sys.argv[1:] if argv is None else argv | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 89 | if args and args[0] in ("--messages", "--obex-messages", "--registration"): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 91 | if len(args) != 2: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 93 | return 2 | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 99 | return 1 | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 100 | if mode == "--registration": | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 102 | elif mode in ("--messages", "--obex-messages"): | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 104 | else: | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 106 | return 0 | test_obex_monitor, test_map_events_contract, test_map_send_contract |
+| 109 | if __name__ == "__main__": | test_obex_monitor, test_map_events_contract, test_map_send_contract |
 
 ## crates/nativepair-core/src/lib.rs
 
-| Source line | Decision / method | Planned assertion family |
+Assertion families: Rust exhaustive_contract_tests.
+
+| Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 53 | pub fn new(platform: PhonePlatform) -> Self { | CORE: exhaustive state matrix |
-| 61 | pub const fn platform(&self) -> PhonePlatform { | CORE: exhaustive state matrix |
-| 66 | pub fn availability(&self, capability: Capability) -> Availability { | CORE: exhaustive state matrix |
-| 73 | pub fn set_availability( | CORE: exhaustive state matrix |
-| 84 | pub fn supports(&self, capability: Capability) -> bool { | CORE: exhaustive state matrix |
+| 53 | pub fn new(platform: PhonePlatform) -> Self { | exhaustive_contract_tests |
+| 61 | pub const fn platform(&self) -> PhonePlatform { | exhaustive_contract_tests |
+| 66 | pub fn availability(&self, capability: Capability) -> Availability { | exhaustive_contract_tests |
+| 73 | pub fn set_availability( | exhaustive_contract_tests |
+| 84 | pub fn supports(&self, capability: Capability) -> bool { | exhaustive_contract_tests |
+
+## crates/nativepair-cli/src/main.rs
+
+Assertion families: [test_binary_contract](../scripts/tests/test_binary_contract.py).
+
+| Source line | Decision / method | Assertion mapping |
+| --- | --- | --- |
+| 18 | fn main() -> ExitCode { | test_binary_contract |
+| 22 | Some("--version" \| "-V") if args.next().is_none() => { | test_binary_contract |
+| 26 | Some("--help" \| "-h") if args.next().is_none() => { | test_binary_contract |
 
 ## crates/nativepair-daemon/src/main.rs
 
-| Source line | Decision / method | Planned assertion family |
+Assertion families: [test_binary_contract](../scripts/tests/test_binary_contract.py).
+
+| Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 9 | fn main() -> ExitCode { | CLI/DAEMON: argv and exit-code matrix |
-| 12 | match args.next().as_deref() { | CLI/DAEMON: argv and exit-code matrix |
-| 13 | Some("--version" &#124; "-V") if args.next().is_none() => { | CLI/DAEMON: argv and exit-code matrix |
+| 9 | fn main() -> ExitCode { | test_binary_contract |
+| 13 | Some("--version" \| "-V") if args.next().is_none() => { | test_binary_contract |

@@ -15,7 +15,8 @@ without a whole call object for the selected gateway remains unknown. Apply
 the same fail-closed distinction to the passive HFP diagnostic. Add explicit
 boundary/type/corruption/correlation rows; valid output schemas are unchanged.
 User-selected scope: finish automated M1 verification, fix exposed defects, and
-run the deterministic suite ten consecutive times. Live calls, SMS, device
+run the complete deterministic baseline once plus ten process stability
+executions. Live calls, SMS, device
 permission changes, service restarts and iPhone experiments are excluded.
 
 ## Repository scan and baseline
@@ -29,8 +30,7 @@ guides were read. Trivial enum declarations are included in the domain cross
 product, rather than used as a substitute for protocol coverage.
 
 Baseline: five Rust tests and seventeen Python test methods. The seventeen
-Python methods passed locally in 11.700 seconds. Rust baseline is pending the
-quality gate. Prior 196-scenario forecast is superseded by executable scenario
+Python methods passed locally in 11.700 seconds. The Rust quality gate subsequently passed. Prior 196-scenario forecast is superseded by executable scenario
 inventory for existing code; hardware forecasts remain separate.
 
 Local commands: `cargo fmt --all -- --check`,
@@ -73,17 +73,17 @@ the updated gate discovers the complete Python suite after building binaries.
 1. **Analysis and planning — complete:** complete artifact inventory, source
    branch map, applicability matrix, interaction cases and estimates before
    writing tests. Commit the documentation as the rollback baseline.
-2. **Domain and observer — core/observer complete, binary contracts in stage 4:** exhaustive capability state cross product; CLI
+2. **Domain and observer — complete:** exhaustive capability state cross product; CLI
    arguments; observer parsers, graph, subprocess, sample, clocked lifecycle,
    privacy and malformed data. Fix only exposed correctness defects. Commit.
-3. **Protocol contract harness and probes — implemented; stability gate pending:** hermetic external commands;
+3. **Protocol contract harness and probes — complete:** hermetic external commands;
    parameter/guard branches, all command failure exits, MAP/PBAP lifecycle,
    event/send correlation, HFP/SCO states and cleanup, audio/SDP/MNS diagnostics.
    Commit coherent groups with updated execution state.
 4. **Packaging and CI — implemented; remote CI not executed:** metadata/layout/checksum/error contracts; real package
    smoke; CI discovers all deterministic tests. Commit.
-5. **Verification and handoff:** mutation review, per-file coverage map, full
-   quality gate, ten consecutive runs, CI verification where accessible,
+5. **Verification and handoff — complete locally:** mutation review, per-file coverage map, full
+   quality gate, one full baseline plus ten process stability executions,
    categorized actual counts and remaining hardware gates. Commit records.
 
 Each milestone is reversible with its atomic commit. No promotion to `main`
@@ -125,24 +125,26 @@ have an assertion. Source-level branch locations are in the companion map.
 
 ## Positive / negative applicability matrix
 
-`?` = planned for all applicable rules in the family. `—reason` = not
+`✔` = implemented for all applicable planned rules in the family. `—reason` = not
 applicable. No cell is empty. N3 covers local IPC/tool failures rather than
 inventing HTTP/DNS contracts; N11 is absent throughout M1.
 
 | Family | Positive | N1 | N2 | N3 | N4 | N5 | N6 | N7 | N8 | N9 | N10 | N11 | N12 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| CORE | ? | —typed API | ? | —pure | ? | —exclusive mutable borrow | —no serialization | —no auth | —no time | —pure | ? | —no billing | —no I/O |
-| CLI/DAEMON | ? | ? | ? | —no IPC yet | —stateless | —stateless | —no serialized input | —no auth | —no time | —immediate | ? | —no billing | —no storage |
-| WATCH/ENTRY | ? | ? | ? | ? | ? | ? | ? | ? | ? | ? | ? | —no billing | —memory only |
-| BT | ? | ? | ? | ? | —read only | —snapshot | ? | ? | —no time | —no owned resource | ? | —no billing | —no temp |
-| SESSION/READ | ? | ? | ? | ? | —read only | ? | ? | ? | —no dates | ? | ? | —no billing | ? |
-| SEND | ? | ? | ? | ? | ? | ? | ? | ? | —fixed ASCII | ? | ? | —no entitlements | ? |
-| EVENTS | ? | ? | ? | ? | ? | ? | ? | ? | —counts only | ? | ? | —no billing | ? |
-| SDP/MNS | ? | ? | ? | ? | —read only | —snapshot | ? | ? | —no dates | ? | ? | —no billing | ? |
-| HFP/AUDIO | ? | ? | ? | ? | ? | ? | ? | ? | —no dates | ? | ? | —no billing | ? |
-| CALL/SCO | ? | ? | ? | ? | ? | ? | ? | ? | —no dates | ? | ? | —no billing | ? |
-| ROUTING/HEALTH | ? | ? | ? | ? | —snapshot | ? | ? | ? | ? | ? | ? | —no billing | ? |
-| BUILD/VERIFY | ? | ? | ? | ? | ? | —single staging owner | ? | ? | ? | ? | —synthetic paths | —no billing | ? |
+| CORE | ✔ | —typed API | ✔ | —pure | ✔ | —exclusive mutable borrow | —no serialization | —no auth | —no time | —pure | —no personal data | —no billing | —no I/O |
+| CLI/DAEMON | ✔ | ✔ | ✔ | —no IPC yet | —stateless | —stateless | —no serialized input | —no auth | —no time | —immediate | ✔ | —no billing | —no storage |
+| WATCH/ENTRY | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | —fake monotonic clock | ✔ | ✔ | —no billing | —memory only |
+| BT | ✔ | ✔ | ✔ | ✔ | —read only | —snapshot | ✔ | ✔ | —no time | —no owned resource | ✔ | —no billing | —no temp |
+| SESSION/READ | ✔ | ✔ | ✔ | ✔ | —read only | ✔ | ✔ | ✔ | —no dates | ✔ | ✔ | —no billing | ✔ |
+| SEND | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | —fixed ASCII | ✔ | ✔ | —no entitlements | ✔ |
+| EVENTS | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | —counts only | ✔ | ✔ | —no billing | ✔ |
+| SDP/MNS | ✔ | ✔ | ✔ | ✔ | —read only | —snapshot | ✔ | ✔ | —no dates | ✔ | ✔ | —no billing | ✔ |
+| HFP/AUDIO | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | —no dates | ✔ | ✔ | —no billing | ✔ |
+| CALL/SCO | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | —no dates | ✔ | ✔ | —no billing | ✔ |
+| ROUTING/HEALTH | ✔ | ✔ | ✔ | ✔ | —snapshot | ✔ | ✔ | ✔ | —no dates | ✔ | ✔ | —no billing | ✔ |
+| BUILD/VERIFY | ✔ | ✔ | ✔ | ✔ | ✔ | —single staging owner | ✔ | ✔ | ✔ | ✔ | —synthetic paths | —no billing | ✔ |
+| GRAPH | ✔ | ✔ | ✔ | —pure | ✔ | —snapshot | ✔ | —no auth | —no time | —pure | —no diagnostics | —no billing | ✔ |
+| MONITOR | ✔ | ✔ | ✔ | —pure parser | ✔ | ✔ | ✔ | ✔ | —no dates | —synchronous parser | ✔ | —no billing | ✔ |
 
 ## Interaction matrix (subset, never extra count)
 
@@ -252,7 +254,10 @@ acceptance, pending-to-Activate race, missing source/sink filtering, > versus
 missing dependency/layout check. Actual trials and surviving mutations are
 recorded after execution. No percentage is claimed without instrumentation.
 
-## Execution state
+## Intermediate execution history
+
+These historical entries describe earlier source states. Current counts and
+final verification results are recorded in the sections below.
 
 Final branch audit extension (before implementation): require ObjectManager
 interface framing for message additions/removals and signal/interface/member
@@ -422,17 +427,42 @@ recorded here rather than omitted from the review history. Reproduce using
 
 ## Validation and handoff gate
 
-Formatting and Clippy passed. The ten-run stability gate is in progress;
-`work/repeated-runs.json` records only completed runs. Shell syntax, executable
-bits and Python compilation passed. The actual amd64 release package built
-and passed metadata, layout, checksum and both extracted binary smoke checks.
-All completed shell commands/process sessions were closed (Terminal closed).
-The first draft stability series was deliberately interrupted after one pass
-to fix the numeric and signal defects above; it does not count toward the final
-ten-run gate. Final source state requires one fresh complete baseline and nine further
-process stability lane runs, as refined by the user below.
-GitHub execution for these local commits has not been triggered or verified.
-No host package installation and no live phone operation were performed.
+The complete 1363-method Python baseline passed in 210.283 seconds, and all
+eight Rust methods passed. The 182-scenario process stability lane passed ten
+consecutive executions: once within the full baseline and nine independent
+runs of 48.881–51.296 seconds. The other 1181 Python methods and Rust tests were
+not repeated. Zero test failures or observed flakes occurred in this series.
+[Canonical results](evidence/m1-automated-execution.json) record each lane/pass;
+[stability IDs](evidence/m1-process-stability-inventory.json) define its scope.
+The earlier interrupted whole-suite series is historical and does not count.
+
+Formatting, Clippy, shell syntax, executable bits and Python compilation passed.
+The final amd64 package was rebuilt after the observer fixes and passed checksum,
+metadata, layout, dependencies and both extracted binary smoke checks. No host
+package installation occurred. All owned command/process sessions completed
+and were closed (Terminal closed). Raw detailed logs remain under ignored work/.
+All 29 finite mutation trials were killed by assertion failures.
+
+The [functional coverage map](M1_COVERAGE_MAP.md), [source decision index](M1_BRANCH_MAP.md),
+canonical inventories, negative matrix and interaction matrix provide the
+automated handoff. The source trace records 2358 executed line locations and
+606 Python arcs across 20 source/module units (embedded Python is separate);
+these counts are execution evidence, not a branch-coverage percentage.
+
+Automated completion gate for the current source scope: public methods,
+planned independent branches, business rules, invariants, boundary variants,
+applicable N1–N12 scenarios and inventoried meaningful interactions all have
+explicit executable coverage. Hardware interoperability, Linux duplex audio,
+iPhone ANCS and recovery/permission UX remain separate feasibility gates. M1
+as a product milestone remains in progress. New GitHub CI execution has not
+been triggered or verified for these unpublished local commits.
+
+Rollback/handoff commits: a3718b3 (plan), 8a75e94 (domain/observer), f72f768
+(OBEX harness/privacy/cleanup), 0d0b4f4 (protocol/signal evidence), 1cb0646
+(packaging/CI), 15f17a4 (verification tooling), 423e3c1 (observer corruption),
+and 5d72c31 (process stability lane). The final documentation commit records
+these measured results. No new user decision or unrecorded architecture choice
+is needed to resume from this repository.
 
 ### Process stability lane refinement (2026-10-09)
 

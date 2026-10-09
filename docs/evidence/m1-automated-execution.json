@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-09",
+  "source_commit": "5d72c31",
+  "full_python_methods": 1363,
+  "added_python_methods": 1346,
+  "rust_methods": 8,
+  "added_rust_methods": 3,
+  "added_rust_table_rows": 495,
+  "process_stability_methods": 182,
+  "process_stability_executions": 10,
+  "deterministic_python_methods_executed_once": 1181,
+  "failures": 0,
+  "mutation_trials": 29,
+  "mutations_killed": 29,
+  "static_checks": "passed once; shell/Python syntax rechecked after source changes",
+  "native_package": "nativepair_0.1.0_amd64.deb built and verified after final production changes",
+  "remote_ci": "configured, not executed for unpublished local commits",
+  "hardware": "not exercised",
+  "runs": [
+    {
+      "run": 1,
+      "lane": "all",
+      "status": "passed",
+      "duration_seconds": 210.694
+    },
+    {
+      "run": 2,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 51.312
+    },
+    {
+      "run": 3,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.759
+    },
+    {
+      "run": 4,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 50.564
+    },
+    {
+      "run": 5,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 51.427
+    },
+    {
+      "run": 6,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.023
+    },
+    {
+      "run": 7,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.884
+    },
+    {
+      "run": 8,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.888
+    },
+    {
+      "run": 9,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.999
+    },
+    {
+      "run": 10,
+      "lane": "process-stability",
+      "status": "passed",
+      "duration_seconds": 49.813
+    }
+  ]
+}

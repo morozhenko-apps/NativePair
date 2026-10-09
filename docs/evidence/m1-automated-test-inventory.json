@@ -4348,6 +4348,34 @@
     "category": "Positive"
   },
   {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_0_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_1_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_2_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_3_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_4_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_5_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_6_when_passive_hfp_calls_are_unknown_when_corrupt_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_remaining_contracts.RemainingProbeContracts.test_given_corrupt_codec_when_sco_initial_state_unavailable_then_contract_holds",
     "category": "N3"
   },
@@ -4724,6 +4752,10 @@
     "category": "N2"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_boolean_id_reply_when_id_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_broken_json_when_sample_parsed_then_contract_holds",
     "category": "N6"
   },
@@ -4757,6 +4789,10 @@
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_corrupt_entries_when_sample_parsed_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_count_without_object_when_call_observed_then_contract_holds",
     "category": "N6"
   },
   {
@@ -4816,6 +4852,10 @@
     "category": "N6"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_foreign_gateway_call_when_call_observed_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_hfp_node_when_watch_detects_state_changes_then_contract_holds",
     "category": "N5"
   },
@@ -4826,6 +4866,10 @@
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_input_stream_link_when_graph_classified_then_contract_holds",
     "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_integer_id_reply_when_id_rejected_then_contract_holds",
+    "category": "N6"
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_intermittent_samples_when_watch_failed_samples_then_contract_holds",
@@ -4896,28 +4940,32 @@
     "category": "Positive"
   },
   {
-    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_27_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_28_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_29_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_30_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
     "id": "test_watcher_contract.WatcherContracts.test_given_link_state_31_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_link_state_32_when_graph_classified_then_contract_holds",
     "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_33_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_34_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_35_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_link_state_36_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_list_id_reply_when_id_rejected_then_contract_holds",
+    "category": "N6"
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_local_device_when_bluetooth_classified_then_contract_holds",
@@ -4945,6 +4993,34 @@
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_12_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_13_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_14_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_15_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_16_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_17_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_18_when_corrupt_graph_filtered_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_malformed_object_19_when_corrupt_graph_filtered_then_contract_holds",
     "category": "N6"
   },
   {
@@ -4988,12 +5064,20 @@
     "category": "N2"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_maximum_minus_one_id_when_id_parsed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_maximum_seconds_when_watch_runs_within_limits_then_contract_holds",
     "category": "N2"
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_minimum_interval_when_watch_runs_within_limits_then_contract_holds",
     "category": "N2"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_minimum_plus_one_id_when_id_parsed_then_contract_holds",
+    "category": "Positive"
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_minimum_seconds_when_watch_runs_within_limits_then_contract_holds",
@@ -5056,6 +5140,22 @@
     "category": "N6"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_node_id_boundary_0_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_node_id_boundary_1_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_node_id_boundary_4294967294_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_node_id_boundary_4294967295_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_nonzero_subprocess_when_command_failed_then_contract_holds",
     "category": "N3"
   },
@@ -5080,7 +5180,23 @@
     "category": "N6"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_object_id_reply_when_id_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_one_call_when_call_observed_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_over_uint32_id_when_id_rejected_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_overflow_count_when_call_observed_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_oversized_id_when_id_rejected_then_contract_holds",
     "category": "N6"
   },
   {
@@ -5101,18 +5217,6 @@
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_profile_when_bluetooth_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_10_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_11_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_12_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
@@ -5172,7 +5276,19 @@
     "category": "Positive"
   },
   {
-    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_9_when_graph_classified_then_contract_holds",
+    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_27_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_28_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_29_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_role_state_30_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
@@ -5192,19 +5308,15 @@
     "category": "N6"
   },
   {
-    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_2_when_graph_classified_then_contract_holds",
+    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_10_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
-    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_3_when_graph_classified_then_contract_holds",
+    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_11_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
-    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_4_when_graph_classified_then_contract_holds",
-    "category": "Positive"
-  },
-  {
-    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_5_when_graph_classified_then_contract_holds",
+    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_12_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
@@ -5217,6 +5329,10 @@
   },
   {
     "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_8_when_graph_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_sink_state_9_when_graph_classified_then_contract_holds",
     "category": "Positive"
   },
   {
@@ -5280,8 +5396,20 @@
     "category": "Positive"
   },
   {
+    "id": "test_watcher_contract.WatcherContracts.test_given_zero_count_with_object_when_call_observed_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_watcher_contract.WatcherContracts.test_given_zero_id_when_id_parsed_then_contract_holds",
     "category": "Positive"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_zero_prefixed_count_when_call_observed_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_watcher_contract.WatcherContracts.test_given_zero_prefixed_id_when_id_rejected_then_contract_holds",
+    "category": "N6"
   },
   {
     "id": "test_watcher_entry.WatcherEntryContracts.test_given_help_when_actual_python_entry_help_then_contract_holds",

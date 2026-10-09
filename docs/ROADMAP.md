@@ -42,6 +42,7 @@ Infrastructure:
 - [x] Establish headless Debian package build and CI installation gate.
 - [x] Record first Pixel probe evidence.
 - [x] Record capability matrix.
+- [x] Verify all current automated contracts, native packaging and process stability; see [execution record](M1_AUTOMATED_VERIFICATION.md).
 
 Deliverable: a capability matrix backed by reproducible commands/logs and no personal payloads in committed fixtures.
 
