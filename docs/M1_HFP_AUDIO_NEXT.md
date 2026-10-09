@@ -237,7 +237,7 @@ State: plan recorded before hardware preparation. Matrix progress wording in
 the classifier record is reconciled with the completed 218-row execution;
 no tests or production behavior changed.
 
-### Revalidation preparation result — awaiting Pixel connection
+### Initial revalidation preparation result (historical: device missing)
 
 The revalidation plan was committed first (f01bb41). ADB inventory succeeds but
 contains zero devices: no authorized, unauthorized or offline entries. Exactly
@@ -253,3 +253,28 @@ Resume stage 1 after the user connects Pixel 6a over USB and authorizes ADB if
 prompted. Repeat identity correlation and the no-call preflights before asking
 for the separate one-call approval. The previously supplied destination must
 remain private and must not be used without fresh live-call authorization.
+
+### Corrected-classifier preflight ready (2026-10-10, Europe/Lisbon)
+
+The user connected the selected phone. Exactly one authorized Pixel 6a is now
+available over ADB; Android release 17, Bluetooth enabled. Its local Bluetooth
+address matches exactly one paired BlueZ device, correlated only in memory.
+The existing transport, no-dial SCO and read-only routing probes all exit zero.
+PipeWire/WirePlumber are active, HFP session and transport API are available,
+GetCalls confirms no existing call, State is idle and RejectSCO is false.
+The idle transport reports codec ID 2 (mSBC); this is not live codec/audio proof.
+No HFP nodes, phone HFP defaults or orphan HFP nodes are observed while idle.
+
+[Ready-state evidence](evidence/m1-hfp-revalidation-ready.txt) contains bounded
+fields only. No destination, serial, address or device name is persisted. No
+Dial, HangupAll, Activate, audio stream, default/link change or service restart
+occurred. Owned command sessions completed and closed (Terminal closed).
+
+Stage 1 and stage 2 preparation are complete; stage 3 awaits fresh explicit
+approval for one outgoing call to the previously supplied private destination.
+The user's readiness reply authorized USB preparation, not another telephone
+call. Ask whether both participants are ready to answer and check computer
+output/microphone, leaving the call connected until automatic probe completion.
+Use the existing 30-second answer, 15-second node and 20-second human window
+limits. Reconfirm identity and the no-existing-call guard immediately before
+an approved attempt. No automated tests or source changes are needed here.
