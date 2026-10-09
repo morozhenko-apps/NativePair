@@ -201,3 +201,38 @@ these nodes in all audio diagnostics and records anonymous final call/transport
 state on failure before cleanup. Automated verification is separate from live
 validation. The original failed result is preserved; the existing one-call
 authorization is consumed.
+
+## Corrected-classifier hardware revalidation plan
+
+Continuation after 864ae87. Mode B. The user requests continuation; preparation
+is authorized, but the previous single-call authorization is consumed.
+
+1. Reconfirm exactly one authorized Pixel 6a through ADB model queries and
+   correlate its local Bluetooth address with a paired BlueZ target in memory.
+   Do not print/store serials, addresses, device names or destinations. Observe
+   radio state; if unavailable/ambiguous, stop before transport operations.
+2. Run existing transport, no-dial SCO and read-only routing probes against
+   only the correlated Pixel. Record bounded status fields and call absence,
+   RejectSCO, transport state and endpoints. No Dial, HangupAll, Activate,
+   default/link changes, audio streams, service restarts or message operations.
+3. Once ready, request fresh explicit approval for one outgoing guarded call
+   to the same previously provided test destination, plus human readiness.
+   Keep the destination in memory/environment only. Do not dial until approval.
+4. For an approved attempt only, reconfirm identity and use existing guards,
+   answer/readiness limits and owned cleanup. Ask the human to leave the call
+   connected until automatic completion and verify both computer audio paths.
+   Preserve any failed endpoint result and new final call/transport fields.
+5. Inspect post-call absence, idle transport and remaining endpoints read-only;
+   record sanitized evidence and human confirmation, update capability/roadmap
+   wording only to the established evidence level, and commit the handoff.
+
+The existing automated gate is complete and unchanged; do not repeat static,
+pure or process stability tests for a hardware-only continuation. No code,
+architecture, dependencies or routing change is planned. Risks remain early
+remote/manual hangup, service/device loss and unknown reads. A pre-existing call
+must remain untouched. Rollback is owned-call cleanup only after approved Dial;
+never disconnect user-owned connections or restore global settings automatically.
+
+State: plan recorded before hardware preparation. Matrix progress wording in
+the classifier record is reconciled with the completed 218-row execution;
+no tests or production behavior changed.

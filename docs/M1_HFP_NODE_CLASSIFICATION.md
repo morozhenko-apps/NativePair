@@ -69,10 +69,10 @@ probes. No domain subject is mocked; only external commands are synthetic.
 
 | Artifact | Positive | N1 | N2 | N3 | N4 | N5 | N6 | N7 | N8 | N9 | N10 | N11 | N12 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| shared classifier | Covered | Planned via N6 types | Planned via N6 missing | NA pure | NA pure | NA pure | Planned exhaustive product | NA no identity | NA no dates | NA pure | Existing + no output | NA no billing | NA pure |
-| SCO/routing | Planned | Existing | Planned | Existing | Existing one Dial | Existing | Planned | Planned | NA no dates | Existing | Planned cross-cutting | NA no billing | Existing + cleanup |
-| health/watcher | Planned | Existing | Existing | Existing | NA read-only | Existing | Planned | NA no auth changes | NA no dates | Existing | Existing | NA no billing | Existing |
-| end-of-wait observations | Planned active call | NA enums | Planned absent | Planned | Existing cleanup once | Planned combinations | Planned unknown | Existing guards | NA no dates | Planned early hangup | Planned cross-cutting | NA no billing | Existing cleanup |
+| shared classifier | Covered | Covered via N6 types | Covered via N6 missing | NA pure | NA pure | NA pure | Covered exhaustive product | NA no identity | NA no dates | NA pure | Existing + no output | NA no billing | NA pure |
+| SCO/routing | Covered | Existing | Covered | Existing | Existing one Dial | Existing | Covered | Covered | NA no dates | Existing | Covered cross-cutting | NA no billing | Existing + cleanup |
+| health/watcher | Covered | Existing | Existing | Existing | NA read-only | Existing | Covered | NA no auth changes | NA no dates | Existing | Existing | NA no billing | Existing |
+| end-of-wait observations | Covered active call | NA enums | Covered absent | Covered | Existing cleanup once | Covered combinations | Covered unknown | Existing guards | NA no dates | Covered early hangup | Covered cross-cutting | NA no billing | Existing cleanup |
 
 ## Milestones, risks and rollback
 
