@@ -295,3 +295,59 @@ any failed node result and its end-of-wait call/transport observations. Ask for
 human confirmation of computer output/microphone after the attempt. No manual
 routing, default/link changes, service restart or unrelated phone operation.
 The automated gate is unchanged and is not repeated for this hardware attempt.
+
+### Corrected-classifier live attempt — automatic gate passed (2026-10-10)
+
+The fresh one-call approval was committed first (3c9d7d2). The wrapper reconfirmed
+exactly one authorized Pixel 6a and its paired-target identity entirely in memory.
+The unchanged probe confirmed no existing call and RejectSCO=false, attempted
+Dial exactly once and received acceptance. The call reached active and SCO was
+already active, so Activate was not invoked. The corrected classifier observed
+exactly two matching distinct HFP nodes with both source and sink present:
+hfp_nodes_ready=yes. The 20-second human window opened, then HangupAll was
+accepted. probe_complete=yes, exit zero, no stderr and no automatic retry.
+
+Read-only post-call verification reconfirmed the Pixel identity, a successful
+empty-call query, transport idle, no HFP nodes, no phone HFP defaults and no
+orphan HFP nodes. All three post-check probes exited zero. No global audio
+routing/default/link changes or service restarts were performed. No voice
+payload or personal identifier was recorded. Owned sessions ended (Terminal
+closed). The new single-call approval is consumed; no repeat is authorized.
+
+Evidence: [live automatic gate](evidence/m1-hfp-revalidation-live-attempt.txt)
+and [post-call state](evidence/m1-hfp-revalidation-post-call.txt). This closes
+the corrected classifier's live node-enumeration gate on the observed setup.
+The user reports headphone output but cannot identify the microphone. Headphone
+attachment and human confirmation of automatic completion are not established. Previous explicit human
+computer-duplex evidence remains valid and separate. The successful current
+run cannot establish whether the earlier zero was caused by representation,
+early hangup or both; preserve that historical uncertainty.
+
+No source change or automated regression rerun was needed. M1 still requires
+recovery/permission characterization and iPhone ANCS when hardware is available.
+
+### Human microphone uncertainty and passive follow-up
+
+The user reports sound through connected headphones. They covered computer
+microphone openings, yet the remote participant still heard them, and ask
+whether the phone microphone was used. This does not establish the microphone
+identity: a headphone microphone, another computer input or sound passing the
+physical obstruction remain possible. Headphone attachment (computer/phone)
+and whether the headphones contain a microphone are awaiting clarification.
+Do not promote this report to confirmed computer duplex for this attempt.
+
+A passive snapshot after the call shows the current default source is an
+Audio/Source using ALSA, associated with a PCI device, with one ALSA source
+available and no HFP source selected. No identifiers or descriptions are
+printed. This identifies the current default computer audio input only; it
+cannot reconstruct the source feeding SCO during the ended call or distinguish
+an analog headset input from a built-in microphone by itself. No mute, audio
+routing/default/link change or new call was performed. Terminal closed.
+
+[Microphone follow-up](evidence/m1-hfp-revalidation-microphone-followup.txt).
+The automatic endpoint gate is passed, while physical uplink verification
+remains open. The earlier explicit computer-duplex report remains historical
+human evidence; it is not independent graph-level microphone proof. A future
+approved call should observe the active uplink graph and identify the physical
+source before claiming that gate complete. No further live call is authorized
+by this uncertainty report; the latest one-call approval is consumed.

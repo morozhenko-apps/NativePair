@@ -161,8 +161,8 @@ coverage claim or a hardware completion claim.
 
 [Current evidence](evidence/m1-hfp-node-execution.json) binds full-suite results,
 all ten process passes and fourteen mutation trials to source hashes. Production
-source is 39172c9; verification-tool repair is 72de7a6. The corrected classifier
-has not been exercised in another live call. Historical zero-count timing is
+source is 39172c9; verification-tool repair is 72de7a6. At automated completion, the corrected classifier
+had not yet been exercised in another live call. Historical zero-count timing is
 still unresolved; preserve the previous automatic failure and human computer
 duplex confirmation separately. No new call, routing mutation, service restart,
 phone payload recording or host package installation occurred. All owned
@@ -174,3 +174,14 @@ persistent host/phone state needs restoration. Next hardware step, if requested,
 is one separately approved call with final call/transport observations and human
 computer-audio confirmation; iPhone ANCS and recovery/permission UX remain open
 M1 gates. Remote CI has not been executed for these unpublished commits.
+
+## Subsequent hardware revalidation (2026-10-10)
+
+One separately approved call exercised the unchanged corrected classifier on
+the correlated Pixel 6a. Active call/SCO and two distinct matching HFP nodes,
+including both directions, were observed. The human window opened and automatic
+HangupAll succeeded; the probe exited zero. Post-checks confirmed no call,
+idle transport and no remaining HFP nodes. The user reports headphone audio but cannot identify the microphone, so
+physical uplink proof remains open. See [the live record](M1_HFP_AUDIO_NEXT.md) and its sanitized evidence.
+The prior automatic failure remains historical; its exact timing cause is not
+established by this later success. No additional call is authorized.

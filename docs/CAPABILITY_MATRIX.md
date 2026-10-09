@@ -16,7 +16,7 @@ Evidence levels:
 Reference device: Pixel 6a  
 Host: Ubuntu 26.04  
 BlueZ: 5.85 / Ubuntu package 5.85-4ubuntu0.2  
-Initial evidence date: 2026-10-06; HFP audio update: 2026-10-09 (Pixel Android 17).
+Initial evidence date: 2026-10-06; HFP audio update: 2026-10-10 (Pixel Android 17).
 
 | Capability | Native mechanism | Highest proven level | Result | Notes |
 | --- | --- | ---: | --- | --- |
@@ -24,7 +24,7 @@ Initial evidence date: 2026-10-06; HFP audio update: 2026-10-09 (Pixel Android 1
 | Messages send | MAP | 5 | Proven | Corrected bMessage passed local structure validation, PushMessage returned a transfer, the transfer reached complete, and the intended recipient confirmed exactly one SMS with the expected fixed probe text. |
 | Message events | MAP | 5 | Proven | A real incoming SMS produced a new Message1 object through the MAP/MNS path. Registration Transfer1 was observed; explicit completion status was not captured, but end-to-end event delivery proves registration was effective. |
 | Contacts | PBAP | 4 | Proven | Internal phonebook select, size query, and non-empty bounded listing succeeded. Personal payloads were suppressed. |
-| Calls | HFP (phone AG, Linux HF) | 5 | Call control proven; computer duplex human-confirmed | One authorized 2026-10-09 call reached active; SCO was already active, so no Activate call was required. The user explicitly confirmed sound and microphone in both directions through the computer. The probe nevertheless found zero matching HFP nodes and exited with hfp_nodes_not_ready; the gateway classifier has since been corrected and regression-tested, with live revalidation pending. Owned-call cleanup succeeded and post-call GetCalls was empty with transport idle. See [live result](M1_HFP_AUDIO_NEXT.md). This establishes feasibility for the observed setup, not repeatability, recovery or a successful automated audio gate. |
+| Calls | HFP (phone AG, Linux HF) | 5 | Call control and SCO endpoints proven; latest physical microphone unverified | The 2026-10-09 call has an explicit historical human report of computer duplex, with failed automatic enumeration. On 2026-10-10, one newly approved call passed the corrected automatic gate: active call/SCO, two distinct HFP nodes, both directions, human window and accepted HangupAll; post-check confirmed no call, idle transport and no HFP nodes. The user reports headphone audio but cannot identify the microphone; headphone attachment is awaiting clarification. Covering microphone openings does not prove the phone was the input. No active uplink graph was retained. See [live result and follow-up](M1_HFP_AUDIO_NEXT.md). Endpoint presence is not physical microphone or repeatability/recovery proof. |
 | App notifications | Generic Android Bluetooth | — | No baseline mechanism selected | Android has no project-approved generic equivalent to iPhone ANCS for arbitrary app notifications. |
 | Apple notifications | ANCS | — | Not applicable | ANCS was not advertised by the Android reference device, as expected. |
 
@@ -44,11 +44,11 @@ For the Pixel 6a, NativePair's no-companion-app Android foundation is currently 
 - outgoing SMS through MAP;
 - incoming MAP message events;
 - contact listing through PBAP;
-- HFP call control and one human-confirmed bidirectional call through the computer.
+- HFP call control, active SCO and distinct source/sink endpoints; physical microphone confirmation remains open.
 
 Remaining gaps include:
 
-- live revalidation of corrected HFP endpoint enumeration and graph-level route evidence;
+- physical output/microphone identification and active uplink graph evidence;
 - repeatable call/audio lifecycle across reconnects;
 - reconnect/recovery behavior.
 
