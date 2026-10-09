@@ -1,6 +1,19 @@
 # M1 automated verification execution record
 
 Date: 2026-10-09. Branch: `dev`. Mode: **B — Testing**.
+
+Latest user refinement: run static checks and deterministic Rust/Python cases
+once, rather than ten times. The stability lane repeats only real background
+OBEX/FIFO/session teardown and synthetic OS-signal scenarios ten times. No
+currently failing flaky test is hidden or skipped. This supersedes the earlier
+whole-suite repeat policy for this task; CI still runs the complete suite once.
+
+Final observer audit (before implementation): enforce uint32 node IDs, reject
+non-string/oversized wpctl ID replies and malformed false-valued info/props.
+Only the exact empty GetCalls array establishes absence; a positive count
+without a whole call object for the selected gateway remains unknown. Apply
+the same fail-closed distinction to the passive HFP diagnostic. Add explicit
+boundary/type/corruption/correlation rows; valid output schemas are unchanged.
 User-selected scope: finish automated M1 verification, fix exposed defects, and
 run the deterministic suite ten consecutive times. Live calls, SMS, device
 permission changes, service restarts and iPhone experiments are excluded.
@@ -320,27 +333,27 @@ staging is intentionally persistent and cleared by the next build, as before.
 ## Canonical implemented inventory
 
 The [canonical Python inventory](evidence/m1-automated-test-inventory.json)
-contains 1331 uniquely named methods, including 17 existing methods. The
-implementation added 1314 Python scenarios and three Rust methods containing
+contains 1363 uniquely named methods, including 17 existing methods. The
+implementation added 1346 Python scenarios and three Rust methods containing
 495 table rows. Method counts, table rows and assertions have separate units;
 do not add them together as a coverage percentage.
 
 | Primary category | Complete Python suite | Added Python scenarios |
 | --- | ---: | ---: |
-| Positive | 225 | 216 |
+| Positive | 231 | 222 |
 | N1 input validation | 294 | 294 |
 | N2 boundaries | 133 | 132 |
 | N3 IPC/tool failures | 151 | 148 |
 | N4 replay/idempotency | 23 | 23 |
 | N5 races/state changes | 23 | 20 |
-| N6 corrupt/stale data | 234 | 234 |
+| N6 corrupt/stale data | 260 | 260 |
 | N7 permissions/guards/missing tools | 147 | 146 |
 | N8 reproducible epoch | 3 | 3 |
 | N9 interruption | 36 | 36 |
 | N10 privacy | 22 | 22 |
 | N11 entitlements | 0 (not applicable) | 0 |
 | N12 storage/cleanup failures | 40 | 40 |
-| **Total** | **1331** | **1314** |
+| **Total** | **1363** | **1346** |
 
 Each method has one primary category. Other invariants asserted by the same
 test (privacy, no duplicate mutation and cleanup) are not counted a second time.
@@ -366,7 +379,7 @@ contracts take most of the complete-suite duration.
 
 ## Actual mutation review
 
-All 25 deliberately injected mutations were killed by assertion failures;
+All 29 deliberately injected mutations were killed by assertion failures;
 every trial first passed the same test selection on unmodified copied sources.
 This is a finite invariant review, not an exhaustive mutation score.
 
@@ -397,6 +410,10 @@ This is a finite invariant review, not an exhaustive mutation score.
 | mns_interrupt_ignored | interrupted MNS exits 130 |
 | build_interrupt_ignored | interrupted build emits no finished package |
 | verify_interrupt_ignored | interrupted verification cannot report success |
+| watcher_node_id_overflow_accepted | uint32-overflow graph node is absent |
+| watcher_false_graph_properties_accepted | malformed graph object is absent |
+| watcher_malformed_calls_reported_absent | corrupt call reply remains unknown |
+| passive_hfp_malformed_calls_reported_absent | corrupt passive reply remains unknown |
 
 The initial zero-growth mutation survived a substring-based harness assertion.
 Exact line matching killed it on rerun. That surviving trial is resolved and
@@ -412,6 +429,26 @@ and passed metadata, layout, checksum and both extracted binary smoke checks.
 All completed shell commands/process sessions were closed (Terminal closed).
 The first draft stability series was deliberately interrupted after one pass
 to fix the numeric and signal defects above; it does not count toward the final
-ten-run gate. Final 1331-method source state requires ten fresh complete runs.
+ten-run gate. Final source state requires one fresh complete baseline and nine further
+process stability lane runs, as refined by the user below.
 GitHub execution for these local commits has not been triggered or verified.
 No host package installation and no live phone operation were performed.
+
+### Process stability lane refinement (2026-10-09)
+
+The user requested that static and deterministic checks not be repeated ten
+times. `run_suite.py --runs 10` now runs Rust and the complete 1363-method Python
+baseline once, then repeats exactly 182 subprocess/FIFO/interruption scenarios
+nine times. Those scenarios therefore receive ten consecutive executions.
+The selector includes ObexContracts (109), SendContracts (26), MapEventContracts
+(15), RemainingProbeContracts N9 (24), HFP dial interruption cases (4), and
+PackagingBranches N9 (4). Pure event parsing, fake-clock observer states and
+simulated transport transitions run once. No failure is classified away as
+flaky. Reports identify the lane for each run and save both canonical inventories.
+
+The latest observer regressions add 32 scenarios: canonical uint32 node IDs,
+malformed graph properties, exact empty call arrays and selected-gateway call
+objects. The watcher rejects malformed IDs/properties and both passive HFP
+observers report `unknown` rather than claiming no call from malformed data.
+These internal parsing fixes retain the existing output schema. The targeted
+174 watcher and seven passive HFP corruption cases pass.

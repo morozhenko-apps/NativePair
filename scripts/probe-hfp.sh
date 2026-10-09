@@ -202,11 +202,16 @@ fi
 if [[ -n "$AG_PATH" ]] &&
   busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
   bool_line call_state_query_succeeded yes
-  if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then
-    bool_line call_objects_present yes
-  else
-    bool_line call_objects_present no
-  fi
+  CALL_PRESENCE="$(awk -v gateway="$AG_PATH" '
+    NR == 1 && $1 == "a(oa{sv})" && $2 ~ /^(0|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 {
+      if ($2 == "0" && NF == 2) print "no";
+      else if ($2 + 0 > 0 && $3 ~ "^\"" gateway "/call[0-9]+\"$") print "yes";
+      else print "unknown";
+      found = 1
+    }
+    END { if (!found) print "unknown" }
+  ' "$CALLS_REPLY")"
+  bool_line call_objects_present "$CALL_PRESENCE"
 else
   bool_line call_state_query_succeeded no
   bool_line call_objects_present unknown

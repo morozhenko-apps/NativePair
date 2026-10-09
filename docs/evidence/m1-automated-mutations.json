@@ -198,5 +198,37 @@
     "selector": "interrupted_during_verify",
     "baseline": "passed",
     "result": "killed"
+  },
+  {
+    "mutation": "watcher_node_id_overflow_accepted",
+    "file": "scripts/probe_call_audio_watch.py",
+    "pattern": "test_watcher_contract.py",
+    "selector": "corrupt_graph_filtered",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "watcher_false_graph_properties_accepted",
+    "file": "scripts/probe_call_audio_watch.py",
+    "pattern": "test_watcher_contract.py",
+    "selector": "corrupt_graph_filtered",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "watcher_malformed_calls_reported_absent",
+    "file": "scripts/probe_call_audio_watch.py",
+    "pattern": "test_watcher_contract.py",
+    "selector": "call_observed",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "passive_hfp_malformed_calls_reported_absent",
+    "file": "scripts/probe-hfp.sh",
+    "pattern": "test_remaining_contracts.py",
+    "selector": "passive_hfp",
+    "baseline": "passed",
+    "result": "killed"
   }
 ]

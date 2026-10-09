@@ -90,13 +90,19 @@ add_cases(WatcherContracts, "Positive", "id_parsed", [
     ("normal_id", ("id 41, type Node", 41)),
     ("multiline_id", ("ignored\nid 42, type Node\n", 42)),
     ("large_id", ("id 4294967295, type Node", 4294967295)),
+    ("minimum_plus_one_id", ("id 1, type Node", 1)),
+    ("maximum_minus_one_id", ("id 4294967294, type Node", 4294967294)),
 ], check_id)
 add_cases(WatcherContracts, "N6", "id_rejected", [
     (name, (value, None)) for name, value in [
         ("null_id", None), ("empty_id", ""), ("negative_id", "id -1,"),
         ("prefix_id", "Xid 41,"), ("missing_comma", "id 41"),
         ("text_id", "id x,"), ("decimal_id", "id 1.5,"),
-        ("private_id", SECRET)]], check_id)
+        ("private_id", SECRET), ("over_uint32_id", "id 4294967296,"),
+        ("oversized_id", "id " + "9" * 4301 + ","),
+        ("zero_prefixed_id", "id 01,"),
+        ("integer_id_reply", 3), ("boolean_id_reply", True),
+        ("list_id_reply", [SECRET]), ("object_id_reply", {"value": SECRET})]], check_id)
 
 
 def check_mute(self, value):
@@ -143,6 +149,10 @@ def check_graph(self, value):
 
 graph_cases = [("empty_graph", ([], None, None, {})),
                ("stale_defaults", ([], 41, 42, {}))]
+for identifier in (0, 1, 4294967294, 4294967295):
+    graph_cases.append(("node_id_boundary_" + str(identifier), (
+        [node(identifier)], identifier, None,
+        {"default_sink_present": "yes", "default_sink_state": "running"})))
 for state in ["running", "idle", "suspended", "error", "unknown", SECRET, None]:
     graph_cases.append(("sink_state_" + str(len(graph_cases)), (
         [node(41, state=state)], 41, None,
@@ -180,12 +190,21 @@ for kind in ["api.bluez5.address", "api.bluez5.profile", "device.api"]:
          "hfp_nodes": 2 if kind == "api.bluez5.profile" else 0})))
 add_cases(WatcherContracts, "Positive", "graph_classified", graph_cases, check_graph)
 add_cases(WatcherContracts, "N6", "corrupt_graph_filtered", [
-    ("malformed_object_" + str(i), ([obj], None, None, {}))
+    ("malformed_object_" + str(i), ([obj],
+        obj.get("id") if isinstance(obj, dict) and type(obj.get("id")) is int else 1,
+        None, {}))
     for i, obj in enumerate([
         None, 1, [], "private", {}, {"type": "Other"},
         {"type": "PipeWire:Interface:Node", "id": []},
         {"type": "PipeWire:Interface:Node", "id": True},
         {"type": "PipeWire:Interface:Node", "id": -1},
+        {"type": "PipeWire:Interface:Node", "id": 4294967296},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": 0},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": False},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": []},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": {"props": 0}},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": {"props": False}},
+        {"type": "PipeWire:Interface:Node", "id": 1, "info": {"props": []}},
         {"type": "PipeWire:Interface:Node", "id": 1, "info": SECRET},
         {"type": "PipeWire:Interface:Node", "id": 1, "info": {"props": SECRET}},
         {"type": "PipeWire:Interface:Link", "info": {}},
@@ -224,7 +243,12 @@ add_cases(WatcherContracts, "N6", "call_observed", [
     ("no_calls", (GATEWAY, "a(oa{sv}) 0", "no")),
     ("one_call", (GATEWAY, f'a(oa{{sv}}) 1 "{GATEWAY}/call0" 0', "yes")),
     ("malformed_calls", (GATEWAY, SECRET, "unknown")),
-    ("call_suffix", (GATEWAY, f'a(oa{{sv}}) 1 "{GATEWAY}/call0private" 0', "no")),
+    ("call_suffix", (GATEWAY, f'a(oa{{sv}}) 1 "{GATEWAY}/call0private" 0', "unknown")),
+    ("count_without_object", (GATEWAY, 'a(oa{sv}) 1', "unknown")),
+    ("foreign_gateway_call", (GATEWAY, 'a(oa{sv}) 1 "/org/pipewire/Telephony/ag1/call0" 0', "unknown")),
+    ("zero_count_with_object", (GATEWAY, f'a(oa{{sv}}) 0 "{GATEWAY}/call0" 0', "unknown")),
+    ("zero_prefixed_count", (GATEWAY, f'a(oa{{sv}}) 01 "{GATEWAY}/call0" 0', "unknown")),
+    ("overflow_count", (GATEWAY, f'a(oa{{sv}}) 4294967296 "{GATEWAY}/call0" 0', "unknown")),
 ], check_call)
 
 

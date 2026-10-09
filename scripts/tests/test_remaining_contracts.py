@@ -123,3 +123,11 @@ add_cases(RemainingProbeContracts, "N9", "diagnostic_int_defaults_overridden", [
         ("probe-map-sdp.sh", "sdptool", {}),
         ("probe-mns.sh", "strings", {"mns_flags": []}),
     )], check)
+
+add_cases(RemainingProbeContracts, "N6", "passive_hfp_calls_are_unknown_when_corrupt", [
+    ("corrupt_" + str(index), ("probe-hfp.sh", (), {}, [route("busctl", "GetCalls", text)], {}, (), ["call_objects_present=unknown"], 0))
+    for index, text in enumerate(("", "PRIVATE_CONTACT", "a(oa{sv}) 1",
+        'a(oa{sv}) 1 "/org/pipewire/Telephony/ag1/call0" 0',
+        'a(oa{sv}) 0 "/org/pipewire/Telephony/ag0/call0" 0',
+        'a(oa{sv}) 01 "/org/pipewire/Telephony/ag0/call0" 0',
+        'a(oa{sv}) 4294967296 "/org/pipewire/Telephony/ag0/call0" 0'))], check)

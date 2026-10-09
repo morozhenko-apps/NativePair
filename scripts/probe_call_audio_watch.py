@@ -9,8 +9,8 @@ import subprocess
 import time
 
 TELEPHONY = "org.pipewire.Telephony"
-CALL_PATH = re.compile(r'"/org/pipewire/Telephony/ag[0-9]+/call[0-9]+"')
 AG_PATH = re.compile(r'"(/org/pipewire/Telephony/ag[0-9]+)"')
+MAX_NODE_ID = 4294967295
 
 
 def command(args):
@@ -24,8 +24,13 @@ def command(args):
 
 
 def parse_wpctl_id(output):
-    match = re.search(r"(?m)^id ([0-9]+),", output or "")
-    return int(match.group(1)) if match else None
+    if not isinstance(output, str):
+        return None
+    match = re.search(r"(?m)^id (0|[1-9][0-9]{0,9}),", output)
+    if not match:
+        return None
+    value = int(match.group(1))
+    return value if value <= MAX_NODE_ID else None
 
 
 def parse_sink_mute(output):
@@ -48,12 +53,15 @@ def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present):
     for obj in objects:
         if not isinstance(obj, dict):
             continue
-        info = obj.get("info") or {}
-        if not isinstance(info, dict) or not isinstance(info.get("props") or {}, dict):
+        info = obj.get("info")
+        if info is None:
+            info = {}
+        if not isinstance(info, dict) or (info.get("props") is not None
+                                         and not isinstance(info.get("props"), dict)):
             continue
         if obj.get("type") == "PipeWire:Interface:Node":
             identifier = obj.get("id")
-            if type(identifier) is int and identifier >= 0:
+            if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID:
                 nodes[identifier] = info
         elif obj.get("type") == "PipeWire:Interface:Link":
             if all(type(info.get(key)) is int for key in
@@ -111,9 +119,13 @@ def call_present(gateway):
                       "org.ofono.VoiceCallManager", "GetCalls"])
     if output is None:
         return "unknown"
-    if not re.match(r'^a\(oa\{sv\}\) [0-9]+(?:\s|$)', output):
-        return "unknown"
-    return "yes" if CALL_PATH.search(output) else "no"
+    if re.fullmatch(r'a\(oa\{sv\}\) 0\s*', output):
+        return "no"
+    match = re.match(r'^a\(oa\{sv\}\) ([1-9][0-9]{0,9}) "' + re.escape(gateway)
+                     + r'/call[0-9]+"(?:\s|$)', output)
+    if match and int(match.group(1)) <= MAX_NODE_ID:
+        return "yes"
+    return "unknown"
 
 
 def sample(gateway):

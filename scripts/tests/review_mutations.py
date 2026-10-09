@@ -89,6 +89,20 @@ TRIALS = [
      "trap 'exit 130' INT", ":", "test_packaging_branches.py", "interrupted_before_build"),
     ("verify_interrupt_ignored", "scripts/verify-deb.sh",
      "trap 'exit 130' INT", ":", "test_packaging_branches.py", "interrupted_during_verify"),
+    ("watcher_node_id_overflow_accepted", "scripts/probe_call_audio_watch.py",
+     "type(identifier) is int and 0 <= identifier <= MAX_NODE_ID",
+     "type(identifier) is int and identifier >= 0",
+     "test_watcher_contract.py", "corrupt_graph_filtered"),
+    ("watcher_false_graph_properties_accepted", "scripts/probe_call_audio_watch.py",
+     'info = obj.get("info")', 'info = obj.get("info") or {}',
+     "test_watcher_contract.py", "corrupt_graph_filtered"),
+    ("watcher_malformed_calls_reported_absent", "scripts/probe_call_audio_watch.py",
+     '    return "unknown"\n\n\ndef sample(gateway):',
+     '    return "no"\n\n\ndef sample(gateway):',
+     "test_watcher_contract.py", "call_observed"),
+    ("passive_hfp_malformed_calls_reported_absent", "scripts/probe-hfp.sh",
+     'END { if (!found) print "unknown" }', 'END { if (!found) print "no" }',
+     "test_remaining_contracts.py", "passive_hfp"),
 ]
 
 
