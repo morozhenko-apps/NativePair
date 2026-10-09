@@ -24,7 +24,7 @@ PipeWire link mutation is included in the preparation stage.
    Record current call absence/presence, transport state, RejectSCO, codec and
    endpoint/default-routing evidence. Missing services/devices or blocked
    transport remain explicit unknown/blocker results.
-2. **Live proof — awaiting separate authorization.** Present the actual
+2. **Live proof — one attempt authorized; execution pending.** Present the actual
    preflight results before requesting a dedicated destination and human
    readiness. One guarded Dial attempt only; never touch a pre-existing call.
    Wait for the remote answer and active call, observe/activate the transport
@@ -136,3 +136,21 @@ authorization for one guarded outgoing test call and the destination; require
 human confirmation of computer output and microphone during the existing
 20-second check window. Existing guard, time limits and owned-call HangupAll
 cleanup remain unchanged. No routing architecture change is authorized.
+
+## Authorized live attempt
+
+The user supplied a dedicated destination in direct response to the explicit
+single-call authorization question. This authorizes one guarded outgoing SCO
+test to that destination. Keep the number only in the process environment;
+never put it in repository files, evidence or normal diagnostics. Do not
+automatically retry Dial. Reconfirm the Pixel identity/BlueZ correlation in
+memory and let the existing probe enforce an empty call set and RejectSCO=false
+immediately before its one Dial attempt. Use the documented defaults: up to
+30 seconds for the remote answer, 15 seconds for SCO/node readiness and a
+20-second human check window. Preserve all existing owned-call cleanup.
+
+After completion, inspect call absence, idle transport and orphan endpoints
+read-only; record sanitized status and ask which physical output/microphone
+carried the audio. Successful transport/endpoints alone do not complete duplex
+proof. No production changes, manual routing or service restarts are planned.
+The already successful regression suite is not repeated for this hardware run.
