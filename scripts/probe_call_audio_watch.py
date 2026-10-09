@@ -119,9 +119,10 @@ def call_present(gateway):
                       "org.ofono.VoiceCallManager", "GetCalls"])
     if output is None:
         return "unknown"
-    if re.fullmatch(r'a\(oa\{sv\}\) 0\s*', output):
+    signature = r'a(?:\(oa\{sv\}\)|\{oa\{sv\}\})'
+    if re.fullmatch(signature + r' 0\s*', output):
         return "no"
-    match = re.match(r'^a\(oa\{sv\}\) ([1-9][0-9]{0,9}) "' + re.escape(gateway)
+    match = re.match(r'^' + signature + r' ([1-9][0-9]{0,9}) "' + re.escape(gateway)
                      + r'/call[0-9]+"(?:\s|$)', output)
     if match and int(match.group(1)) <= MAX_NODE_ID:
         return "yes"

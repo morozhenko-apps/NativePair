@@ -337,28 +337,31 @@ staging is intentionally persistent and cleared by the next build, as before.
 
 ## Canonical implemented inventory
 
+Updated after the [hardware-discovered GetCalls correction](M1_GETCALLS_COMPATIBILITY.md).
+Earlier execution and trace records below retain their original source/counts.
+
 The [canonical Python inventory](evidence/m1-automated-test-inventory.json)
-contains 1363 uniquely named methods, including 17 existing methods. The
-implementation added 1346 Python scenarios and three Rust methods containing
+contains 1447 uniquely named methods, including 17 existing methods. The
+implementation added 1430 Python scenarios and three Rust methods containing
 495 table rows. Method counts, table rows and assertions have separate units;
 do not add them together as a coverage percentage.
 
 | Primary category | Complete Python suite | Added Python scenarios |
 | --- | ---: | ---: |
-| Positive | 231 | 222 |
+| Positive | 255 | 246 |
 | N1 input validation | 294 | 294 |
 | N2 boundaries | 133 | 132 |
 | N3 IPC/tool failures | 151 | 148 |
 | N4 replay/idempotency | 23 | 23 |
 | N5 races/state changes | 23 | 20 |
-| N6 corrupt/stale data | 260 | 260 |
-| N7 permissions/guards/missing tools | 147 | 146 |
+| N6 corrupt/stale data | 316 | 316 |
+| N7 permissions/guards/missing tools | 151 | 150 |
 | N8 reproducible epoch | 3 | 3 |
 | N9 interruption | 36 | 36 |
 | N10 privacy | 22 | 22 |
 | N11 entitlements | 0 (not applicable) | 0 |
 | N12 storage/cleanup failures | 40 | 40 |
-| **Total** | **1363** | **1346** |
+| **Total** | **1447** | **1430** |
 
 Each method has one primary category. Other invariants asserted by the same
 test (privacy, no duplicate mutation and cleanup) are not counted a second time.
@@ -425,7 +428,7 @@ Exact line matching killed it on rerun. That surviving trial is resolved and
 recorded here rather than omitted from the review history. Reproduce using
 `python3 scripts/tests/review_mutations.py --output work/mutation-review.json`.
 
-## Validation and handoff gate
+## Previous source validation and handoff gate (5d72c31)
 
 The complete 1363-method Python baseline passed in 210.283 seconds, and all
 eight Rust methods passed. The 182-scenario process stability lane passed ten
@@ -482,3 +485,24 @@ objects. The watcher rejects malformed IDs/properties and both passive HFP
 observers report `unknown` rather than claiming no call from malformed data.
 These internal parsing fixes retain the existing output schema. The targeted
 174 watcher and seven passive HFP corruption cases pass.
+
+## Hardware-discovered GetCalls contract correction
+
+The selected Pixel 6a returned a successful empty `a{oa{sv}}` GetCalls reply.
+The earlier fixtures supplied only `a(oa{sv})`, so the synthetic inventory missed
+a real adapter contract. The correction adds 84 explicit cases, preserves both
+wire forms and canonical-empty rejection, and changes the default external
+adapter to the installed dictionary form. Six new assertion-level mutation
+trials passed; all 84 regression cases passed after twelve reproduced failures.
+The latest full-suite and device results are recorded in
+[M1_GETCALLS_COMPATIBILITY.md](M1_GETCALLS_COMPATIBILITY.md). Previous ten-run
+evidence remains tied to 5d72c31; it is not evidence of ten runs of this revision.
+
+The current full Python suite passed: 1447 methods in 270.605 seconds, zero
+failures. The six targeted wire mutations were killed. Native package rebuild
+and verification, changed Bash syntax and Python compilation passed. The
+[current execution artifact](evidence/m1-getcalls-execution.json) records scope
+and counts; [Pixel preflight](evidence/m1-pixel-hfp-preflight.txt) confirms no
+existing call, idle transport, RejectSCO=false and Activate availability. No
+live call or routing mutation has occurred; the destination and live-call
+authorization remain required. All owned terminal sessions are closed.

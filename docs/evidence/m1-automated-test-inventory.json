@@ -968,6 +968,342 @@
     "category": "Positive"
   },
   {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary0_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary0_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary1_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary1_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary2_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary2_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary3_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary4_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary5_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary6_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivedictionary7_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array0_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array0_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array1_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array1_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array2_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array2_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array3_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array4_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array5_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array6_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_passivestruct_array7_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary0_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary0_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary1_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary1_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary2_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary3_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary4_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary5_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary_when_existing_guard_preserves_call_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shdictionary_when_owned_call_uses_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array0_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array0_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array1_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array1_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array2_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array3_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array4_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array5_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array_when_existing_guard_preserves_call_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_call_shstruct_array_when_owned_call_uses_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary0_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary0_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary1_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary1_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary2_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary3_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary4_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary5_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary_when_existing_guard_preserves_call_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shdictionary_when_owned_call_uses_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array0_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array0_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array1_when_empty_guard_accepts_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array1_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array2_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array3_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array4_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array5_when_malformed_empty_reply_blocks_dial_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array_when_existing_guard_preserves_call_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_probe_hfp_sco_shstruct_array_when_owned_call_uses_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary0_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary0_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary1_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary1_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary2_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary2_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary3_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary4_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary5_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary6_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherdictionary7_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array0_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array0_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array1_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array1_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array2_when_observer_recognizes_wire_signature_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array2_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array3_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array4_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array5_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array6_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_getcalls_compatibility.GetCallsCompatibility.test_given_watcherstruct_array7_when_observer_rejects_corrupt_wire_reply_then_contract_holds",
+    "category": "N6"
+  },
+  {
     "id": "test_hfp_contract_extended.HfpContracts.test_given_accepted_error_when_sco_transport_transition_then_contract_holds",
     "category": "N5"
   },

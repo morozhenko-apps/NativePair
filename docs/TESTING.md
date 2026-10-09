@@ -143,3 +143,19 @@ Hardware tests must document:
 - evidence level from `docs/FEASIBILITY.md`.
 
 Logs included in issues or test evidence must be sanitized before publication.
+
+## GetCalls wire regression
+
+The Pixel hardware continuation revealed the dictionary GetCalls signature
+`a{oa{sv}}`; default fixtures now use it. Explicit legacy and dictionary rows
+are in `test_getcalls_compatibility.py`. Run the scoped regressions with:
+
+```bash
+python3 -m unittest discover -s scripts/tests -p test_getcalls_compatibility.py -v
+python3 scripts/tests/review_mutations.py --start-at call_dictionary_reply_rejected --output work/getcalls-mutations.json
+```
+
+The full current inventory contains 1447 Python methods. The previous ten-run
+process stability evidence is tied to commit 5d72c31; the wire correction does
+not change process/signal ownership logic and receives one fresh full-suite
+run plus six targeted mutation trials. See [the correction record](M1_GETCALLS_COMPATIBILITY.md).

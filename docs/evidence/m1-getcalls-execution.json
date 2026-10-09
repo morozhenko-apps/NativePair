@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-09",
+  "plan_commit": "d7ee7de",
+  "scope": "GetCalls compatibility; full suite once and no-dial Pixel preflight",
+  "full_python_methods": 1447,
+  "added_python_methods_since_baseline": 1430,
+  "new_regression_methods": 84,
+  "new_categories": {
+    "Positive": 24,
+    "N6": 56,
+    "N7": 4
+  },
+  "before_fix": {
+    "tests": 84,
+    "failures": 12,
+    "duration_seconds": 18.624
+  },
+  "after_fix": {
+    "tests": 84,
+    "failures": 0,
+    "duration_seconds": 22.021
+  },
+  "full_suite": {
+    "tests": 1447,
+    "failures": 0,
+    "duration_seconds": 270.605
+  },
+  "mutation_trials": 6,
+  "mutations_killed": 6,
+  "process_stability": "not repeated; process/signal ownership unchanged; previous 10-pass evidence is specific to 5d72c31",
+  "hardware": {
+    "model": "Pixel 6a",
+    "android": "17",
+    "target_correlated": true,
+    "no_dial_sco": "passed",
+    "passive_hfp": "passed",
+    "routing_snapshot": "passed",
+    "call_present": false,
+    "transport": "idle",
+    "reject_sco": false,
+    "activate_available": true,
+    "calls_created": 0,
+    "activate_invocations": 0,
+    "audio_streams_opened": 0,
+    "routing_changed": false
+  },
+  "native_package": "amd64 rebuilt and verified",
+  "remote_ci": "not run for local unpublished commits"
+}

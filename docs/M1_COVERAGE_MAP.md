@@ -36,7 +36,7 @@ This functional review is not an instrumented 100% branch coverage percentage.
 
 The required artifacts, expected bounds, negative applicability and meaningful
 interactions were inventoried before implementation. The complete inventory
-contains 1363 Python methods (1346 added), and Rust has eight methods including
+contains 1447 Python methods (1430 added), and Rust has eight methods including
 three added methods with 495 explicit domain rows. Pure tests use fake clocks
 and command adapters. Integration fixtures execute the actual scripts with
 hermetic external adapters; no subject under test is mocked.
@@ -77,3 +77,15 @@ DEBUG records probe/wrapper source locations. Rust and packaging fixtures are
 validated by explicit contract assertions and are not instrumented in this
 trace. Blank-source shell launcher events are excluded. No trace contains
 arguments, graph values, identifiers or message payloads.
+
+## Hardware-discovered wire contract correction
+
+The Pixel continuation exposed a missing GetCalls dictionary wire form.
+The previous source-specific execution and trace artifacts remain historical
+evidence for commit 5d72c31. Current call/SCO/passive HFP/watcher functions also
+map to [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py):
+84 explicit legacy/dictionary, empty/existing, malformed, lifecycle and observer
+combinations. Default GetCalls fakes now follow actual installed introspection.
+See [the correction record](M1_GETCALLS_COMPATIBILITY.md) for plan, branch and
+negative/interaction applicability, before/after results and new evidence.
+No ten-run claim is made for this later source revision.

@@ -162,9 +162,9 @@ elif name == "busctl":
             print('a(oa{sv}) 1 "/org/pipewire/Telephony/ag0" 0')
         elif method == "GetCalls":
             if update(lambda state: state["call_exists"]):
-                print(config.get("active_calls", 'a(oa{sv}) 1 "/org/pipewire/Telephony/ag0/call0" 1 "State" s "active"'))
+                print(config.get("active_calls", 'a{oa{sv}} 1 "/org/pipewire/Telephony/ag0/call0" 1 "State" s "active"'))
             else:
-                print("a(oa{sv}) 0")
+                print("a{oa{sv}} 0")
         elif method == "HangupAll":
             update(lambda state: state.update(call_exists=False))
         elif method == "Activate":

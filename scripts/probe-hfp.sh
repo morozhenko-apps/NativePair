@@ -203,7 +203,7 @@ if [[ -n "$AG_PATH" ]] &&
   busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
   bool_line call_state_query_succeeded yes
   CALL_PRESENCE="$(awk -v gateway="$AG_PATH" '
-    NR == 1 && $1 == "a(oa{sv})" && $2 ~ /^(0|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 {
+    NR == 1 && ($1 == "a(oa{sv})" || $1 == "a{oa{sv}}") && $2 ~ /^(0|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 {
       if ($2 == "0" && NF == 2) print "no";
       else if ($2 + 0 > 0 && $3 ~ "^\"" gateway "/call[0-9]+\"$") print "yes";
       else print "unknown";

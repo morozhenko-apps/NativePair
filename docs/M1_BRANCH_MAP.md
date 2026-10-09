@@ -1,6 +1,6 @@
 # M1 current source branch map
 
-Date: 2026-10-09. Status: implementation and local verification complete.
+Date: 2026-10-09. Status: GetCalls compatibility, complete Python suite and no-dial Pixel preflight passed.
 
 This source decision index links methods, conditions, loops, command substitutions,
 returns and cleanup exits to executable assertion families. It is an audit index,
@@ -9,8 +9,8 @@ not a denominator for instrumented branch coverage. Python scenario IDs are in
 and assertions are in linked tests. The original pre-implementation map is
 preserved in Git commit a3718b3.
 
-See [the functional coverage map](M1_COVERAGE_MAP.md) for per-file functions,
-covered contracts, remaining interoperability checks and their reasons.
+See [the functional coverage map](M1_COVERAGE_MAP.md) and
+[GetCalls correction](M1_GETCALLS_COMPATIBILITY.md) for contracts and evidence.
 
 ## scripts/build-deb.sh
 
@@ -287,83 +287,83 @@ Assertion families: [test_watcher_entry](../scripts/tests/test_watcher_entry.py)
 
 ## scripts/probe-hfp.sh
 
-Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 11 | usage() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 25 | if [[ "${1:-}" == "--help" \|\| "${1:-}" == "-h" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 27 | exit 0 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 30 | if [[ $# -ne 0 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 33 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 36 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 38 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 41 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 43 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 46 | for command in bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep; do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 47 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 49 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 53 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 61 | cleanup() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 64 | trap cleanup EXIT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 65 | trap 'exit 130' INT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 66 | trap 'exit 143' TERM | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 68 | bool_line() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 77 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 78 | if [[ -z "$info" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 80 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 84 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 86 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 88 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 91 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 93 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 95 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 98 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 101 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 105 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 108 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 112 | if command -v pipewire >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 113 | pipewire_version="$(pipewire --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 115 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 119 | if command -v wireplumber >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 120 | wireplumber_version="$(wireplumber --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 122 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 126 | if busctl --user introspect "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER" >"$MANAGER_INTROSPECT" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 128 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 132 | if grep -Fq 'org.ofono.Manager' "$MANAGER_INTROSPECT" 2>/dev/null && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 135 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 148 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 150 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 152 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 154 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 159 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 160 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 161 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 162 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 163 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 165 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 172 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 175 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 180 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 182 | if grep -Fq 'org.pipewire.Telephony.AudioGateway1' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 183 | grep -Fq 'Dial' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 184 | grep -Fq 'HangupAll' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 187 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 191 | if grep -Fq 'org.ofono.VoiceCallManager' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 194 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 197 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 202 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 205 | CALL_PRESENCE="$(awk -v gateway="$AG_PATH" ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 206 | NR == 1 && $1 == "a(oa{sv})" && $2 ~ /^(0\|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 207 | if ($2 == "0" && NF == 2) print "no"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 208 | else if ($2 + 0 > 0 && $3 ~ "^\"" gateway "/call[0-9]+\"$") print "yes"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 209 | else print "unknown"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 212 | END { if (!found) print "unknown" } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 215 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 220 | if command -v pw-dump >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 222 | if grep -Fqi "$DEVICE" "$PW_DUMP"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 224 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
-| 227 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts |
+| 11 | usage() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 25 | if [[ "${1:-}" == "--help" \|\| "${1:-}" == "-h" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 27 | exit 0 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 30 | if [[ $# -ne 0 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 33 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 36 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 38 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 41 | if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( CONNECT_TIMEOUT > 922337203685477580 )); then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 43 | exit 2 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 46 | for command in bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep; do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 47 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 49 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 53 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 61 | cleanup() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 64 | trap cleanup EXIT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 65 | trap 'exit 130' INT | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 66 | trap 'exit 143' TERM | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 68 | bool_line() { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 77 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 78 | if [[ -z "$info" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 80 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 84 | if grep -Eq '^[[:space:]]*Paired:[[:space:]]+yes$' <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 86 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 88 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 91 | if grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 93 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 95 | exit 1 | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 98 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 101 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 105 | if command -v systemctl >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 108 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 112 | if command -v pipewire >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 113 | pipewire_version="$(pipewire --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 115 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 119 | if command -v wireplumber >/dev/null 2>&1; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 120 | wireplumber_version="$(wireplumber --version 2>/dev/null \| tail -n 1 \| tr -cd '[:alnum:].:_ -')" | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 122 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 126 | if busctl --user introspect "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER" >"$MANAGER_INTROSPECT" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 128 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 132 | if grep -Fq 'org.ofono.Manager' "$MANAGER_INTROSPECT" 2>/dev/null && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 135 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 148 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 150 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 152 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 154 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 159 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 160 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 161 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 162 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 163 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 165 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 172 | if [[ -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 175 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 180 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 182 | if grep -Fq 'org.pipewire.Telephony.AudioGateway1' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 183 | grep -Fq 'Dial' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 184 | grep -Fq 'HangupAll' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 187 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 191 | if grep -Fq 'org.ofono.VoiceCallManager' "$AG_INTROSPECT" && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 194 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 197 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 202 | if [[ -n "$AG_PATH" ]] && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 205 | CALL_PRESENCE="$(awk -v gateway="$AG_PATH" ' | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 206 | NR == 1 && ($1 == "a(oa{sv})" \|\| $1 == "a{oa{sv}}") && $2 ~ /^(0\|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 207 | if ($2 == "0" && NF == 2) print "no"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 208 | else if ($2 + 0 > 0 && $3 ~ "^\"" gateway "/call[0-9]+\"$") print "yes"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 209 | else print "unknown"; | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 212 | END { if (!found) print "unknown" } | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 215 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 220 | if command -v pw-dump >/dev/null 2>&1 && | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 222 | if grep -Fqi "$DEVICE" "$PW_DUMP"; then | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 224 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 227 | else | test_hfp_contract_extended, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 
 ## scripts/probe-hfp-audio.sh
 
@@ -441,227 +441,227 @@ Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contr
 
 ## scripts/probe-hfp-call.sh
 
-Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 13 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 27 | The destination is never printed. The probe refuses to dial if any call object | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 32 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 33 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 40 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 45 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 52 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 55 | if [[ ! "$OBSERVE_SECONDS" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( OBSERVE_SECONDS > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 57 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 60 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 66 | for command in awk bluetoothctl busctl grep head mktemp sleep seq timeout; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 67 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 69 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 73 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 82 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 84 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 86 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 88 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 91 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 97 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 99 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 100 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 101 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 103 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 111 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 112 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 115 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 119 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 121 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 130 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 132 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 133 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 137 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 138 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 139 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 140 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 141 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 143 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 148 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 150 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 154 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 157 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 161 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 163 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 165 | if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 168 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 172 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 176 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 180 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 185 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 199 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 203 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 208 | for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 209 | if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 224 | if [[ $HANGUP_STATUS -eq 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 227 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 231 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 236 | if [[ "$CALL_SEEN" == yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 239 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 13 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 27 | The destination is never printed. The probe refuses to dial if any call object | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 32 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 33 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 40 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 45 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 50 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 52 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 55 | if [[ ! "$OBSERVE_SECONDS" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( OBSERVE_SECONDS > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 57 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 60 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 66 | for command in awk bluetoothctl busctl grep head mktemp sleep seq timeout; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 67 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 69 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 73 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 82 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 84 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 86 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 88 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 91 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 97 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 99 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 100 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 101 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 103 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 111 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 112 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 115 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 119 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 121 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 130 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 132 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 133 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 137 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 138 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 139 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 140 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 141 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 143 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 148 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 150 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 154 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 157 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 161 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 163 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 165 | if ! grep -Eq '^a(\(oa\{sv\}\)\|\{oa\{sv\}\}) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 168 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 172 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 176 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 180 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 185 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 199 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 203 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 208 | for _ in $(seq 1 "$((OBSERVE_SECONDS * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 209 | if busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"     org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 224 | if [[ $HANGUP_STATUS -eq 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 227 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 231 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 236 | if [[ "$CALL_SEEN" == yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 239 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 
 ## scripts/probe-hfp-sco.sh
 
-Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 19 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 29 | NATIVEPAIR_SCO_STATE_TIMEOUT    Condition wait limit for SCO activation (default 15). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 30 | NATIVEPAIR_CALL_ACTIVE_TIMEOUT  Condition wait limit for remote answer (default 30). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 43 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 44 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 51 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 56 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 61 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 66 | for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 68 | if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( value > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 70 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 74 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 77 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 80 | for command in awk bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 81 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 83 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 87 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 106 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 108 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 110 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 112 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 115 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 121 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 123 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 124 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 125 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 127 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 131 | read_transport_state() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 132 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 133 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 138 | refresh_call_snapshot() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 142 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 144 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 147 | CALL_PATH="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 149 | grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" \|\| true | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 154 | if [[ -z "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 155 | return 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 158 | for state in active dialing alerting incoming waiting held disconnected; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 159 | if grep -Eq "\"State\"[[:space:]]+s[[:space:]]+\"$state\"" "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 161 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 165 | for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 166 | if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 168 | CALL_STATE="$(sed -nE 's/^s "(active\|dialing\|alerting\|incoming\|waiting\|held\|disconnected)"$/\1/p' "$CALL_STATE_REPLY")" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 169 | if [[ -n "$CALL_STATE" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 170 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 175 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 178 | inspect_hfp_nodes() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 179 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 180 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 183 | python3 - "$PW_DUMP" "$DEVICE" "$(dirname -- "${BASH_SOURCE[0]}")" >"$NODE_RESULT" <<'PY' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 194 | sys.exit(1) | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 200 | for obj in data: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 203 | if props.get("api.bluez5.address") != device: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 205 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 210 | if media_class == "Audio/Source": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 212 | elif media_class == "Audio/Sink": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 216 | print(f"hfp_source_node_present={'yes' if source else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 217 | print(f"hfp_sink_node_present={'yes' if sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 218 | print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 226 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 227 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 230 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 234 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 236 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 245 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 247 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 248 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 250 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 252 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 256 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 257 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 258 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 259 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 260 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 262 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 267 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 269 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 273 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 275 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 277 | if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 280 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 284 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 288 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 292 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 295 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 299 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 302 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 306 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 308 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 312 | if grep -Fq 'b true' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 316 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 317 | elif grep -Fq 'b false' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 319 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 322 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 325 | INITIAL_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 328 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 334 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 348 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 352 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 357 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 358 | if refresh_call_snapshot && [[ -n "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 366 | if [[ "$CALL_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 369 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 375 | for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 376 | if refresh_call_snapshot; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 378 | if [[ "$LAST_CALL_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 389 | if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 392 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 398 | TRANSPORT_STATE_BEFORE_ACTIVATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 407 | case "$TRANSPORT_STATE_BEFORE_ACTIVATE" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 418 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 419 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 420 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 424 | [[ "$LAST_STATE" == idle \|\| "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 438 | if [[ $ACTIVATE_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 441 | ACTIVATE_ERROR_CLASS="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 443 | grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState\|InvalidFormat\|NotSupported\|InProgress\|Failed\|CME)\|org\.freedesktop\.DBus\.Error\.(InvalidArgs\|Failed\|NoReply\|Timeout\|AccessDenied\|ServiceUnknown)' "$ACTIVATE_REPLY" \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 447 | if [[ -z "$ACTIVATE_ERROR_CLASS" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 448 | if grep -Eqi 'timed out\|timeout' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 450 | elif grep -Eqi 'invalid state\|already active' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 452 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 457 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 461 | for _ in $(seq 1 15); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 462 | [[ "$LAST_STATE" == active ]] && { ACTIVE_SEEN=yes; break; } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 463 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 465 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 467 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 471 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 482 | if [[ "$ACTIVATE_INVOKED" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 486 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" != 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 491 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 494 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" == 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 495 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 496 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 497 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 501 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 510 | if [[ "$ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 513 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 517 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 518 | if inspect_hfp_nodes && grep -Fq 'hfp_nodes_ready=yes' "$NODE_RESULT"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 525 | if [[ -s "$NODE_RESULT" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 527 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 536 | if [[ "$NODES_READY" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 539 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 551 | if [[ $HANGUP_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 555 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 561 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
-| 563 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts |
+| 19 | usage() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 29 | NATIVEPAIR_SCO_STATE_TIMEOUT    Condition wait limit for SCO activation (default 15). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 30 | NATIVEPAIR_CALL_ACTIVE_TIMEOUT  Condition wait limit for remote answer (default 30). | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 43 | while [[ $# -gt 0 ]]; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 44 | case "$1" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 51 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 56 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 61 | if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 63 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 66 | for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 68 | if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] \|\| (( value > 922337203685477580 )); then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 70 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 74 | if [[ "$DO_DIAL" == yes ]] && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 77 | exit 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 80 | for command in awk bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 81 | if ! command -v "$command" >/dev/null 2>&1; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 83 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 87 | TMP_DIR="$(mktemp -d)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 106 | cleanup() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 108 | trap - EXIT INT TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 110 | if [[ "$DIAL_ATTEMPTED" == yes && "$HANGUP_DONE" != yes && -n "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 112 | if timeout 8s busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 115 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 121 | exit "$status" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 123 | trap cleanup EXIT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 124 | trap 'exit 130' INT | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 125 | trap 'exit 143' TERM | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 127 | bool_line() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 131 | read_transport_state() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 132 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 133 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 138 | refresh_call_snapshot() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 142 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 144 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 147 | CALL_PATH="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 149 | grep -oE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY" \|\| true | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 154 | if [[ -z "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 155 | return 2 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 158 | for state in active dialing alerting incoming waiting held disconnected; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 159 | if grep -Eq "\"State\"[[:space:]]+s[[:space:]]+\"$state\"" "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 161 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 165 | for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 166 | if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \ | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 168 | CALL_STATE="$(sed -nE 's/^s "(active\|dialing\|alerting\|incoming\|waiting\|held\|disconnected)"$/\1/p' "$CALL_STATE_REPLY")" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 169 | if [[ -n "$CALL_STATE" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 170 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 175 | return 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 178 | inspect_hfp_nodes() { | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 179 | if ! pw-dump >"$PW_DUMP" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 180 | return 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 183 | python3 - "$PW_DUMP" "$DEVICE" "$(dirname -- "${BASH_SOURCE[0]}")" >"$NODE_RESULT" <<'PY' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 194 | sys.exit(1) | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 200 | for obj in data: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 203 | if props.get("api.bluez5.address") != device: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 205 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 210 | if media_class == "Audio/Source": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 212 | elif media_class == "Audio/Sink": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 216 | print(f"hfp_source_node_present={'yes' if source else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 217 | print(f"hfp_sink_node_present={'yes' if sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 218 | print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 226 | info="$(bluetoothctl info "$DEVICE" 2>/dev/null \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 227 | if [[ -z "$info" ]] \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 230 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 234 | if ! grep -Fqi "$HFP_AG_UUID" <<<"$info"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 236 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 245 | if [[ $CONNECT_STATUS -eq 124 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 247 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 248 | elif grep -Fq 'Connection successful' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 250 | elif grep -Eqi 'already connected\|connected: yes' "$CONNECT_LOG"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 252 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 256 | for _ in $(seq 1 50); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 257 | if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 258 | AG_PATH="$(awk -F'"' ' | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 259 | { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 260 | END { for (path in seen) { count++; last = path } if (count == 1) print last } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 262 | [[ -n "$AG_PATH" ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 267 | if [[ -z "$AG_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 269 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 273 | if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 275 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 277 | if ! grep -Eq '^a(\(oa\{sv\}\)\|\{oa\{sv\}\}) 0[[:space:]]*$' "$CALLS_REPLY" && | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 280 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 284 | if grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 288 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 292 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 295 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 299 | if ! busctl --user introspect "$TELEPHONY_SERVICE" "$AG_PATH" 2>/dev/null \| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 302 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 306 | if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"   "$TRANSPORT_IFACE" RejectSCO >"$REJECT_REPLY" 2>/dev/null; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 308 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 312 | if grep -Fq 'b true' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 316 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 317 | elif grep -Fq 'b false' "$REJECT_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 319 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 322 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 325 | INITIAL_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 328 | if [[ "$DO_DIAL" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 334 | exit 0 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 348 | if [[ $DIAL_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 352 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 357 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 358 | if refresh_call_snapshot && [[ -n "$CALL_PATH" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 366 | if [[ "$CALL_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 369 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 375 | for _ in $(seq 1 "$((CALL_ACTIVE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 376 | if refresh_call_snapshot; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 378 | if [[ "$LAST_CALL_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 389 | if [[ "$CALL_ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 392 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 398 | TRANSPORT_STATE_BEFORE_ACTIVATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 407 | case "$TRANSPORT_STATE_BEFORE_ACTIVATE" in | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 418 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 419 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 420 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 424 | [[ "$LAST_STATE" == idle \|\| "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 438 | if [[ $ACTIVATE_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 441 | ACTIVATE_ERROR_CLASS="$( | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 443 | grep -oE 'org\.pipewire\.Telephony\.Error\.(InvalidState\|InvalidFormat\|NotSupported\|InProgress\|Failed\|CME)\|org\.freedesktop\.DBus\.Error\.(InvalidArgs\|Failed\|NoReply\|Timeout\|AccessDenied\|ServiceUnknown)' "$ACTIVATE_REPLY" \|\| | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 447 | if [[ -z "$ACTIVATE_ERROR_CLASS" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 448 | if grep -Eqi 'timed out\|timeout' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 450 | elif grep -Eqi 'invalid state\|already active' "$ACTIVATE_REPLY"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 452 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 457 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 461 | for _ in $(seq 1 15); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 462 | [[ "$LAST_STATE" == active ]] && { ACTIVE_SEEN=yes; break; } | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 463 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 465 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 467 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 471 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 482 | if [[ "$ACTIVATE_INVOKED" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 486 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" != 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 491 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 494 | if [[ "$ACTIVE_SEEN" != yes && "$ACTIVATE_STATUS" != not_called && "$ACTIVATE_STATUS" == 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 495 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 496 | LAST_STATE="$(read_transport_state \|\| true)" | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 497 | if [[ "$LAST_STATE" == active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 501 | [[ "$LAST_STATE" == error ]] && break | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 510 | if [[ "$ACTIVE_SEEN" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 513 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 517 | for _ in $(seq 1 "$((STATE_TIMEOUT * 10))"); do | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 518 | if inspect_hfp_nodes && grep -Fq 'hfp_nodes_ready=yes' "$NODE_RESULT"; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 525 | if [[ -s "$NODE_RESULT" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 527 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 536 | if [[ "$NODES_READY" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 539 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 551 | if [[ $HANGUP_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 555 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 561 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 563 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 
 ## scripts/probe-map-events.sh
 
@@ -1142,94 +1142,94 @@ Assertion families: [test_obex_contract](../scripts/tests/test_obex_contract.py)
 
 ## scripts/probe_call_audio_watch.py
 
-Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contract.py), [test_call_audio_watch](../scripts/tests/test_call_audio_watch.py), [test_watcher_entry](../scripts/tests/test_watcher_entry.py).
+Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contract.py), [test_call_audio_watch](../scripts/tests/test_call_audio_watch.py), [test_watcher_entry](../scripts/tests/test_watcher_entry.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 16 | def command(args): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 22 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 23 | return result.stdout if result.returncode == 0 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 26 | def parse_wpctl_id(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 27 | if not isinstance(output, str): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 28 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 30 | if not match: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 31 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 33 | return value if value <= MAX_NODE_ID else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 36 | def parse_sink_mute(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 37 | if not isinstance(output, str) or not re.fullmatch( | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 39 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 40 | return "yes" if "[MUTED]" in output else "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 43 | def is_bluetooth(props): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 44 | return bool(props.get("api.bluez5.address") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 49 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 53 | for obj in objects: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 54 | if not isinstance(obj, dict): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 57 | if info is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 59 | if not isinstance(info, dict) or (info.get("props") is not None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 62 | if obj.get("type") == "PipeWire:Interface:Node": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 64 | if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 66 | elif obj.get("type") == "PipeWire:Interface:Link": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 67 | if all(type(info.get(key)) is int for key in | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 71 | def props(nid): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 72 | return (nodes.get(nid) or {}).get("props") or {} | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 74 | outputs = {nid: info for nid, info in nodes.items() | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 75 | if str((info.get("props") or {}).get("media.class") or "") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 77 | connected_outputs = {link.get("output-node-id") for link in links | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 78 | if link.get("input-node-id") == sink_id | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 81 | bt_nodes = [info for info in nodes.values() | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 82 | if is_bluetooth(info.get("props") or {})] | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 83 | hfp_nodes = [info for info in bt_nodes | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 84 | if (info.get("props") or {}).get("api.bluez5.profile") | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 87 | if sink_state not in ("running", "idle", "suspended", "error"): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 89 | return { | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 91 | "default_sink_present": "yes" if sink_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 92 | "default_sink_is_bluetooth": "yes" if is_bluetooth(props(sink_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 95 | "default_source_present": "yes" if source_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 96 | "default_source_is_bluetooth": "yes" if is_bluetooth(props(source_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 99 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 101 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 108 | def find_gateway(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 112 | return gateways[0] if len(gateways) == 1 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 115 | def call_present(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 116 | if gateway is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 117 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 120 | if output is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 121 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 122 | if re.fullmatch(r'a\(oa\{sv\}\) 0\s*', output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 123 | return "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 126 | if match and int(match.group(1)) <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 127 | return "yes" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 128 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 131 | def sample(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 133 | if raw is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 134 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 138 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 139 | if not isinstance(objects, list): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 140 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 144 | return graph_snapshot(objects, sink, source, muted, call_present(gateway)), sink, source | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 147 | def emit(index, elapsed, state, first_sink, sink, first_source, source): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 150 | print("default_sink_changed=" + ("yes" if sink != first_sink else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 151 | print("default_source_changed=" + ("yes" if source != first_source else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 152 | for name, value in state.items(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 157 | def main(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 162 | if not (5 <= args.seconds <= 90) or not (250 <= args.interval_ms <= 2000): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 164 | if not all(shutil.which(cmd) for cmd in ("pw-dump", "wpctl", "busctl")): | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 167 | return 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 174 | print("telephony_gateway_resolved=" + ("yes" if gateway else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 181 | while time.monotonic() - start < args.seconds: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 183 | if result is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 185 | else: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 187 | if count == 0: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 198 | if comparison != previous: | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 206 | return 130 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 210 | print("call_observed=" + ("yes" if call_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 211 | print("sink_muted_at_any_time=" + ("yes" if mute_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 212 | print("default_sink_changed_at_any_time=" + ("yes" if sink_changed else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 213 | print("hfp_nodes_observed=" + ("yes" if hfp_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 215 | ("yes" if stream_disruption else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 216 | print("probe_complete=" + ("yes" if count else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 218 | return 0 if count else 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
-| 221 | if __name__ == "__main__": | test_watcher_contract, test_call_audio_watch, test_watcher_entry |
+| 16 | def command(args): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 22 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 23 | return result.stdout if result.returncode == 0 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 26 | def parse_wpctl_id(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 27 | if not isinstance(output, str): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 28 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 30 | if not match: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 31 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 33 | return value if value <= MAX_NODE_ID else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 36 | def parse_sink_mute(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 37 | if not isinstance(output, str) or not re.fullmatch( | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 39 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 40 | return "yes" if "[MUTED]" in output else "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 43 | def is_bluetooth(props): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 44 | return bool(props.get("api.bluez5.address") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 49 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 53 | for obj in objects: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 54 | if not isinstance(obj, dict): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 57 | if info is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 59 | if not isinstance(info, dict) or (info.get("props") is not None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 62 | if obj.get("type") == "PipeWire:Interface:Node": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 64 | if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 66 | elif obj.get("type") == "PipeWire:Interface:Link": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 67 | if all(type(info.get(key)) is int for key in | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 71 | def props(nid): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 72 | return (nodes.get(nid) or {}).get("props") or {} | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 74 | outputs = {nid: info for nid, info in nodes.items() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 75 | if str((info.get("props") or {}).get("media.class") or "") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 77 | connected_outputs = {link.get("output-node-id") for link in links | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 78 | if link.get("input-node-id") == sink_id | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 81 | bt_nodes = [info for info in nodes.values() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 82 | if is_bluetooth(info.get("props") or {})] | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 83 | hfp_nodes = [info for info in bt_nodes | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 84 | if (info.get("props") or {}).get("api.bluez5.profile") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 87 | if sink_state not in ("running", "idle", "suspended", "error"): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 89 | return { | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 91 | "default_sink_present": "yes" if sink_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 92 | "default_sink_is_bluetooth": "yes" if is_bluetooth(props(sink_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 95 | "default_source_present": "yes" if source_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 96 | "default_source_is_bluetooth": "yes" if is_bluetooth(props(source_id)) else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 99 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 101 | for i in outputs.values()), | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 108 | def find_gateway(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 112 | return gateways[0] if len(gateways) == 1 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 115 | def call_present(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 116 | if gateway is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 117 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 120 | if output is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 121 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 123 | if re.fullmatch(signature + r' 0\s*', output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 124 | return "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 127 | if match and int(match.group(1)) <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 128 | return "yes" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 129 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 132 | def sample(gateway): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 134 | if raw is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 135 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 139 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 140 | if not isinstance(objects, list): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 141 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 145 | return graph_snapshot(objects, sink, source, muted, call_present(gateway)), sink, source | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 148 | def emit(index, elapsed, state, first_sink, sink, first_source, source): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 151 | print("default_sink_changed=" + ("yes" if sink != first_sink else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 152 | print("default_source_changed=" + ("yes" if source != first_source else "no"), flush=True) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 153 | for name, value in state.items(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 158 | def main(): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 163 | if not (5 <= args.seconds <= 90) or not (250 <= args.interval_ms <= 2000): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 165 | if not all(shutil.which(cmd) for cmd in ("pw-dump", "wpctl", "busctl")): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 168 | return 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 175 | print("telephony_gateway_resolved=" + ("yes" if gateway else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 182 | while time.monotonic() - start < args.seconds: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 184 | if result is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 186 | else: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 188 | if count == 0: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 199 | if comparison != previous: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 207 | return 130 | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 211 | print("call_observed=" + ("yes" if call_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 212 | print("sink_muted_at_any_time=" + ("yes" if mute_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 213 | print("default_sink_changed_at_any_time=" + ("yes" if sink_changed else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 214 | print("hfp_nodes_observed=" + ("yes" if hfp_seen else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 216 | ("yes" if stream_disruption else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 217 | print("probe_complete=" + ("yes" if count else "no")) | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 219 | return 0 if count else 1 | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 222 | if __name__ == "__main__": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
 
 ## scripts/probe_audio_graph.py
 

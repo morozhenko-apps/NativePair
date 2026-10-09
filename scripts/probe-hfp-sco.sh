@@ -274,7 +274,7 @@ if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallMan
   bool_line call_state_query_succeeded no
   exit 1
 fi
-if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" &&
+if ! grep -Eq '^a(\(oa\{sv\}\)|\{oa\{sv\}\}) 0[[:space:]]*$' "$CALLS_REPLY" &&
   ! grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then
   bool_line call_state_query_succeeded no
   exit 1

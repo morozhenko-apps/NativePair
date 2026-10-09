@@ -1,0 +1,50 @@
+[
+  {
+    "mutation": "call_dictionary_reply_rejected",
+    "file": "scripts/probe-hfp-call.sh",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "empty_guard_accepts",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "sco_dictionary_reply_rejected",
+    "file": "scripts/probe-hfp-sco.sh",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "empty_guard_accepts",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "watcher_dictionary_reply_rejected",
+    "file": "scripts/probe_call_audio_watch.py",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "observer_recognizes",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "passive_dictionary_reply_rejected",
+    "file": "scripts/probe-hfp.sh",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "observer_recognizes",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "call_noncanonical_empty_reply_accepted",
+    "file": "scripts/probe-hfp-call.sh",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "malformed_empty_reply_blocks",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "sco_noncanonical_empty_reply_accepted",
+    "file": "scripts/probe-hfp-sco.sh",
+    "pattern": "test_getcalls_compatibility.py",
+    "selector": "malformed_empty_reply_blocks",
+    "baseline": "passed",
+    "result": "killed"
+  }
+]

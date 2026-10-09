@@ -70,6 +70,29 @@ inventoried synthetic contracts; hardware revealed their missing wire form.
 
 ## State
 
-Inventory and plan recorded before regression implementation. No live call is
+Inventory and plan were committed before regression implementation (d7ee7de).
+All 84 rows were added. Before the fix, 12 failed in 18.624 seconds; after the
+four production signature corrections, all 84 passed in 22.021 seconds. Default
+GetCalls fixtures now use the actual dictionary form. Six targeted mutations
+check removal of dictionary support in each consumer and acceptance of 00 in
+each dial guard. All six targeted mutations were killed by assertion failures; each unmodified
+selection passed first. The complete 1447-method Python suite passed once in
+270.605 seconds with no failures. Shell syntax and Python compilation passed.
+The native amd64 Debian package was rebuilt and verified. Rust sources did
+not change, so the previously successful Rust quality gate was not repeated.
+
+The actual Pixel no-dial SCO, passive HFP and read-only routing probes all
+passed after the fix. GetCalls is readable and confirms no existing call;
+transport is idle, RejectSCO is false, and Activate is available. No HFP nodes
+exist while idle. No call/Activate/audio stream or routing mutation occurred.
+All owned terminal/process sessions completed and closed (Terminal closed).
+The test recipient is not configured. Next action requires explicit live-call
+authorization, a dedicated destination and human readiness.
+
+The initial preparation wrapper accidentally omitted its target environment
+when spawning probes; all three rejected their arguments with exit 2 before
+Bluetooth operations. That wrapper was corrected and rerun; those setup exits
+are not classified as phone failures or flaky tests.
+No live call is
 authorized. Final hardware gate still requires an approved destination and
 human confirmation of the actual computer speaker/headphones and microphone.
