@@ -116,7 +116,9 @@ Python suite, including all 218 new rows, passed in 322.559 seconds. Shell synta
 and Python compilation passed once. The native amd64 package rebuilt and passed
 checksum, metadata, layout and both extracted binary checks; probes are repository
 feasibility tools and are not shipped in this headless package. Rust is unchanged.
-The full run is process-stability pass one; nine process-only passes remain.
+The full run supplied process-stability pass one. Nine further 182-scenario
+process-only passes succeeded in 51.584–97.215 seconds: ten consecutive passes
+with zero failures or observed flakes. Pure/static/Rust cases were not repeated.
 No new hardware operation or call.
 Owned scoped/mutation terminal sessions completed and closed (Terminal closed).
 
@@ -136,3 +138,13 @@ Owned scoped/mutation terminal sessions completed and closed (Terminal closed).
 Each of the eight unchanged mutation selections passed before mutation. All
 eight modified selections failed by assertions, rather than syntax/import
 errors. Full mutation logs remain under ignored work/. No real phone was used.
+
+## Verification-tool follow-up plan
+
+Audit found that the new end-of-wait canonical-empty check duplicates the old
+SCO mutation anchors. Before completing verification, qualify the two existing
+SCO GetCalls trial anchors with their preflight grep context; preserve each
+mutation and selected assertions. This is a reversible test-tool repair, not
+a production change. After process runs finish, re-run the six retained wire
+mutations plus the eight new HFP trials, and recheck tool compilation. The
+182-case process selection and all production source hashes remain unchanged.
