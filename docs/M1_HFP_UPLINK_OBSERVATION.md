@@ -97,3 +97,16 @@ non-ALSA classification, malformed IDs, private state leakage and failure succes
 - Analysis, inventory, branch map, negative matrix and plan: complete.
 - Implementation, execution, mutation review and idle hardware snapshot: pending.
 - Live microphone proof: pending fresh single-call approval and human check.
+
+### Mutation runner correction discovered during execution
+
+Five initial trials unexpectedly survived although their assertions directly
+contradict the edits. The disposable mutation runner can reuse Python bytecode
+when baseline and mutated source have equal size and the same coarse timestamp.
+This makes mutation evidence unreliable. Before accepting any new mutation
+result, run Python mutation subprocesses with -B in the fresh disposable tree
+(which already excludes __pycache__). Add one N6 regression: a same-length
+source edit with identical mtime must fail the real assertion after a successful
+baseline; assert no bytecode is written. This covers execute's changed Python
+invocation branch. Rust execution and all product code remain unchanged.
+The initial mutation output is provisional and will be replaced, not counted.

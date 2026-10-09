@@ -162,7 +162,7 @@ def execute(root, pattern, selected):
     if pattern == "rust":
         command = ["cargo", "test", "--workspace", "--all-features", "--offline"]
     else:
-        command = [sys.executable, "-m", "unittest", "discover", "-s", "scripts/tests", "-p", pattern, "-v"]
+        command = [sys.executable, "-B", "-m", "unittest", "discover", "-s", "scripts/tests", "-p", pattern, "-v"]
         if selected:
             command += ["-k", selected]
     return subprocess.run(command, cwd=root, capture_output=True, text=True, timeout=180, check=False)
