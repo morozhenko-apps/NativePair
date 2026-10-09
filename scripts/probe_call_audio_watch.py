@@ -9,8 +9,8 @@ import subprocess
 import time
 
 TELEPHONY = "org.pipewire.Telephony"
-CALL_PATH = re.compile(r"/org/pipewire/Telephony/ag[0-9]+/call[0-9]+")
-AG_PATH = re.compile(r"/org/pipewire/Telephony/ag[0-9]+")
+CALL_PATH = re.compile(r'"/org/pipewire/Telephony/ag[0-9]+/call[0-9]+"')
+AG_PATH = re.compile(r'"(/org/pipewire/Telephony/ag[0-9]+)"')
 
 
 def command(args):
@@ -29,7 +29,8 @@ def parse_wpctl_id(output):
 
 
 def parse_sink_mute(output):
-    if output is None or not output.startswith("Volume:"):
+    if not isinstance(output, str) or not re.fullmatch(
+            r"Volume: [0-9]+(?:\.[0-9]+)?(?: \[MUTED\])?\s*", output):
         return "unknown"
     return "yes" if "[MUTED]" in output else "no"
 
@@ -45,11 +46,19 @@ def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present):
     nodes = {}
     links = []
     for obj in objects:
+        if not isinstance(obj, dict):
+            continue
         info = obj.get("info") or {}
+        if not isinstance(info, dict) or not isinstance(info.get("props") or {}, dict):
+            continue
         if obj.get("type") == "PipeWire:Interface:Node":
-            nodes[obj.get("id")] = info
+            identifier = obj.get("id")
+            if type(identifier) is int and identifier >= 0:
+                nodes[identifier] = info
         elif obj.get("type") == "PipeWire:Interface:Link":
-            links.append(info)
+            if all(type(info.get(key)) is int for key in
+                   ("input-node-id", "output-node-id")):
+                links.append(info)
 
     def props(nid):
         return (nodes.get(nid) or {}).get("props") or {}
@@ -71,11 +80,11 @@ def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present):
         sink_state = "unknown"
     return {
         "call_present": call_present,
-        "default_sink_present": "yes" if sink_id is not None else "no",
+        "default_sink_present": "yes" if sink_id in nodes else "no",
         "default_sink_is_bluetooth": "yes" if is_bluetooth(props(sink_id)) else "no",
         "default_sink_state": sink_state,
         "default_sink_muted": sink_muted,
-        "default_source_present": "yes" if source_id is not None else "no",
+        "default_source_present": "yes" if source_id in nodes else "no",
         "default_source_is_bluetooth": "yes" if is_bluetooth(props(source_id)) else "no",
         "output_streams": len(outputs),
         "output_streams_running": sum(i.get("state") == "running"
@@ -101,6 +110,8 @@ def call_present(gateway):
     output = command(["busctl", "--user", "call", TELEPHONY, gateway,
                       "org.ofono.VoiceCallManager", "GetCalls"])
     if output is None:
+        return "unknown"
+    if not re.match(r'^a\(oa\{sv\}\) [0-9]+(?:\s|$)', output):
         return "unknown"
     return "yes" if CALL_PATH.search(output) else "no"
 
