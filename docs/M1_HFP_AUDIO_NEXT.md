@@ -17,7 +17,7 @@ PipeWire link mutation is included in the preparation stage.
 
 ## Plan and milestones
 
-1. **Preparation — inspected; blocked on target confirmation.** Inspect available ADB/BlueZ devices without
+1. **Preparation — Pixel selected; correlation/preflight pending.** Inspect available ADB/BlueZ devices without
    printing addresses, serials or names. Select the existing configured target
    or a unique paired HFP phone; ambiguity requires a user decision. Run the
    existing transport and no-dial SCO preflights and read-only routing snapshot.
@@ -86,12 +86,28 @@ service restart was performed.
 
 Sanitized preparation evidence is in
 [the preparation log](evidence/m1-hfp-audio-preparation.txt). No conclusion about
-SM-G991B HFP support can be drawn from this state. Recommended continuation:
-confirm the connected SM-G991B as the intended test phone, enable Bluetooth
-through its normal user interface, then correlate the device and repeat the
-preflight. Alternatively reconnect the previously tested Pixel 6a. The former
-uses currently available hardware but starts a separate model evidence record;
-the latter continues comparable Pixel evidence but requires that phone.
+SM-G991B HFP support can be drawn from this state.
+
+The user subsequently selected the previously tested Pixel 6a. A fresh ADB
+inventory now contains two authorized phones, including exactly one Pixel 6a
+and one SM-G991B. Select the Pixel by its verified model rather than using the
+implicit default ADB target. Read its Bluetooth state and correlate its local
+adapter address with a paired BlueZ target entirely in memory before any HFP
+connection attempt. Do not print/store either device's serial, address or name.
+The SM-G991B is outside the selected continuation scope. If correlation is
+unavailable or ambiguous, stop before connecting.
+
+Reversible preparation detail: the selected Pixel reports Bluetooth disabled.
+Its local `svc bluetooth` help documents the ordinary enable/disable operation,
+whereas `cmd bluetooth_manager help` is not supported on this build. Use one
+`svc bluetooth enable` attempt as normal radio setup for the user-selected HFP
+verification, then condition-observe enabled state and correlate the local
+address before connecting. This does not alter pairing permissions or product
+architecture. Record the initial disabled state. If the ordinary operation is
+rejected or identity remains unknown, stop and request manual settings/device
+confirmation. Do not force privilege changes or restart services. Keep the
+radio available for this selected verification stage; do not automatically
+disable it if that could interrupt a user-owned connection.
 
 Live proof is not authorized in this continuation. Once preparation is ready,
 obtain fresh call authorization and a dedicated destination before stage 2.
