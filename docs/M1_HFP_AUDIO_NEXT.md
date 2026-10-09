@@ -24,7 +24,7 @@ PipeWire link mutation is included in the preparation stage.
    Record current call absence/presence, transport state, RejectSCO, codec and
    endpoint/default-routing evidence. Missing services/devices or blocked
    transport remain explicit unknown/blocker results.
-2. **Live proof — one attempt authorized; execution pending.** Present the actual
+2. **Live proof — one attempt completed; physical endpoint confirmation pending.** Present the actual
    preflight results before requesting a dedicated destination and human
    readiness. One guarded Dial attempt only; never touch a pre-existing call.
    Wait for the remote answer and active call, observe/activate the transport
@@ -154,3 +154,35 @@ read-only; record sanitized status and ask which physical output/microphone
 carried the audio. Successful transport/endpoints alone do not complete duplex
 proof. No production changes, manual routing or service restarts are planned.
 The already successful regression suite is not repeated for this hardware run.
+
+## Authorized live result (2026-10-09)
+
+One guarded attempt ran at 22:26:54–22:27:30 UTC on the correlated Pixel 6a.
+The probe confirmed no pre-existing call, attempted Dial once, received a
+successful reply and observed the call reaching active. Transport was already
+active before the activation decision; Activate was therefore never invoked.
+The existing endpoint classifier reported zero matching HFP nodes and neither
+source nor sink. The probe exited with hfp_nodes_not_ready before its human
+verification window, and the owned-call HangupAll cleanup succeeded.
+
+Read-only post-call verification confirms a successful GetCalls query with an
+empty set, transport idle, no HFP/default phone routes and no orphan HFP nodes.
+No routing/default/link changes or host service restart were performed. All
+owned command/process sessions completed and closed (Terminal closed).
+
+The user reports voice and sound working normally in both directions. This is
+positive human audibility evidence, despite the classifier's zero-node result.
+It does not yet establish which physical output and microphone carried the
+conversation. A focused endpoint clarification is pending. Do not weaken the
+distinct-source/sink assertion or infer that hardware audio failed merely
+because the current classifier found no matching nodes. No contemporaneous
+unfiltered graph was retained, so the zero count cannot distinguish missing
+endpoints from a filtering/representation mismatch after the call has ended.
+
+Sanitized evidence: [live attempt](evidence/m1-pixel-sco-live-attempt.txt) and
+[post-call state](evidence/m1-pixel-sco-post-call.txt). No destination number or
+voice payload is stored. The authorization was consumed by this one Dial
+attempt; no automatic repeat is authorized. Next action is record the physical
+endpoint answer and, if necessary, plan a scoped diagnostic improvement before
+another separately approved live test. Linux duplex support remains pending
+that evidence, rather than declared failed or proven from this result alone.
