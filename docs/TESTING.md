@@ -179,6 +179,24 @@ A failed node wait now records fresh anonymous call/transport states before
 cleanup; `unknown` never means an absent call. This does not establish the
 timing of the earlier live attempt or authorize a new call.
 
+## Direct HFP microphone-link observation
+
+The next addition contains 203 direct-uplink contracts plus one mutation-runner
+bytecode regression (204 new methods; 1869 Python methods in total). Run the
+scoped contracts and 13 targeted mutations with:
+
+```bash
+python3 -m unittest discover -s scripts/tests -p test_hfp_uplink.py
+python3 -m unittest discover -s scripts/tests -p test_mutation_execution.py
+python3 scripts/tests/review_mutations.py --start-at uplink_foreign_target_included --output work/uplink-mutations.json
+```
+
+The observer never calls or alters audio. Direct active graph links are evidence
+of connection only, not proof of audible signal or physical microphone identity.
+Plan, inventory, limits and execution: [uplink observation](M1_HFP_UPLINK_OBSERVATION.md).
+Mutation Python subprocesses disable bytecode writes in fresh disposable trees,
+so equal-length edits with equal mtimes cannot silently reuse baseline bytecode.
+
 For source 39172c9, the complete 1665-method suite passed once and the existing
 182-case process lane passed nine further runs: ten successes including the
 baseline, with zero observed flakes. Static/Rust/pure cases were not repeated.

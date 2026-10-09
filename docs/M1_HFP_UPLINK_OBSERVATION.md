@@ -110,3 +110,24 @@ source edit with identical mtime must fail the real assertion after a successful
 baseline; assert no bytecode is written. This covers execute's changed Python
 invocation branch. Rust execution and all product code remain unchanged.
 The initial mutation output is provisional and will be replaced, not counted.
+
+### Implementation and scoped verification complete
+
+The additive observer and 203 direct-uplink scenarios are implemented; the
+mutation runner correction adds one regression (204 new methods total).
+The scoped contracts pass. All 12 uplink mutation baselines pass and their edits
+are killed by assertion failures after disabling bytecode writes. A thirteenth
+trial removes that protection and is killed by the new same-size/mtime regression.
+The initial stale-bytecode results are superseded, not included as passing trials.
+
+Exact primary counts: Positive 36; N1 22; N2 8; N3 6; N4 5; N5 10;
+N6 86; N7 29; N9 1; N10 1. N8 is inapplicable (no calendar/locale decisions),
+N11 has no billing/entitlements, N12 has no storage writes. Privacy and exact
+state assertions apply across other rows without double-counting their category.
+The inventory estimate was exceeded because malformed endpoint types and
+profile/class/target combinations each receive independent registered rows.
+
+All applicable planned matrix cells and coverage-map branches are now covered
+by explicit scoped contracts; full-suite execution and idle hardware readiness
+remain pending. The only production addition is the standalone observer;
+existing call, routing, watcher, decoder and command-adapter behavior is unchanged.
