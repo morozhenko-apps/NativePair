@@ -127,12 +127,13 @@ Mandatory manual or separate-device gates include: correct physical Linux **micr
 10. **Execution:** local and CI results, Android/iPhone environment details and sanitized evidence.
 11. **Completion Gate:** risk-significant branches tested, expected checks green, remaining hardware support clearly marked proven/unknown/blocked.
 
-Preferred execution cadence from the broader Mode B workflow: **dev runs fast tests once**; a future release/main gate runs stable tests once and *designated flaky tests* ten times when such a lane has been implemented and justified. NativePair's current CI does **not** have that flaky separation, and NativePair is not a Google Play app; do not add unrelated Play publishing gates. Never perform live hardware actions in CI without explicit approval.
-
-For the user-selected 2026-10-09 automated verification task, the complete
-deterministic suite is required to pass ten consecutive local runs. That task
-requirement overrides the historical preferred cadence above; CI continues to
-run the complete suite once per change.
+Execution cadence, refined by the user on 2026-10-09: static checks and all
+deterministic contracts run once. The 182-scenario process stability lane runs
+ten times (the complete baseline includes its first pass). This lane tests
+actual subprocess, FIFO, signal and teardown interactions. No observed flaky
+tests are being accepted. CI runs the complete suite once per change; the local
+runner records both lane inventories and all pass/failure results. Hardware
+verification remains separate and is not performed in CI.
 
 ## Updating this plan
 

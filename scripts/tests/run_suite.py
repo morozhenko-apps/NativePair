@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run complete deterministic suites with progress and canonical category counts."""
+"""Run contracts once and repeat only process stability scenarios."""
 import argparse
 from collections import Counter
 import json
@@ -29,6 +29,22 @@ def inventory(suite):
     return entries
 
 
+def process_stability(test):
+    """Select actual subprocess/FIFO/signal interactions, not simulated races."""
+    module = type(test).__module__
+    name = type(test).__name__
+    category = getattr(getattr(test, test._testMethodName), "category", "Positive")
+    if (module, name) in {
+        ("test_obex_contract", "ObexContracts"),
+        ("test_map_send_contract", "SendContracts"),
+        ("test_map_events_contract", "MapEventContracts"),
+    }:
+        return True
+    if module in {"test_remaining_contracts", "test_packaging_branches"}:
+        return category == "N9"
+    return module == "test_hfp_contract_extended" and "dial_terminated" in test._testMethodName
+
+
 class ProgressResult(unittest.TextTestResult):
     def startTest(self, test):
         super().startTest(test)
@@ -42,6 +58,7 @@ def main():
     parser.add_argument("--inventory", type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--trace-first", action="store_true")
+    parser.add_argument("--lane", choices=("all", "process-stability"), default="all")
     args = parser.parse_args()
     if not 1 <= args.runs <= 10:
         parser.error("--runs must be 1..10")
@@ -53,11 +70,17 @@ def main():
         for index in range(1, args.runs + 1):
             started = time.monotonic()
             trace_directory = None
-            print(f"run_started={index}/{args.runs}", flush=True)
-            python_command = [sys.executable, str(Path(__file__).resolve())]
+            lane = args.lane if index == 1 else "process-stability"
+            print(f"run_started={index}/{args.runs} lane={lane}", flush=True)
+            python_command = [sys.executable, str(Path(__file__).resolve()), "--lane", lane]
             if report and index == 1:
                 python_command += ["--inventory", str(report.parent / "test-inventory.json")]
-            for command in (["cargo", "test", "--workspace", "--all-features"], python_command):
+            if report and index == 2:
+                python_command += ["--inventory", str(report.parent / "stability-inventory.json")]
+            commands = [python_command]
+            if lane == "all":
+                commands.insert(0, ["cargo", "test", "--workspace", "--all-features"])
+            for command in commands:
                 environment = os.environ.copy()
                 if args.trace_first and index == 1 and command == python_command:
                     trace_root = (report.parent if report else ROOT / "work") / "source-trace" / f"run-{os.getpid()}"
@@ -71,11 +94,11 @@ def main():
                 result = subprocess.run(command, cwd=ROOT, env=environment, check=False)
                 if result.returncode:
                     if report:
-                        results.append({"run": index, "status": "failed", "exit_code": result.returncode})
+                        results.append({"run": index, "lane": lane, "status": "failed", "exit_code": result.returncode})
                         report.write_text(json.dumps(results, indent=2) + "\n")
                     return result.returncode
             duration = time.monotonic() - started
-            results.append({"run": index, "status": "passed", "duration_seconds": round(duration, 3)})
+            results.append({"run": index, "lane": lane, "status": "passed", "duration_seconds": round(duration, 3)})
             if trace_directory:
                 results[-1]["trace_directory"] = trace_directory
             if report:
@@ -83,7 +106,12 @@ def main():
             print(f"run_passed={index}/{args.runs} duration_seconds={duration:.3f}", flush=True)
         return 0
     suite = unittest.defaultTestLoader.discover(str(ROOT / "scripts/tests"))
+    if args.lane == "process-stability":
+        suite = unittest.TestSuite(test for test in flatten(suite) if process_stability(test))
+        if suite.countTestCases() == 0:
+            parser.error("process-stability lane must not be empty")
     entries = inventory(suite)
+    print(f"lane={args.lane} test_count={len(entries)}", flush=True)
     print("category_counts=" + json.dumps(dict(sorted(Counter(entry["category"] for entry in entries).items()))), flush=True)
     if args.inventory:
         args.inventory.write_text(json.dumps(entries, indent=2) + "\n")

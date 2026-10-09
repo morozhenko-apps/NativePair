@@ -96,12 +96,25 @@ python3 scripts/tests/run_suite.py
 The runner prints progress, exact primary-category counts and optional canonical
 scenario IDs (`--inventory <path>`). Every negative case also asserts cleanup
 and privacy where applicable, without counting those assertions again. For the
-required stability gate, execute fresh suites sequentially:
+required stability gate, execute one complete baseline followed by nine fresh
+process stability runs:
 
 ```bash
 python3 scripts/tests/run_suite.py --runs 10 --report work/repeated-runs.json
 python3 scripts/tests/review_mutations.py --output work/mutation-review.json
 ```
+
+`--runs 10` executes Rust and all Python contracts once. The first full run
+counts as the first pass of the 182-scenario process stability lane; runs 2–10
+execute only that lane. Formatting, Clippy, syntax, packaging, pure parsers,
+observer fake-clock cases and other deterministic scenarios are not repeated.
+The lane contains OBEX session/FIFO/cleanup contracts (109), MAP sending (26),
+MAP event subprocess contracts (15), probe interruption cases (24), HFP owned
+call interruption cases (4) and packaging interruption cases (4). Its exact IDs
+are recorded in `work/stability-inventory.json`. This selection is based on
+process interactions; no observed flaky test is being excused or excluded.
+Use `--lane process-stability --runs 10` to repeat only that lane after an
+independently completed full baseline. CI runs all contracts once.
 
 `--trace-first` on the ten-run command adds source-line/arc evidence for its first
 run only. Trace files and detailed local logs live under ignored `work/`; final
