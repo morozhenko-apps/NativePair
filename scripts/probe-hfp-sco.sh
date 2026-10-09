@@ -65,7 +65,7 @@ fi
 
 for value_name in CONNECT_TIMEOUT STATE_TIMEOUT CALL_ACTIVE_TIMEOUT HUMAN_WINDOW; do
   value="${!value_name}"
-  if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then
+  if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] || (( value > 922337203685477580 )); then
     echo "$value_name must be a positive integer." >&2
     exit 2
   fi
@@ -77,7 +77,7 @@ if [[ "$DO_DIAL" == yes ]] &&
   exit 2
 fi
 
-for command in bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do
+for command in awk bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -120,7 +120,9 @@ cleanup() {
   rm -rf "$TMP_DIR"
   exit "$status"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 bool_line() {
   printf '%s=%s\n' "$1" "$2"
@@ -130,7 +132,7 @@ read_transport_state() {
   if ! busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then
     return 1
   fi
-  sed -nE 's/^s "(.*)"$/\1/p' "$STATE_REPLY"
+  sed -nE 's/^s "(idle|pending|active|error)"$/\1/p' "$STATE_REPLY"
 }
 
 refresh_call_snapshot() {
@@ -163,7 +165,7 @@ refresh_call_snapshot() {
   for iface in org.pipewire.Telephony.Call1 org.ofono.VoiceCall; do
     if busctl --user get-property "$TELEPHONY_SERVICE" "$CALL_PATH" \
       "$iface" State >"$CALL_STATE_REPLY" 2>/dev/null; then
-      CALL_STATE="$(sed -nE 's/^s "(.*)"$/\1/p' "$CALL_STATE_REPLY")"
+      CALL_STATE="$(sed -nE 's/^s "(active|dialing|alerting|incoming|waiting|held|disconnected)"$/\1/p' "$CALL_STATE_REPLY")"
       if [[ -n "$CALL_STATE" ]]; then
         return 0
       fi
@@ -178,21 +180,24 @@ inspect_hfp_nodes() {
     return 1
   fi
 
-  python3 - "$PW_DUMP" "$DEVICE" >"$NODE_RESULT" <<'PY'
+  python3 - "$PW_DUMP" "$DEVICE" "$(dirname -- "${BASH_SOURCE[0]}")" >"$NODE_RESULT" <<'PY'
 import json
 import sys
+sys.path.insert(0, sys.argv[-1])
+from probe_audio_graph import load_nodes
 
 path, device = sys.argv[1:3]
-with open(path, "r", encoding="utf-8") as handle:
-    data = json.load(handle)
+try:
+    data = load_nodes(path)
+except (OSError, ValueError):
+    print("pipewire_snapshot_valid=no")
+    sys.exit(1)
 
 count = 0
 source = False
 sink = False
 
 for obj in data:
-    if obj.get("type") != "PipeWire:Interface:Node":
-        continue
     info = obj.get("info") or {}
     props = info.get("props") or {}
     if props.get("api.bluez5.address") != device:
@@ -250,12 +255,10 @@ fi
 
 for _ in $(seq 1 50); do
   if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then
-    AG_PATH="$(
-      {
-        grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" || true
-      } |
-        head -n 1
-    )"
+    AG_PATH="$(awk -F'"' '
+      { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 }
+      END { for (path in seen) { count++; last = path } if (count == 1) print last }
+    ' "$MODEMS_REPLY")"
     [[ -n "$AG_PATH" ]] && break
   fi
   sleep 0.1
@@ -268,6 +271,11 @@ fi
 bool_line hfp_session_established yes
 
 if ! busctl --user call "$TELEPHONY_SERVICE" "$AG_PATH"   org.ofono.VoiceCallManager GetCalls >"$CALLS_REPLY" 2>/dev/null; then
+  bool_line call_state_query_succeeded no
+  exit 1
+fi
+if ! grep -Eq '^a\(oa\{sv\}\) 0[[:space:]]*$' "$CALLS_REPLY" &&
+  ! grep -qE '/org/pipewire/Telephony/ag[0-9]+/call[0-9]+' "$CALLS_REPLY"; then
   bool_line call_state_query_succeeded no
   exit 1
 fi

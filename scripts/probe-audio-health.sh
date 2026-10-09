@@ -5,10 +5,12 @@ export LC_ALL=C
 ITERATIONS="${NATIVEPAIR_AUDIO_HEALTH_ITERATIONS:-10}"
 RECENT_WINDOW="${NATIVEPAIR_AUDIO_HEALTH_JOURNAL_WINDOW:-2 minutes}"
 
-if [[ ! "$ITERATIONS" =~ ^[0-9]+$ ]] || (( ITERATIONS < 2 || ITERATIONS > 60 )); then
+if [[ ! "$ITERATIONS" =~ ^0*([2-9]|[1-5][0-9]|60)$ ]]; then
   echo "NATIVEPAIR_AUDIO_HEALTH_ITERATIONS must be an integer from 2 to 60." >&2
   exit 2
 fi
+
+ITERATIONS=$((10#$ITERATIONS))
 
 for command in grep journalctl mktemp pw-dump python3 pw-top sed systemctl timeout wpctl; do
   if ! command -v "$command" >/dev/null 2>&1; then
@@ -29,7 +31,9 @@ DEFAULT_SOURCE_REPLY="$TMP_DIR/default-source.reply"
 cleanup() {
   rm -rf "$TMP_DIR"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 echo "nativepair_audio_health_probe_schema=2"
 echo "personal_payload_printed=no"
@@ -77,9 +81,11 @@ if [[ $PW_TOP_STATUS -ne 0 ]]; then
 fi
 echo "pw_top_capture_succeeded=yes"
 
-python3 - "$PW_TOP_RAW" "$PW_DUMP" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" >"$PW_TOP_RESULT" <<'PY'
+python3 - "$PW_TOP_RAW" "$PW_DUMP" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(dirname -- "${BASH_SOURCE[0]}")" >"$PW_TOP_RESULT" <<'PY' || { cat "$PW_TOP_RESULT"; exit 1; }
 import json
 import sys
+sys.path.insert(0, sys.argv[-1])
+from probe_audio_graph import load_nodes
 
 top_path, dump_path, default_sink_id, default_source_id = sys.argv[1:5]
 
@@ -144,16 +150,15 @@ growth = {
     if max_err.get(nid, 0) - first_err.get(nid, 0) > 0
 }
 
-with open(dump_path, "r", encoding="utf-8") as handle:
-    dump = json.load(handle)
+try:
+    dump = load_nodes(dump_path)
+except (OSError, ValueError):
+    print("pipewire_snapshot_valid=no")
+    sys.exit(1)
 
 props_by_id = {}
 for obj in dump:
-    if obj.get("type") != "PipeWire:Interface:Node":
-        continue
     obj_id = obj.get("id")
-    if obj_id is None:
-        continue
     info = obj.get("info") or {}
     props_by_id[str(obj_id)] = info.get("props") or {}
 

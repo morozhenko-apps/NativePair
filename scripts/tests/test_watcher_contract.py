@@ -308,7 +308,7 @@ def check_main(self, value):
             code = error.code
     self.assertEqual(code, expected_code, errors.getvalue())
     for field in expected_fields:
-        self.assertIn(field + "\n", output.getvalue())
+        self.assertIn(field, output.getvalue().splitlines())
     self.assertNotIn(SECRET, output.getvalue() + errors.getvalue())
 
 

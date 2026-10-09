@@ -12,7 +12,7 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
-for command in busctl grep head mktemp python3 pw-dump sed wpctl; do
+for command in awk busctl grep head mktemp python3 pw-dump sed wpctl; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -30,7 +30,9 @@ DEFAULT_SOURCE_REPLY="$TMP_DIR/default-source.reply"
 cleanup() {
   rm -rf "$TMP_DIR"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 echo "nativepair_audio_routing_probe_schema=1"
 echo "personal_payload_printed=no"
@@ -38,18 +40,16 @@ echo "routing_changed=no"
 
 AG_PATH=""
 if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"   org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then
-  AG_PATH="$(
-    {
-      grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" || true
-    } |
-      head -n 1
-  )"
+  AG_PATH="$(awk -F'"' '
+      { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 }
+      END { for (path in seen) { count++; last = path } if (count == 1) print last }
+    ' "$MODEMS_REPLY")"
 fi
 
 if [[ -n "$AG_PATH" ]]; then
   echo "telephony_audio_gateway_present=yes"
   if busctl --user get-property "$TELEPHONY_SERVICE" "$AG_PATH"     "$TRANSPORT_IFACE" State >"$STATE_REPLY" 2>/dev/null; then
-    STATE="$(sed -nE 's/^s "(.*)"$/\1/p' "$STATE_REPLY")"
+    STATE="$(sed -nE 's/^s "(idle|pending|active|error)"$/\1/p' "$STATE_REPLY")"
     printf 'transport_state=%s\n' "${STATE:-unknown}"
   else
     echo "transport_state=unknown"
@@ -76,18 +76,21 @@ if wpctl inspect @DEFAULT_AUDIO_SOURCE@ >"$DEFAULT_SOURCE_REPLY" 2>/dev/null; th
   DEFAULT_SOURCE_ID="$(sed -nE 's/^id ([0-9]+),.*/\1/p' "$DEFAULT_SOURCE_REPLY" | head -n 1)"
 fi
 
-python3 - "$PW_DUMP" "$DEVICE" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" >"$ROUTING_RESULT" <<'PY'
+python3 - "$PW_DUMP" "$DEVICE" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(dirname -- "${BASH_SOURCE[0]}")" >"$ROUTING_RESULT" <<'PY' || { cat "$ROUTING_RESULT"; exit 1; }
 import json
 import sys
+sys.path.insert(0, sys.argv[-1])
+from probe_audio_graph import load_nodes
 
 path, device, default_sink_id, default_source_id = sys.argv[1:5]
-with open(path, "r", encoding="utf-8") as handle:
-    data = json.load(handle)
+try:
+    data = load_nodes(path)
+except (OSError, ValueError):
+    print("pipewire_snapshot_valid=no")
+    sys.exit(1)
 
 hfp_nodes = []
 for obj in data:
-    if obj.get("type") != "PipeWire:Interface:Node":
-        continue
     info = obj.get("info") or {}
     props = info.get("props") or {}
     if props.get("api.bluez5.address") != device:

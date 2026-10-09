@@ -8,13 +8,13 @@ DEPENDENCIES = {
     "probe-obex-session.sh": "busctl bluetoothctl obexctl stdbuf mktemp",
     "probe-obex-read.sh": "busctl bluetoothctl obexctl stdbuf mktemp",
     "probe-map-send.sh": "busctl bluetoothctl obexctl stdbuf mktemp wc tail grep sed od tr python3",
-    "probe-map-events.sh": "busctl bluetoothctl obexctl stdbuf mktemp",
+    "probe-map-events.sh": "busctl bluetoothctl obexctl stdbuf mktemp python3",
     "probe-map-sdp.sh": "sdptool timeout mktemp",
     "probe-hfp.sh": "bluetoothctl busctl grep awk sed head tail tr mktemp timeout seq sleep",
-    "probe-hfp-audio.sh": "bluetoothctl busctl grep head mktemp sed seq sleep timeout",
-    "probe-hfp-call.sh": "bluetoothctl busctl grep head mktemp sleep seq timeout",
-    "probe-hfp-sco.sh": "bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl",
-    "probe-audio-routing.sh": "busctl grep head mktemp python3 pw-dump sed wpctl",
+    "probe-hfp-audio.sh": "awk bluetoothctl busctl grep head mktemp sed seq sleep timeout",
+    "probe-hfp-call.sh": "awk bluetoothctl busctl grep head mktemp sleep seq timeout",
+    "probe-hfp-sco.sh": "awk bluetoothctl busctl cat grep head mktemp python3 pw-dump sed seq sleep timeout wpctl",
+    "probe-audio-routing.sh": "awk busctl grep head mktemp python3 pw-dump sed wpctl",
     "probe-audio-health.sh": "grep journalctl mktemp pw-dump python3 pw-top sed systemctl timeout wpctl",
 }
 TARGETS = {"probe-obex-session.sh", "probe-obex-read.sh"}
@@ -66,7 +66,7 @@ add_cases(ParameterContracts, "N1", "timeout_validated", [
     (name.replace("-", "_").replace(".", "_") + "_" + variable.lower() + "_" + str(index),
      (name, arguments(name), {variable: text}, (), 2, ()))
     for name, variables in TIMERS.items() for variable in variables
-    for index, text in enumerate(("0", "-1", "01", "1.5", "NaN", "Infinity", " 1", "1s"))], check)
+    for index, text in enumerate(("0", "-1", "01", "1.5", "NaN", "Infinity", " 1", "1s", "922337203685477581", "9" * 80))], check)
 
 add_cases(ParameterContracts, "N7", "dependency_missing", [
     (name.replace("-", "_").replace(".", "_") + "_missing_" + dependency.replace("-", "_"),

@@ -60,7 +60,7 @@ fi
 
 for value_name in CONNECT_TIMEOUT TRANSFER_TIMEOUT; do
   value="${!value_name}"
-  if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then
+  if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] || (( value > 922337203685477580 )); then
     echo "$value_name must be a positive integer." >&2
     exit 2
   fi

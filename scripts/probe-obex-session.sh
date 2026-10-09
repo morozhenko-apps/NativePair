@@ -54,7 +54,7 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
-if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] || (( CONNECT_TIMEOUT > 922337203685477580 )); then
   echo "NATIVEPAIR_OBEX_TIMEOUT must be a positive integer." >&2
   exit 2
 fi

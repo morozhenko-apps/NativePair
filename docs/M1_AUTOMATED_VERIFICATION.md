@@ -7,8 +7,8 @@ permission changes, service restarts and iPhone experiments are excluded.
 
 ## Repository scan and baseline
 
-Production: three Rust sources, fourteen protocol/audio Bash probes, one Python
-observer, a Bash observer entry point, two packaging scripts, Debian control
+Production: three Rust sources, fourteen Bash probe/observer entry points,
+three Python observer/parser modules, two packaging scripts, Debian control
 template and CI. There is no production D-Bus daemon, GUI, persistence layer,
 network HTTP client, billing or ANCS adapter yet. Do not invent tests for them.
 All existing production sources and required agent/architecture/privacy/roadmap
@@ -26,8 +26,8 @@ Local commands: `cargo fmt --all -- --check`,
 `python3 -m unittest discover -s scripts/tests -v`,
 `bash -n scripts/<name>.sh`, `./scripts/build-deb.sh`, and
 `./scripts/verify-deb.sh artifacts/nativepair_<version>_<arch>.deb`.
-CI currently separates Rust and Debian jobs and selects only two Python files;
-the final gate must discover the complete Python suite.
+Baseline CI separated Rust and Debian jobs and selected only two Python files;
+the updated gate discovers the complete Python suite after building binaries.
 
 ## Invariants and decisions
 
@@ -63,11 +63,11 @@ the final gate must discover the complete Python suite.
 2. **Domain and observer — core/observer complete, binary contracts in stage 4:** exhaustive capability state cross product; CLI
    arguments; observer parsers, graph, subprocess, sample, clocked lifecycle,
    privacy and malformed data. Fix only exposed correctness defects. Commit.
-3. **Protocol contract harness and probes:** hermetic external commands;
+3. **Protocol contract harness and probes — implemented; stability gate pending:** hermetic external commands;
    parameter/guard branches, all command failure exits, MAP/PBAP lifecycle,
    event/send correlation, HFP/SCO states and cleanup, audio/SDP/MNS diagnostics.
    Commit coherent groups with updated execution state.
-4. **Packaging and CI:** metadata/layout/checksum/error contracts; real package
+4. **Packaging and CI — implemented; remote CI not executed:** metadata/layout/checksum/error contracts; real package
    smoke; CI discovers all deterministic tests. Commit.
 5. **Verification and handoff:** mutation review, per-file coverage map, full
    quality gate, ten consecutive runs, CI verification where accessible,
@@ -107,6 +107,8 @@ have an assertion. Source-level branch locations are in the companion map.
 | HEALTH: `probe-audio-health.sh` | cleanup; embedded props_for, is_bluetooth, is_hfp, media_class, default_kind; top parsing/growth/classification/journal | High diagnostic correctness/privacy; contract; 35+ |
 | BUILD: `build-deb.sh` | version, architecture, staging, release build, source epoch, checksum | High destructive staging/package integrity; integration; 15+ |
 | VERIFY: `verify-deb.sh` | assert_field, dependency_present; input/checksum/metadata/layout/executable guards | High package integrity; integration; 20+ |
+| GRAPH: `probe_audio_graph.py` | valid_nodes, load_nodes; root/entry/info/props/ID validation, duplicates, file errors | High false endpoints; unit; 30+ |
+| MONITOR: `probe_obex_monitor.py` | transfer_status, registration, message_count, main; framing, correlation, replay, errors, CLI modes | High false send/event evidence; unit; 50+ |
 
 ## Positive / negative applicability matrix
 
@@ -153,6 +155,55 @@ inventing HTTP/DNS contracts; N11 is absent throughout M1.
 
 ### Defects exposed during protocol work
 
+HFP/audio test stage extends the existing invariants, without selecting any
+audio-routing architecture: malformed GetCalls replies cannot authorize Dial;
+ambiguous gateway enumeration cannot select an arbitrary phone; transport and
+call state diagnostics accept only known enums. Corrupt JSON and malformed
+node entries produce anonymous unavailable results, and duplicate endpoint IDs
+cannot establish two distinct SCO endpoints. Scripted signals test cleanup of
+owned synthetic calls only. MNS's known upstream-defect pattern must exclude an
+explicitly disabled MNS plugin, as already required by FEASIBILITY.md.
+
+Minimal testability extraction: `probe_audio_graph.py` owns `load_nodes(path)`
+and `valid_nodes(data)` for the three embedded audio classifiers. Its contract
+requires a JSON array, filters malformed/non-node/invalid-ID entries, normalizes
+missing info/props to dictionaries, and resolves duplicate IDs by the last
+snapshot entry. Unit inventory: null/scalar/root shapes; invalid object/info/
+props/ID types; empty/one/many nodes; duplicates; Unicode and unreadable/corrupt
+files (30+ scenarios, N1/N2/N6/N10/N12). The Bash tools pass their own script
+directory explicitly, so invocation from another working directory still works.
+This avoids three incompatible corruption policies and adds no dependency.
+
+Packaging verification stage: exercise both binary entry points and real
+temporary Debian archives. Build tests use a temporary repository copy and
+fake Cargo compilation only; verifier tests execute the actual dpkg and
+checksum tooling, with synthetic executable payloads. Verify every required
+metadata/dependency/doc/binary independently, checksum corruption/missing/wrong
+target/multiline sidecars, invalid versions/architectures, build/tool/staging
+failures and source-date handling. A package cannot be relabelled as another
+architecture without cross-compiling: this build script is native-only and
+must reject an override different from dpkg's host architecture. A SHA sidecar
+must name this exact archive, not merely some other file whose hash is valid.
+Preserve nonzero exit statuses from external tools (e.g. dpkg-deb returns 2
+for malformed archive magic); usage errors are 2 and NativePair guard failures
+are 1. Tests assert the concrete expected tool code rather than rewriting all
+external failures to an invented uniform status.
+
+MAP event parser extension (before implementation): `message_count(text,
+session, obexctl=False)` counts additions within this session, suppresses
+duplicate additions, and recognizes removals before path reuse;
+`registration(text, session)` correlates transfer evidence to this session.
+The monitor CLI gains internal message/registration modes. Planned unit and
+contract cases cover other-session events, existing baseline events, duplicates,
+remove/re-add, both monitor and obexctl sources, all registration outcomes and
+monitor/session death. No SMS is generated by these fixtures.
+
+Numeric overflow contract: diagnostic second values must fit the existing
+signed 64-bit shell arithmetic after conversion to tenths of a second. Reject
+values above 922337203685477580 before any external operation; this is an
+implementation-capacity guard, not a new product timeout policy. Add max-1,
+max, max+1 and oversized-digit regression rows for every timer variable.
+
 - Ten probes echoed arbitrary unknown arguments. The privacy regression tests
   failed for every probe; errors now omit the argument value.
 - Add `probe_obex_monitor.py` as an internal pure parser for busctl monitor
@@ -190,6 +241,59 @@ recorded after execution. No percentage is claimed without instrumentation.
 
 ## Execution state
 
+Final branch audit extension (before implementation): require ObjectManager
+interface framing for message additions/removals and signal/interface/member
+framing for registration-transfer presence. A body from an unrelated interface
+or method return must not establish evidence. Add explicit malformed-framing
+regressions. Packaging supplements cover each required missing tool, malformed
+Cargo metadata, failed staging/archive/hash commands, epoch absent/derived/
+invalid and overridden artifact/staging directories. Binary argument errors
+are categorized as N1, separately from successful entry-point behavior.
+Mutation trials use disposable repository copies only, with baseline tests
+passing first; production sources are never mutated in the working checkout.
+The observer entry wrapper is tested separately for exact argv forwarding,
+success/failure/interrupt exit propagation and missing Python. Epoch fixtures
+are categorized as N8 because they verify reproducible timestamps independent
+of local calendar rendering; no date/locale product feature is invented.
+Mutation review exposed a test-harness assertion defect: searching for a field
+as a substring can match a longer field ending in that name (for example,
+`nodes_with_err_growth` inside `bluetooth_nodes_with_err_growth`). Replace field
+substring checks with exact output-line membership; rerun affected baselines
+and mutations. Assertions are strengthened, not adjusted to accept a bug.
+Verification instrumentation uses standard-library Python line/arc tracing
+and Bash DEBUG source-line traces during one complete run. It records executed
+locations without printing command arguments or values. These traces help the
+manual branch audit; they are not an instrumented 100% branch-coverage claim.
+The first instrumented complete run passed (1295 Python methods, 313.683s).
+Audit then identified non-canonical zero-prefixed OBEX numeric replies such as
+`08`: Bash arithmetic treats them as octal. Add 12 independent regression rows
+for MAP folders/messages, PBAP lists and PBAP size using `00`, `01`, `08`;
+require unknown for these malformed busctl decimal forms before shell
+arithmetic. Stop only the owned stability-run process group and restart all
+ten runs after this source change. The interrupted run is not a flaky failure.
+The completed trace also prompts explicit coverage of both INT and TERM trap
+arms for every probe owning temporary files/processes. Add independent signal
+rows at an external operation after trap installation; assert exact exit status,
+zero unwanted mutations and no leftover artifacts. These are synthetic signals
+to owned fixture processes, never signals to host services.
+Signal-fixture correction: an external command inside Bash command substitution
+has a subshell parent, so signaling its immediate parent does not test the
+probe's INT trap. The harness launcher records its owned PID before exec; the
+new `signal_probe` adapter option targets that recorded probe PID. Existing
+`signal_parent` fixtures retain their meaning. This changes test infrastructure
+only and makes trap-arm assertions exercise the intended process.
+Signal audit exposed ignored INT in SDP/MNS (successful exit after cancellation).
+Add explicit INT/TERM exits (130/143) before operations, retaining EXIT cleanup.
+The same cancellation invariant applies to build/verify: a cancelled operation
+must not report success or publish a finished package. Add two signal cases
+per packaging entry point; verifier temp extraction must be removed. Build
+staging is intentionally persistent and cleared by the next build, as before.
+
+- Combined Python run: 1180 tests passed in 273.046 seconds; process completed
+  and terminal session closed. The 68 subsequently added branch rows passed
+  separately in 12.512 seconds. A fresh combined run is required after the
+  final parser and packaging audit changes.
+
 - Baseline Python suite: passed; process completed and terminal session closed.
 - Core: three added Rust test methods execute 495 table rows (15 initial-state,
   240 transitions, 240 independence/clone rows); all eight Rust methods pass.
@@ -212,3 +316,102 @@ recorded after execution. No percentage is claimed without instrumentation.
 - Hardware: no new operation performed; ADB visibility is not test coverage.
 - Completion gate: open until inventory, branches, tests, mutation review,
   quality checks and ten consecutive runs have evidence.
+
+## Canonical implemented inventory
+
+The [canonical Python inventory](evidence/m1-automated-test-inventory.json)
+contains 1331 uniquely named methods, including 17 existing methods. The
+implementation added 1314 Python scenarios and three Rust methods containing
+495 table rows. Method counts, table rows and assertions have separate units;
+do not add them together as a coverage percentage.
+
+| Primary category | Complete Python suite | Added Python scenarios |
+| --- | ---: | ---: |
+| Positive | 225 | 216 |
+| N1 input validation | 294 | 294 |
+| N2 boundaries | 133 | 132 |
+| N3 IPC/tool failures | 151 | 148 |
+| N4 replay/idempotency | 23 | 23 |
+| N5 races/state changes | 23 | 20 |
+| N6 corrupt/stale data | 234 | 234 |
+| N7 permissions/guards/missing tools | 147 | 146 |
+| N8 reproducible epoch | 3 | 3 |
+| N9 interruption | 36 | 36 |
+| N10 privacy | 22 | 22 |
+| N11 entitlements | 0 (not applicable) | 0 |
+| N12 storage/cleanup failures | 40 | 40 |
+| **Total** | **1331** | **1314** |
+
+Each method has one primary category. Other invariants asserted by the same
+test (privacy, no duplicate mutation and cleanup) are not counted a second time.
+The Rust table rows cover all 15 platform/capability initial combinations,
+240 old/new transitions and 240 independent-capability/clone combinations.
+Sixty transition rows reassign the same value; all four states and all five
+capabilities participate. The original five Rust tests are retained.
+
+N11 is absent because there is no billing or entitlement implementation.
+HTTP/DNS/status-code variants of N3, authorization tokens of N7, migrations of
+N6/N12, UI dialogs/rotation of N9 and calendar/DST/currency behavior of N8 are
+not applicable to the existing sources. Local IPC errors, absent tools,
+malformed snapshots, signals and package epochs are tested instead. Hardware
+permission UX, recovery after service restart and iPhone ANCS are separate
+feasibility work, not covered by simulated evidence.
+
+The existing source distribution is dominated by executable protocol probes,
+so integration/contract tests exceed the preferred product pyramid ratio.
+Pure core/parser/observer rules are tested at unit level; hardware E2E count is
+zero. No artificial DTO tests or hypothetical daemon/UI tests were added to
+improve a ratio. Unit/domain tests complete in fractions of a second; shell
+contracts take most of the complete-suite duration.
+
+## Actual mutation review
+
+All 25 deliberately injected mutations were killed by assertion failures;
+every trial first passed the same test selection on unmodified copied sources.
+This is a finite invariant review, not an exhaustive mutation score.
+
+| Mutation | Assertion protecting the invariant |
+| --- | --- |
+| capability_available_inverted | exact supports result for all states |
+| transition_previous_value_discarded | exact old state for every transition |
+| unrelated_transfer_accepted | another transfer remains unknown |
+| unrelated_event_interface_accepted | wrong ObjectManager interface has zero events |
+| duplicate_sms_send | exactly one PushMessage |
+| sms_retry_enabled | Retry argument is false |
+| ambiguous_dial_cleanup_removed | attempted owned call receives HangupAll |
+| pending_transport_activated_twice | pending state invokes zero Activate calls |
+| single_endpoint_proves_duplex | both distinct source and sink are required |
+| zero_error_growth_counted | exact full-line zero-growth count |
+| timer_maximum_rejected | maximum arithmetic-safe value passes validation |
+| wrong_archive_sidecar_accepted | sidecar must name the inspected archive |
+| runtime_dependency_not_checked | each required dependency is independent |
+| duplicate_node_ids_accepted | duplicate ID resolves to one latest node |
+| private_argument_printed | synthetic private value absent from both streams |
+| codec_mapping_changed | byte codec 1 maps to CVSD |
+| temporary_artifacts_not_removed | no temporary artifacts after interruption |
+| duplicate_owned_call_dial | exactly one Dial |
+| preflight_no_dial_guard_removed | preflight invokes zero Dial/HangupAll |
+| zero_prefixed_array_count_accepted | malformed array decimal remains unknown |
+| zero_prefixed_phonebook_size_accepted | malformed PBAP size remains unknown |
+| sdp_interrupt_ignored | interrupted SDP exits 130 |
+| mns_interrupt_ignored | interrupted MNS exits 130 |
+| build_interrupt_ignored | interrupted build emits no finished package |
+| verify_interrupt_ignored | interrupted verification cannot report success |
+
+The initial zero-growth mutation survived a substring-based harness assertion.
+Exact line matching killed it on rerun. That surviving trial is resolved and
+recorded here rather than omitted from the review history. Reproduce using
+`python3 scripts/tests/review_mutations.py --output work/mutation-review.json`.
+
+## Validation and handoff gate
+
+Formatting and Clippy passed. The ten-run stability gate is in progress;
+`work/repeated-runs.json` records only completed runs. Shell syntax, executable
+bits and Python compilation passed. The actual amd64 release package built
+and passed metadata, layout, checksum and both extracted binary smoke checks.
+All completed shell commands/process sessions were closed (Terminal closed).
+The first draft stability series was deliberately interrupted after one pass
+to fix the numeric and signal defects above; it does not count toward the final
+ten-run gate. Final 1331-method source state requires ten fresh complete runs.
+GitHub execution for these local commits has not been triggered or verified.
+No host package installation and no live phone operation were performed.

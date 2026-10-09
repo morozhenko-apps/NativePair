@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3 -S
 """Hermetic external-system adapter, never a replacement for probe logic."""
 import fcntl
 import json
@@ -101,6 +101,8 @@ if reply is not None and not reply.get("delegate"):
     print(reply.get("stderr", ""), end="", file=sys.stderr, flush=True)
     if reply.get("signal_parent"):
         os.kill(os.getppid(), getattr(signal, reply["signal_parent"]))
+    if reply.get("signal_probe"):
+        os.kill(int((root / "probe.pid").read_text()), getattr(signal, reply["signal_probe"]))
     sys.exit(reply.get("exit", 0))
 
 if name == "chmod" and config.get("capture_payload"):

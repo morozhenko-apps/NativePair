@@ -52,7 +52,7 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
-if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] || (( CONNECT_TIMEOUT > 922337203685477580 )); then
   echo "NATIVEPAIR_OBEX_TIMEOUT must be a positive integer." >&2
   exit 2
 fi
@@ -203,7 +203,7 @@ array_count() {
   local file="$1"
   local signature="$2"
   awk -v signature="$signature" '
-    NR == 1 && $1 == signature && $2 ~ /^[0-9]+$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { print $2; found = 1 }
+    NR == 1 && $1 == signature && $2 ~ /^(0|[1-9][0-9]*)$/ && length($2) <= 10 && $2 + 0 <= 4294967295 { print $2; found = 1 }
     END { if (!found) print "unknown" }
   ' "$file"
 }
@@ -299,7 +299,7 @@ fi
 SIZE_OUT="$TMP_DIR/pbap-size.out"
 if call_to_file "$SIZE_OUT"   org.bluez.obex "$SESSION_PATH" org.bluez.obex.PhonebookAccess1 GetSize; then
   echo "pbap_size_read=yes"
-  size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^[0-9]+$/ && length($2) <= 5 && $2 + 0 <= 65535 { print $2 }' "$SIZE_OUT")"
+  size="$(awk 'NR == 1 && $1 == "q" && $2 ~ /^(0|[1-9][0-9]*)$/ && length($2) <= 5 && $2 + 0 <= 65535 { print $2 }' "$SIZE_OUT")"
   if [[ -z "$size" ]]; then
     echo "pbap_phonebook_nonempty=unknown"
   elif (( size > 0 )); then

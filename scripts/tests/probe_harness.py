@@ -33,6 +33,12 @@ def run_probe(script, args=(), env=None, routes=(), config=None, missing=()):
         binary.mkdir()
         (root / "tmp").mkdir()
         cfg = {"routes": list(routes), **(config or {})}
+        obex_process = None
+        if "mns_flags" in cfg:
+            obex_process = subprocess.Popen(
+                [sys.executable, "-c", "import signal; signal.pause()", *cfg.pop("mns_flags")],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+            cfg["obex_pid"] = obex_process.pid
         wrapped = set(EXTERNALS) | {rule["command"] for rule in routes}
         if cfg.get("capture_payload"):
             wrapped.add("chmod")
@@ -73,8 +79,21 @@ def run_probe(script, args=(), env=None, routes=(), config=None, missing=()):
             "NATIVEPAIR_SCO_HUMAN_WINDOW": "1", "NATIVEPAIR_CALL_OBSERVE_SECONDS": "1",
             **(env or {}),
         }
+        trace_path = os.environ.get("NATIVEPAIR_TEST_TRACE")
+        if trace_path:
+            trace_environment = root / "trace.bash"
+            trace_environment.write_text('set -o functrace\n'
+                'trap \'printf "%s:%s\\n" "${BASH_SOURCE[0]}" "$LINENO" >> "$NATIVEPAIR_TEST_TRACE"\' DEBUG\n')
+            environment.update(BASH_ENV=str(trace_environment), NATIVEPAIR_TEST_TRACE=trace_path)
+        for key in ("PYTHONPATH", "COVERAGE_PROCESS_START", "NATIVEPAIR_PYTHON_TRACE", "NATIVEPAIR_TRACE_ROOT"):
+            if key in os.environ:
+                environment[key] = os.environ[key]
+        if "NATIVEPAIR_PYTHON_TRACE" in environment:
+            environment["NATIVEPAIR_TRACE_SCRIPT"] = str(REPO / "scripts" / script)
         # The process group is created and owned by this exact test invocation.
-        process = subprocess.Popen([str(binary / "bash"), str(REPO / "scripts" / script), *args],
+        process = subprocess.Popen([str(binary / "bash"), "-c",
+                                   'printf "%s\\n" "$$" > "$NATIVEPAIR_TEST_ROOT/probe.pid"; exec "$@"',
+                                   "probe-launch", str(binary / "bash"), str(REPO / "scripts" / script), *args],
                                    env=environment, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, text=True, start_new_session=True)
         try:
@@ -86,6 +105,9 @@ def run_probe(script, args=(), env=None, routes=(), config=None, missing=()):
             except ProcessLookupError:
                 pass
             process.wait()
+            if obex_process is not None:
+                obex_process.terminate()
+                obex_process.wait(timeout=5)
         state = json.loads((root / "state.json").read_text())
         return SimpleNamespace(returncode=process.returncode, stdout=stdout, stderr=stderr,
                                state=state, remaining=[p.name for p in (root / "tmp").iterdir()])
@@ -94,7 +116,7 @@ def run_probe(script, args=(), env=None, routes=(), config=None, missing=()):
 def assert_safe(test, result, expected=0, fields=()):
     test.assertEqual(result.returncode, expected, result.stdout + result.stderr)
     for field in fields:
-        test.assertIn(field + "\n", result.stdout)
+        test.assertIn(field, result.stdout.splitlines())
     for private in (DEVICE, NUMBER, SECRET):
         test.assertNotIn(private, result.stdout + result.stderr)
     test.assertEqual(result.remaining, [], "Probe leaked temporary artifacts")

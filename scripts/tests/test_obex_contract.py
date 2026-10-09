@@ -97,6 +97,9 @@ for target, match, field, signature in [("map", "ListFolders", "map_folder", "aa
                                     ("malformed", "PRIVATE_CONTACT", "unknown"),
                                     ("invalid_count", signature + " x", "unknown"),
                                     ("negative_count", signature + " -1", "unknown"),
+                                    ("leading_zero_00", signature + " 00", "unknown"),
+                                    ("leading_zero_01", signature + " 01", "unknown"),
+                                    ("leading_zero_08", signature + " 08", "unknown"),
                                     ("large_count", signature + " 999999999999999999999999999", "unknown")]:
         arrays.append((target + "_" + field + "_" + label, (READ, target,
             [route("busctl", match, output)], {}, [field + "_list_nonempty=" + expected, "read_probe_complete=yes"], 0)))
@@ -107,6 +110,9 @@ add_cases(ObexContracts, "N6", "phonebook_size_classified", [
     for name, text, expected in [("empty", "q 0", "no"), ("one", "q 1", "yes"),
                                  ("max", "q 65535", "yes"), ("corrupt", "PRIVATE_CONTACT", "unknown"),
                                  ("missing", "", "unknown"), ("negative", "q -1", "unknown"),
+                                 ("leading_zero_00", "q 00", "unknown"),
+                                 ("leading_zero_01", "q 01", "unknown"),
+                                 ("leading_zero_08", "q 08", "unknown"),
                                  ("overflow", "q 999999999999999999999999999", "unknown")]], check)
 
 add_cases(ObexContracts, "N12", "fifo_creation_fails", [

@@ -52,13 +52,13 @@ fi
 
 for value_name in EVENT_TIMEOUT CONNECT_TIMEOUT; do
   value="${!value_name}"
-  if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then
+  if [[ ! "$value" =~ ^[1-9][0-9]{0,17}$ ]] || (( value > 922337203685477580 )); then
     echo "$value_name must be a positive integer." >&2
     exit 2
   fi
 done
 
-for command in busctl bluetoothctl obexctl stdbuf mktemp; do
+for command in busctl bluetoothctl obexctl stdbuf mktemp python3; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -212,50 +212,30 @@ fi
 echo "session_established=yes"
 echo "notification_registration_attempted_by_bluez=yes"
 
+MONITOR_PARSER="$(dirname -- "${BASH_SOURCE[0]}")/probe_obex_monitor.py"
 registration_transfer_seen=no
 registration_transfer_status=not_seen
-
-if wait_for_log "$MONITOR_LOG" 'org\.bluez\.obex\.Transfer1' 3; then
-  registration_transfer_seen=yes
-
-  for _ in {1..30}; do
-    if grep -Eqi 'Status.*complete|complete.*Status' "$MONITOR_LOG"; then
-      registration_transfer_status=complete
-      break
-    fi
-    if grep -Eqi 'Status.*error|error.*Status' "$MONITOR_LOG"; then
-      registration_transfer_status=error
-      break
-    fi
-    sleep 0.1
-  done
-
-  if [[ "$registration_transfer_status" == not_seen ]]; then
-    registration_transfer_status=unknown
-  fi
-fi
+for _ in {1..30}; do
+  read -r registration_transfer_seen registration_transfer_status < <(
+    python3 "$MONITOR_PARSER" --registration "$MONITOR_LOG" "$SESSION_PATH"
+  )
+  [[ "$registration_transfer_status" == complete || "$registration_transfer_status" == error ]] && break
+  sleep 0.1
+done
 
 echo "notification_registration_transfer_seen=$registration_transfer_seen"
 echo "notification_registration_status=$registration_transfer_status"
 
 echo "waiting_for_new_message_event=yes"
 
-baseline_monitor_messages="$(
-  grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null || true
-)"
-baseline_obexctl_messages="$(
-  grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null || true
-)"
+baseline_monitor_messages="$(python3 "$MONITOR_PARSER" --messages "$MONITOR_LOG" "$SESSION_PATH")"
+baseline_obexctl_messages="$(python3 "$MONITOR_PARSER" --obex-messages "$OBEX_LOG" "$SESSION_PATH")"
 
 elapsed=0
 event_observed=no
 while (( elapsed < EVENT_TIMEOUT * 10 )); do
-  current_monitor_messages="$(
-    grep -Ec 'org\.bluez\.obex\.Message1' "$MONITOR_LOG" 2>/dev/null || true
-  )"
-  current_obexctl_messages="$(
-    grep -Ec '\[NEW\].*Message /org/bluez/obex/client/session[0-9]+/message[0-9]+' "$OBEX_LOG" 2>/dev/null || true
-  )"
+  current_monitor_messages="$(python3 "$MONITOR_PARSER" --messages "$MONITOR_LOG" "$SESSION_PATH")"
+  current_obexctl_messages="$(python3 "$MONITOR_PARSER" --obex-messages "$OBEX_LOG" "$SESSION_PATH")"
 
   if (( current_monitor_messages > baseline_monitor_messages ||
         current_obexctl_messages > baseline_obexctl_messages )); then

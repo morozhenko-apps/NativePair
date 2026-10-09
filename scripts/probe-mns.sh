@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 130' INT
+trap 'exit 143' TERM
 export LC_ALL=C
 
 echo "nativepair_mns_probe_schema=2"
@@ -57,16 +59,16 @@ else
   OBEX_EXE=""
 fi
 
+MNS_EXPLICITLY_DISABLED=unknown
 if [[ -n "$OBEX_PID" && -r "/proc/$OBEX_PID/cmdline" ]]; then
   CMDLINE="$(tr '\0' ' ' < "/proc/$OBEX_PID/cmdline")"
-  if grep -Eq -- '--noplugin([=[:space:]][^ ]*,?)*mns|--noplugin[=[:space:]]+mns' <<<"$CMDLINE"; then
-    echo "mns_explicitly_disabled=yes"
+  if grep -Eq -- '(^|[[:space:]])--noplugin(=|[[:space:]]+)([^[:space:],]+,)*mns(,|[[:space:]]|$)' <<<"$CMDLINE"; then
+    MNS_EXPLICITLY_DISABLED=yes
   else
-    echo "mns_explicitly_disabled=no"
+    MNS_EXPLICITLY_DISABLED=no
   fi
-else
-  echo "mns_explicitly_disabled=unknown"
 fi
+echo "mns_explicitly_disabled=$MNS_EXPLICITLY_DISABLED"
 
 if [[ -n "$OBEX_EXE" && -r "$OBEX_EXE" ]] && command -v strings >/dev/null 2>&1; then
   STRINGS_OUT="$(mktemp)"
@@ -150,10 +152,9 @@ else
 fi
 
 known_bluez_2315_pattern=no
-if [[ "${OBEX_EXE:-}" != "" ]] &&
-  command -v strings >/dev/null 2>&1 &&
-  strings "$OBEX_EXE" | grep -Fq 'x-bt/MAP-NotificationRegistration' &&
-  strings "$OBEX_EXE" | grep -Fq 'x-bt/MAP-event-report' &&
+if [[ -n "${STRINGS_OUT:-}" && "$MNS_EXPLICITLY_DISABLED" == no ]] &&
+  grep -Fq 'x-bt/MAP-NotificationRegistration' "$STRINGS_OUT" &&
+  grep -Fq 'x-bt/MAP-event-report' "$STRINGS_OUT" &&
   ! bluetoothctl show 2>/dev/null |
     tr '[:upper:]' '[:lower:]' |
     grep -Fq '00001133-0000-1000-8000-00805f9b34fb'; then

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 130' INT
+trap 'exit 143' TERM
 export LC_ALL=C
 
 DEVICE="${NATIVEPAIR_DEVICE:-}"

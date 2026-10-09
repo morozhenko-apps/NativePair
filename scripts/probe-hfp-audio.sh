@@ -42,12 +42,12 @@ if [[ ! "$DEVICE" =~ ^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$ ]]; then
   exit 2
 fi
 
-if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+if [[ ! "$CONNECT_TIMEOUT" =~ ^[1-9][0-9]{0,17}$ ]] || (( CONNECT_TIMEOUT > 922337203685477580 )); then
   echo "NATIVEPAIR_HFP_CONNECT_TIMEOUT must be a positive integer." >&2
   exit 2
 fi
 
-for command in bluetoothctl busctl grep head mktemp sed seq sleep timeout; do
+for command in awk bluetoothctl busctl grep head mktemp sed seq sleep timeout; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -65,7 +65,9 @@ REJECT_REPLY="$TMP_DIR/reject.reply"
 cleanup() {
   rm -rf "$TMP_DIR"
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 bool_line() {
   printf '%s=%s\n' "$1" "$2"
@@ -131,12 +133,10 @@ fi
 AG_PATH=""
 for _ in $(seq 1 50); do
   if busctl --user call "$TELEPHONY_SERVICE" "$TELEPHONY_MANAGER"     org.ofono.Manager GetModems >"$MODEMS_REPLY" 2>/dev/null; then
-    AG_PATH="$(
-      {
-        grep -oE '/org/pipewire/Telephony/ag[0-9]+' "$MODEMS_REPLY" || true
-      } |
-        head -n 1
-    )"
+    AG_PATH="$(awk -F'"' '
+      { for (i = 2; i <= NF; i += 2) if ($i ~ /^\/org\/pipewire\/Telephony\/ag[0-9]+$/) seen[$i] = 1 }
+      END { for (path in seen) { count++; last = path } if (count == 1) print last }
+    ' "$MODEMS_REPLY")"
     [[ -n "$AG_PATH" ]] && break
   fi
   sleep 0.1
@@ -187,7 +187,7 @@ else
   exit 1
 fi
 
-STATE="$(sed -nE 's/^s "(.*)"$/\1/p' "$STATE_REPLY")"
+STATE="$(sed -nE 's/^s "(idle|pending|active|error)"$/\1/p' "$STATE_REPLY")"
 CODEC="$(sed -nE 's/^y ([0-9]+)$/\1/p' "$CODEC_REPLY")"
 REJECT_SCO="$(sed -nE 's/^b (true|false)$/\1/p' "$REJECT_REPLY")"
 
