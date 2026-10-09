@@ -308,6 +308,32 @@ The new decision logic must be covered by deterministic fake-D-Bus contract test
 
 **Diagnostic revision implemented (dev, 2026-10-08):** `f4cf87b` reads the transport state on the confirmed active call, skips duplicate activation when already `active`, waits for in-flight `pending`, and checks the transport after an error. Method failures remain reported, even when the transport becomes active independently. It still requires observable HFP source/sink nodes before opening a bounded human check window. `21b0059` extends the guarded Bash probe contract suite to 12 synthetic cases, including automatically active SCO, pending-to-active, successful Activate, and error-with-active-transport. [Dev CI run 37838422971](https://github.com/morozhenko-apps/NativePair/actions/runs/37838422971) passed all jobs. No additional physical calls were made. Next evidence gate remains a separately authorized live call plus confirmation of **which physical output and microphone** handled the conversation, not merely that both participants could hear each other.
 
+### Pixel computer duplex observation (2026-10-09)
+
+After the separately authorized single-call test, the correlated Pixel 6a
+(Android 17) reached an active call with AudioGatewayTransport1.State=active
+before any explicit activation. The probe correctly skipped Activate. The user
+reported normal voice/audio in both directions and explicitly confirmed both
+computer output and computer microphone. This is positive computer duplex
+feasibility evidence for the observed setup, beyond the earlier ambiguous
+phone-to-phone audibility result.
+
+The automated source/sink classifier reported zero matching HFP nodes and the
+probe failed with hfp_nodes_not_ready before the human check window. Preserve
+this result: active transport plus human confirmation does not establish a
+successful automated endpoint-enumeration gate. No unfiltered contemporaneous
+graph was retained, so missing endpoints and a property/filter representation
+mismatch cannot be distinguished from the retained evidence. Do not weaken
+assertions or change routing to hide this discrepancy.
+
+Owned-call HangupAll cleanup succeeded. A read-only post-check confirmed an
+empty call set, idle transport and no reported orphan HFP nodes. No defaults,
+PipeWire links or host services were changed. The authorization covered one
+attempt and is consumed. Detailed sanitized evidence and next diagnostic gap
+are in [the continuation record](M1_HFP_AUDIO_NEXT.md). HFP audio is now
+characterized on the reference setup; repeatability, recovery and product
+routing remain separate work. No general Android/iPhone support is implied.
+
 ### SCO probe safety-hardening plan (no real dial)
 
 The already implemented HFP probes have a cleanup gap: `Dial` can reach the phone before the D-Bus method reply fails or times out, yet the scripts currently mark the call as cleanup-owned only after a successful D-Bus reply. In that uncertain outcome a real call could continue without cleanup.

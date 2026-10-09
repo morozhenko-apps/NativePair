@@ -24,14 +24,14 @@ PipeWire link mutation is included in the preparation stage.
    Record current call absence/presence, transport state, RejectSCO, codec and
    endpoint/default-routing evidence. Missing services/devices or blocked
    transport remain explicit unknown/blocker results.
-2. **Live proof — one attempt completed; physical endpoint confirmation pending.** Present the actual
+2. **Live proof — computer duplex human-confirmed; endpoint enumeration unresolved.** Present the actual
    preflight results before requesting a dedicated destination and human
    readiness. One guarded Dial attempt only; never touch a pre-existing call.
    Wait for the remote answer and active call, observe/activate the transport
    through existing logic, inspect matching source/sink endpoints and use the
    existing bounded human verification window. Existing cleanup hangs up the
    owned call on success, failure or interruption. Do not change routing.
-3. **Evidence and handoff — planned.** Record anonymous system results and
+3. **Evidence and handoff — complete for this attempt.** Record anonymous system results and
    explicit human confirmation of the computer output and microphone. Do not
    classify phone-to-phone audibility as Linux duplex proof. If manual routing
    is required, stop and present architecture/UX options before implementing it.
@@ -170,10 +170,10 @@ empty set, transport idle, no HFP/default phone routes and no orphan HFP nodes.
 No routing/default/link changes or host service restart were performed. All
 owned command/process sessions completed and closed (Terminal closed).
 
-The user reports voice and sound working normally in both directions. This is
-positive human audibility evidence, despite the classifier's zero-node result.
-It does not yet establish which physical output and microphone carried the
-conversation. A focused endpoint clarification is pending. Do not weaken the
+The user reports voice and sound working normally in both directions and then
+explicitly confirms that both the output and microphone were on the computer.
+This establishes human-confirmed computer duplex audio on this Pixel/host
+combination, supported by the observed active SCO transport. Do not weaken the
 distinct-source/sink assertion or infer that hardware audio failed merely
 because the current classifier found no matching nodes. No contemporaneous
 unfiltered graph was retained, so the zero count cannot distinguish missing
@@ -182,7 +182,9 @@ endpoints from a filtering/representation mismatch after the call has ended.
 Sanitized evidence: [live attempt](evidence/m1-pixel-sco-live-attempt.txt) and
 [post-call state](evidence/m1-pixel-sco-post-call.txt). No destination number or
 voice payload is stored. The authorization was consumed by this one Dial
-attempt; no automatic repeat is authorized. Next action is record the physical
-endpoint answer and, if necessary, plan a scoped diagnostic improvement before
-another separately approved live test. Linux duplex support remains pending
-that evidence, rather than declared failed or proven from this result alone.
+attempt; no automatic repeat is authorized. HFP audio feasibility is now
+characterized by one human-confirmed computer duplex call. Automated endpoint
+enumeration remains unresolved; the probe result is still a failure and must
+not be relabelled successful. A scoped privacy-safe graph diagnostic can be
+planned before another separately approved live test. This is not a claim of
+repeatability, recovery, all-device support or product routing readiness.

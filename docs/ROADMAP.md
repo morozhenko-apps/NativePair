@@ -32,7 +32,7 @@ Experiments:
 - [x] PBAP session can be created.
 - [x] PBAP contact listing is characterized.
 - [x] HFP call-control feasibility is characterized.
-- [ ] HFP audio path is characterized.
+- [x] HFP audio path is characterized on Pixel 6a: active SCO and human-confirmed computer duplex; automated endpoint enumeration remains unresolved (see [live result](M1_HFP_AUDIO_NEXT.md)).
 - [ ] iPhone ANCS discovery and event flow is characterized.
 - [ ] Failure cases and permission UX are documented.
 
