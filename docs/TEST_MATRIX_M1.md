@@ -7,6 +7,11 @@ Working branch: **dev**; main is not promoted on projections.
 
 This document preserves the initial planning estimate. A full Repository Scan, per-production-file Branch Map, exhaustive inventory, mutation review and measured coverage are **still required**. Counts below may change. Never present planned scenario counts as executed tests, coverage percentage, or proven device features.
 
+The automated implementation now has its own execution record and canonical
+inventory in [M1 automated verification](M1_AUTOMATED_VERIFICATION.md). This
+document remains a historical hardware/automation forecast; use that execution
+record for current synthetic counts, mutations and stability-gate results.
+
 Related records: [Testing Strategy](TESTING.md), [Feasibility](FEASIBILITY.md), [Capability Matrix](CAPABILITY_MATRIX.md), [Roadmap](ROADMAP.md), [Pixel hardware evidence](evidence/pixel-6a-2026-10-06.md).
 
 ## Verified baseline (as of this snapshot)
@@ -123,6 +128,11 @@ Mandatory manual or separate-device gates include: correct physical Linux **micr
 11. **Completion Gate:** risk-significant branches tested, expected checks green, remaining hardware support clearly marked proven/unknown/blocked.
 
 Preferred execution cadence from the broader Mode B workflow: **dev runs fast tests once**; a future release/main gate runs stable tests once and *designated flaky tests* ten times when such a lane has been implemented and justified. NativePair's current CI does **not** have that flaky separation, and NativePair is not a Google Play app; do not add unrelated Play publishing gates. Never perform live hardware actions in CI without explicit approval.
+
+For the user-selected 2026-10-09 automated verification task, the complete
+deterministic suite is required to pass ten consecutive local runs. That task
+requirement overrides the historical preferred cadence above; CI continues to
+run the complete suite once per change.
 
 ## Updating this plan
 

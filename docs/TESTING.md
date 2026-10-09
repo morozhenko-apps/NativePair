@@ -76,13 +76,46 @@ The package gate is an integration/contract check, not a substitute for daemon o
 
 HFP real-call probes are never exercised against hardware in CI. Synthetic external-command adapters model `bluetoothctl` and `busctl` for the actual scripts, covering no-call preflight, pre-existing-call rejection, successful dial/hangup, ambiguous Dial failure after side-effect, and SCO activation failure cleanup. Test fixtures must contain only placeholder addresses/numbers and assert that no dialed number appears in stdout/stderr.
 
-Twelve synthetic guarded-call contract cases run once per dev CI pass, without requiring a Bluetooth controller or real test recipient. The automatic SCO transport cases are synthetic; they do not establish live Pixel behavior. The run also checks script syntax and preserves the existing packaging gate.
+The complete deterministic Python suite runs once per dev CI pass, without requiring a Bluetooth controller or real test recipient. The automatic SCO transport cases are synthetic; they do not establish live Pixel behavior. The run also checks script syntax and preserves the existing packaging gate.
 
 The central safety invariant: once a guarded `Dial` has been attempted, a probe must make a bounded `HangupAll` cleanup attempt if no explicit successful hangup was already performed, even when the Dial method reply is missing or fails. Calls are not created by CI.
 
 ## M1 Mode B planning baseline
 
 The provisional scenario counts, interaction matrix, N1–N12 plan and local Ubuntu + ADB automation forecast are recorded in [M1 Mode B Test Matrix and Local ADB Automation Plan](TEST_MATRIX_M1.md). They are estimates, not measured coverage, and must be reconciled with a complete per-file inventory.
+
+The current executable inventory and results supersede the synthetic forecast:
+[M1 automated verification execution record](M1_AUTOMATED_VERIFICATION.md).
+Build the actual binary entry points before running Python integration tests:
+
+```bash
+cargo build --workspace --locked
+python3 scripts/tests/run_suite.py
+```
+
+The runner prints progress, exact primary-category counts and optional canonical
+scenario IDs (`--inventory <path>`). Every negative case also asserts cleanup
+and privacy where applicable, without counting those assertions again. For the
+required stability gate, execute fresh suites sequentially:
+
+```bash
+python3 scripts/tests/run_suite.py --runs 10 --report work/repeated-runs.json
+python3 scripts/tests/review_mutations.py --output work/mutation-review.json
+```
+
+`--trace-first` on the ten-run command adds source-line/arc evidence for its first
+run only. Trace files and detailed local logs live under ignored `work/`; final
+summary evidence and the canonical inventory belong in `docs/evidence/`.
+Mutation trials use disposable copies, verify an unmodified baseline for each
+trial and require assertion failures; compile/import errors are not kills.
+
+Python requires only its standard library. Native packaging fixtures also
+require existing `dpkg`, `dpkg-deb`, `sha256sum` and `tar`. Probe fixtures use an
+allowlisted PATH; Bluetooth/D-Bus/PipeWire/OBEX/journal commands are synthetic.
+No hardware E2E test runs in CI or in this stability gate. Test-owned process
+groups and temporary directories are removed after each scenario. Pure parser
+and observer tests use fake command adapters and clocks; the core remains
+independent of transport dependencies.
 
 ## Hardware verification
 

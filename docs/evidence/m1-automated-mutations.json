@@ -1,0 +1,202 @@
+[
+  {
+    "mutation": "capability_available_inverted",
+    "file": "crates/nativepair-core/src/lib.rs",
+    "pattern": "rust",
+    "selector": "",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "transition_previous_value_discarded",
+    "file": "crates/nativepair-core/src/lib.rs",
+    "pattern": "rust",
+    "selector": "",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "unrelated_transfer_accepted",
+    "file": "scripts/probe_obex_monitor.py",
+    "pattern": "test_obex_monitor.py",
+    "selector": "bad_event_2",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "unrelated_event_interface_accepted",
+    "file": "scripts/probe_obex_monitor.py",
+    "pattern": "test_map_events_contract.py",
+    "selector": "wrong_dbus_interface",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "duplicate_sms_send",
+    "file": "scripts/probe-map-send.sh",
+    "pattern": "test_map_send_contract.py",
+    "selector": "",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "sms_retry_enabled",
+    "file": "scripts/probe-map-send.sh",
+    "pattern": "test_map_send_contract.py",
+    "selector": "",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "ambiguous_dial_cleanup_removed",
+    "file": "scripts/probe-hfp-call.sh",
+    "pattern": "test_hfp_contract_extended.py",
+    "selector": "ambiguous_dial",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "pending_transport_activated_twice",
+    "file": "scripts/probe-hfp-sco.sh",
+    "pattern": "test_hfp_contract_extended.py",
+    "selector": "pending",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "single_endpoint_proves_duplex",
+    "file": "scripts/probe-hfp-sco.sh",
+    "pattern": "test_hfp_contract_extended.py",
+    "selector": "nodes",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "zero_error_growth_counted",
+    "file": "scripts/probe-audio-health.sh",
+    "pattern": "test_audio_diagnostics_contract.py",
+    "selector": "",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "timer_maximum_rejected",
+    "file": "scripts/probe-obex-read.sh",
+    "pattern": "test_remaining_contracts.py",
+    "selector": "probe_obex_read_shNATIVEPAIR_OBEX_TIMEOUT922337203685477580",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "wrong_archive_sidecar_accepted",
+    "file": "scripts/verify-deb.sh",
+    "pattern": "test_packaging_contract.py",
+    "selector": "wrong_target",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "runtime_dependency_not_checked",
+    "file": "scripts/verify-deb.sh",
+    "pattern": "test_packaging_contract.py",
+    "selector": "invalid_metadata",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "duplicate_node_ids_accepted",
+    "file": "scripts/probe_audio_graph.py",
+    "pattern": "test_audio_graph.py",
+    "selector": "duplicate_ids",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "private_argument_printed",
+    "file": "scripts/probe-obex-session.sh",
+    "pattern": "test_probe_parameters.py",
+    "selector": "probe_obex_session_sh_when_private_argument",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "codec_mapping_changed",
+    "file": "scripts/probe-hfp-audio.sh",
+    "pattern": "test_hfp_contract_extended.py",
+    "selector": "codec_1",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "temporary_artifacts_not_removed",
+    "file": "scripts/probe-obex-session.sh",
+    "pattern": "test_remaining_contracts.py",
+    "selector": "interrupt_probe_obex_session",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "duplicate_owned_call_dial",
+    "file": "scripts/probe-hfp-call.sh",
+    "pattern": "test_hfp_probe_contract.py",
+    "selector": "owned_call_when_probe_succeeds",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "preflight_no_dial_guard_removed",
+    "file": "scripts/probe-hfp-call.sh",
+    "pattern": "test_hfp_probe_contract.py",
+    "selector": "call_preflight",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "zero_prefixed_array_count_accepted",
+    "file": "scripts/probe-obex-read.sh",
+    "pattern": "test_obex_contract.py",
+    "selector": "leading_zero",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "zero_prefixed_phonebook_size_accepted",
+    "file": "scripts/probe-obex-read.sh",
+    "pattern": "test_obex_contract.py",
+    "selector": "leading_zero",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "sdp_interrupt_ignored",
+    "file": "scripts/probe-map-sdp.sh",
+    "pattern": "test_remaining_contracts.py",
+    "selector": "int_defaults",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "mns_interrupt_ignored",
+    "file": "scripts/probe-mns.sh",
+    "pattern": "test_remaining_contracts.py",
+    "selector": "int_defaults",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "build_interrupt_ignored",
+    "file": "scripts/build-deb.sh",
+    "pattern": "test_packaging_branches.py",
+    "selector": "interrupted_before_build",
+    "baseline": "passed",
+    "result": "killed"
+  },
+  {
+    "mutation": "verify_interrupt_ignored",
+    "file": "scripts/verify-deb.sh",
+    "pattern": "test_packaging_branches.py",
+    "selector": "interrupted_during_verify",
+    "baseline": "passed",
+    "result": "killed"
+  }
+]
