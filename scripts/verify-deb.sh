@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 if [[ $# -ne 1 ]]; then
   echo "Usage: $0 <nativepair.deb>" >&2
@@ -12,7 +14,7 @@ if [[ ! -f "$PACKAGE_PATH" ]]; then
   exit 1
 fi
 
-for command in dpkg-deb sha256sum; do
+for command in dpkg-deb sha256sum awk; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "Required command is missing: $command" >&2
     exit 1
@@ -22,6 +24,14 @@ done
 SIDE_CAR="$PACKAGE_PATH.sha256"
 if [[ ! -f "$SIDE_CAR" ]]; then
   echo "Checksum sidecar not found: $SIDE_CAR" >&2
+  exit 1
+fi
+
+if ! awk -v name="$(basename "$PACKAGE_PATH")" '
+  NR == 1 { valid = length($1) == 64 && $1 ~ /^[[:xdigit:]]+$/ && NF == 2 && ($2 == name || $2 == "*" name) }
+  END { exit !(NR == 1 && valid) }
+' "$SIDE_CAR"; then
+  echo "Invalid checksum sidecar: expected one checksum for this package." >&2
   exit 1
 fi
 

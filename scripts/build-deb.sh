@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
@@ -24,7 +26,8 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
   exit 1
 fi
 
-ARCH="${DEB_ARCH:-$(dpkg --print-architecture)}"
+HOST_ARCH="$(dpkg --print-architecture)"
+ARCH="${DEB_ARCH:-$HOST_ARCH}"
 case "$ARCH" in
   amd64|arm64)
     ;;
@@ -33,6 +36,10 @@ case "$ARCH" in
     exit 1
     ;;
 esac
+if [[ "$ARCH" != "$HOST_ARCH" ]]; then
+  echo "Cross-architecture packaging is not supported by the native build." >&2
+  exit 1
+fi
 
 ARTIFACTS_DIR="${NATIVEPAIR_ARTIFACTS_DIR:-$ROOT_DIR/artifacts}"
 BUILD_ROOT="${NATIVEPAIR_PACKAGE_BUILD_DIR:-$ROOT_DIR/target/package/nativepair}"

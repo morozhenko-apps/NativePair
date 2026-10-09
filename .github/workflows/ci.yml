@@ -90,13 +90,11 @@ jobs:
             bash -n "$script"
           done
 
-      - name: Test passive audio watcher
+      - name: Test all deterministic M1 contracts
         run: |
-          python3 -m py_compile scripts/probe_call_audio_watch.py
-          python3 -m unittest discover -s scripts/tests -p 'test_call_audio_watch.py' -v
-
-      - name: Test guarded HFP call and SCO probes
-        run: python3 -m unittest discover -s scripts/tests -p 'test_hfp_probe_contract.py' -v
+          cargo build --workspace --locked
+          python3 -m py_compile scripts/probe_call_audio_watch.py scripts/probe_audio_graph.py scripts/probe_obex_monitor.py
+          python3 -m unittest discover -s scripts/tests -v
 
       - name: Build Debian package
         id: package
