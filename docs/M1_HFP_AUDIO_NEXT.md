@@ -17,7 +17,7 @@ PipeWire link mutation is included in the preparation stage.
 
 ## Plan and milestones
 
-1. **Preparation — planned.** Inspect available ADB/BlueZ devices without
+1. **Preparation — inspected; blocked on target confirmation.** Inspect available ADB/BlueZ devices without
    printing addresses, serials or names. Select the existing configured target
    or a unique paired HFP phone; ambiguity requires a user decision. Run the
    existing transport and no-dial SCO preflights and read-only routing snapshot.
@@ -63,6 +63,36 @@ own their temporary files and terminate their owned call during cleanup.
 
 ## Current state
 
-Plan recorded before hardware operations. Preparation has not run. Live proof
-is not authorized in this continuation. No sensitive identifiers or payloads
-belong in this file or committed evidence.
+The plan was committed before hardware operations (b564d13). Preparation ran
+the existing audio transport probe, no-dial SCO probe and read-only routing
+snapshot. All owned process/terminal sessions completed and closed (Terminal
+closed). No call, Activate invocation, audio stream, link/default change or
+service restart was performed.
+
+- ADB has one authorized device: model SM-G991B, Android 15. The prior hardware
+  evidence was for a Pixel 6a. The intended device for this continuation must
+  therefore be confirmed by the user before further Bluetooth operations.
+- Android reports bluetooth_on=0, enabled=false and state=BLE_ON. Bluetooth
+  Classic is not currently enabled on the ADB-connected phone.
+- BlueZ reports one paired device advertising HFP AG. The preparation selected
+  this unique candidate, but its identity has not been correlated with the
+  ADB-connected phone; do not infer that this is the same physical device.
+- Host Bluetooth, PipeWire and WirePlumber are active. HFP audio preflight
+  ended with a connect timeout; no-dial SCO preflight could not establish a
+  gateway. The Telephony manager is readable but enumerates zero gateways.
+- Read-only routing shows zero HFP nodes, available default sink/source
+  snapshots, no phone HFP defaults and no orphan HFP nodes. The current call
+  state is unknown because no gateway is available, not a proven empty call set.
+
+Sanitized preparation evidence is in
+[the preparation log](evidence/m1-hfp-audio-preparation.txt). No conclusion about
+SM-G991B HFP support can be drawn from this state. Recommended continuation:
+confirm the connected SM-G991B as the intended test phone, enable Bluetooth
+through its normal user interface, then correlate the device and repeat the
+preflight. Alternatively reconnect the previously tested Pixel 6a. The former
+uses currently available hardware but starts a separate model evidence record;
+the latter continues comparable Pixel evidence but requires that phone.
+
+Live proof is not authorized in this continuation. Once preparation is ready,
+obtain fresh call authorization and a dedicated destination before stage 2.
+No sensitive identifiers or payloads belong in committed evidence.
