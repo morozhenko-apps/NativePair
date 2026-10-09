@@ -17,7 +17,7 @@ PipeWire link mutation is included in the preparation stage.
 
 ## Plan and milestones
 
-1. **Preparation — Pixel selected; correlation/preflight pending.** Inspect available ADB/BlueZ devices without
+1. **Preparation — complete for Pixel; live proof awaiting authorization.** Inspect available ADB/BlueZ devices without
    printing addresses, serials or names. Select the existing configured target
    or a unique paired HFP phone; ambiguity requires a user decision. Run the
    existing transport and no-dial SCO preflights and read-only routing snapshot.
@@ -112,3 +112,27 @@ disable it if that could interrupt a user-owned connection.
 Live proof is not authorized in this continuation. Once preparation is ready,
 obtain fresh call authorization and a dedicated destination before stage 2.
 No sensitive identifiers or payloads belong in committed evidence.
+
+## Selected Pixel preparation result
+
+The user confirmed the Pixel 6a and enabled Bluetooth. Its local Bluetooth
+address matches the existing paired BlueZ device; only this correlated target
+was used for subsequent preflights. Model Pixel 6a, Android 17. A normal radio
+enable operation returned success during setup; radio is left enabled for the
+selected test stage. No unrelated device settings or pairing were changed.
+
+HFP audio preflight succeeds. A real wire-signature mismatch initially blocked
+the no-dial SCO guard; the [GetCalls correction](M1_GETCALLS_COMPATIBILITY.md)
+adds 84 regressions and passes the complete suite. After that fix, no-dial SCO
+and passive HFP both confirm an empty call set. Transport is idle, RejectSCO
+is false and Activate is available. Read-only routing confirms no HFP nodes,
+no phone HFP default routes and no orphan nodes. No live call or audio stream
+has been created. These results establish preflight readiness, not Linux
+duplex audio support.
+
+[Pixel evidence](evidence/m1-pixel-hfp-preflight.txt) contains bounded status
+fields only. The dedicated destination is not configured. Await explicit
+authorization for one guarded outgoing test call and the destination; require
+human confirmation of computer output and microphone during the existing
+20-second check window. Existing guard, time limits and owned-call HangupAll
+cleanup remain unchanged. No routing architecture change is authorized.
