@@ -278,3 +278,20 @@ output/microphone, leaving the call connected until automatic probe completion.
 Use the existing 30-second answer, 15-second node and 20-second human window
 limits. Reconfirm identity and the no-existing-call guard immediately before
 an approved attempt. No automated tests or source changes are needed here.
+
+### Fresh single-call approval for corrected-classifier revalidation
+
+The user explicitly approved one call to the previously supplied private
+destination and confirmed both participants are ready. This approval authorizes
+one guarded outgoing SCO attempt only. Do not repeat Dial automatically.
+Reconfirm the authorized Pixel model and paired-target correlation in memory,
+then let the unchanged probe enforce no existing calls and RejectSCO=false.
+The destination stays in the process environment; never write it into source,
+evidence or logs. Use the existing answer/node/human limits and owned cleanup.
+
+Forward only allowlisted anonymous probe status fields during execution. Record
+sanitized result and read-only post-call call/transport/routing state. Preserve
+any failed node result and its end-of-wait call/transport observations. Ask for
+human confirmation of computer output/microphone after the attempt. No manual
+routing, default/link changes, service restart or unrelated phone operation.
+The automated gate is unchanged and is not repeated for this hardware attempt.
