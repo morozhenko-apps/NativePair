@@ -337,31 +337,32 @@ staging is intentionally persistent and cleared by the next build, as before.
 
 ## Canonical implemented inventory
 
-Updated after the [hardware-discovered GetCalls correction](M1_GETCALLS_COMPATIBILITY.md).
+Updated after the [GetCalls correction](M1_GETCALLS_COMPATIBILITY.md) and
+[HFP gateway classification](M1_HFP_NODE_CLASSIFICATION.md).
 Earlier execution and trace records below retain their original source/counts.
 
 The [canonical Python inventory](evidence/m1-automated-test-inventory.json)
-contains 1447 uniquely named methods, including 17 existing methods. The
-implementation added 1430 Python scenarios and three Rust methods containing
+contains 1665 uniquely named methods, including 17 existing methods. The
+implementation added 1648 Python scenarios and three Rust methods containing
 495 table rows. Method counts, table rows and assertions have separate units;
 do not add them together as a coverage percentage.
 
 | Primary category | Complete Python suite | Added Python scenarios |
 | --- | ---: | ---: |
-| Positive | 255 | 246 |
+| Positive | 292 | 283 |
 | N1 input validation | 294 | 294 |
-| N2 boundaries | 133 | 132 |
-| N3 IPC/tool failures | 151 | 148 |
+| N2 boundaries | 163 | 162 |
+| N3 IPC/tool failures | 152 | 149 |
 | N4 replay/idempotency | 23 | 23 |
 | N5 races/state changes | 23 | 20 |
-| N6 corrupt/stale data | 316 | 316 |
-| N7 permissions/guards/missing tools | 151 | 150 |
+| N6 corrupt/stale data | 431 | 431 |
+| N7 permissions/guards/missing tools | 157 | 156 |
 | N8 reproducible epoch | 3 | 3 |
-| N9 interruption | 36 | 36 |
+| N9 interruption/early hangup | 65 | 65 |
 | N10 privacy | 22 | 22 |
 | N11 entitlements | 0 (not applicable) | 0 |
 | N12 storage/cleanup failures | 40 | 40 |
-| **Total** | **1447** | **1430** |
+| **Total** | **1665** | **1648** |
 
 Each method has one primary category. Other invariants asserted by the same
 test (privacy, no duplicate mutation and cleanup) are not counted a second time.
@@ -498,11 +499,30 @@ The latest full-suite and device results are recorded in
 [M1_GETCALLS_COMPATIBILITY.md](M1_GETCALLS_COMPATIBILITY.md). Previous ten-run
 evidence remains tied to 5d72c31; it is not evidence of ten runs of this revision.
 
-The current full Python suite passed: 1447 methods in 270.605 seconds, zero
+The GetCalls-revision full Python suite passed: 1447 methods in 270.605 seconds, zero
 failures. The six targeted wire mutations were killed. Native package rebuild
 and verification, changed Bash syntax and Python compilation passed. The
 [current execution artifact](evidence/m1-getcalls-execution.json) records scope
 and counts; [Pixel preflight](evidence/m1-pixel-hfp-preflight.txt) confirms no
-existing call, idle transport, RejectSCO=false and Activate availability. No
-live call or routing mutation has occurred; the destination and live-call
-authorization remain required. All owned terminal sessions are closed.
+existing call, idle transport, RejectSCO=false and Activate availability. At that preflight stage, no live call or routing mutation had occurred. The
+subsequent authorized call and human duplex confirmation are recorded in
+[M1_HFP_AUDIO_NEXT.md](M1_HFP_AUDIO_NEXT.md). All owned terminal sessions are closed.
+
+## HFP gateway classification and early-hangup observations
+
+The [scoped correction](M1_HFP_NODE_CLASSIFICATION.md) adds 218 explicit rows
+and two pure shared helpers. Four audio consumers recognize the gateway profile;
+SCO/routing recognize its stream directions while physical default checks stay
+strict. Failed node readiness records fresh call/transport state before cleanup.
+The historical zero count remains unexplained: early hangup and classifier
+mismatch cannot be distinguished retrospectively. No new hardware call ran.
+
+The complete 1665-method Python suite passed in 322.559 seconds; all eight new
+mutation trials were killed after passing their unmodified baseline selections.
+Shell syntax, Python compilation and native package rebuild/verification passed
+once. New categories: Positive 37, N2 30, N3 1, N6 115, N7 6, N9 29. N1 property
+types use N6; N4/N5/N10/N12 retain existing coverage and cross-cutting asserts;
+N8/N11 add no applicable date/billing behavior. All planned rows are implemented.
+Nine additional runs of the existing 182-case process lane are pending; the full
+baseline already provides its first successful pass. Previous source-specific
+stability/trace evidence remains historical. Remote CI has not run for this fix.

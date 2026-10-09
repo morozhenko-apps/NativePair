@@ -69,7 +69,7 @@ probes. No domain subject is mocked; only external commands are synthetic.
 
 | Artifact | Positive | N1 | N2 | N3 | N4 | N5 | N6 | N7 | N8 | N9 | N10 | N11 | N12 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| shared classifier | Planned | Planned via N6 types | Planned via N6 missing | NA pure | NA pure | NA pure | Planned exhaustive product | NA no identity | NA no dates | NA pure | Existing + no output | NA no billing | NA pure |
+| shared classifier | Covered | Planned via N6 types | Planned via N6 missing | NA pure | NA pure | NA pure | Planned exhaustive product | NA no identity | NA no dates | NA pure | Existing + no output | NA no billing | NA pure |
 | SCO/routing | Planned | Existing | Planned | Existing | Existing one Dial | Existing | Planned | Planned | NA no dates | Existing | Planned cross-cutting | NA no billing | Existing + cleanup |
 | health/watcher | Planned | Existing | Existing | Existing | NA read-only | Existing | Planned | NA no auth changes | NA no dates | Existing | Existing | NA no billing | Existing |
 | end-of-wait observations | Planned active call | NA enums | Planned absent | Planned | Existing cleanup once | Planned combinations | Planned unknown | Existing guards | NA no dates | Planned early hangup | Planned cross-cutting | NA no billing | Existing cleanup |
@@ -81,10 +81,11 @@ probes. No domain subject is mocked; only external commands are synthetic.
 3. Implement shared classification, update all four consumers and add failure
    snapshots. No change to audio routing or call authorization.
 4. Run new rows and complete Python suite once; shell syntax/Python compile
-   once; rebuild/verify packaged helpers once. Add targeted assertion-level
+   once; rebuild/verify the native package once. Add targeted assertion-level
    mutations for gateway acceptance, direction mapping, defaults and unknown
-   call handling. Previous ten-run process evidence remains tied to 5d72c31;
-   no signal/ownership code changes require repeating static checks ten times.
+   call handling. Count the full baseline as process-stability pass one, then run the existing
+   182-case process lane nine more times on this source. Static checks, pure
+   cases and Rust are not repeated ten times. Keep previous evidence historical.
 5. Reconcile exact counts, canonical inventory, coverage/branch maps and handoff
    records; commit the scoped fix and evidence. Live validation remains pending
    a separately approved call; do not relabel the previous failed probe.
@@ -97,5 +98,41 @@ Rollback: revert the scoped fix commit; no persistent host or phone changes.
 
 ## State
 
-Analysis complete. Plan and inventory recorded before implementation. No new
-hardware operations or calls performed. Test and implementation stages pending.
+Analysis and plan committed first (c199b36). All 218 planned rows are implemented
+in test_hfp_node_classification.py: Positive 37, N2 30, N3 1, N6 115, N7 6,
+N9 29. N1 type boundaries use N6 as external properties; N4/N5/N10/N12 retain
+existing coverage plus ownership/privacy/cleanup assertions in the new rows.
+N8 and N11 are not applicable to this change (no time formats or billing).
+
+Before implementation, 218 rows ran in 73.883 seconds: 66 assertion failures
+and 132 missing-helper errors. The first implementation run exposed eight
+fixture-default mismatches: the harness uses sink 41/source 42, while these
+fixtures use source 41/sink 42. Tests now inject explicit matching default IDs;
+assertions are preserved, including rejection of streams as default devices.
+The initial failure count includes fixture failures and must not be treated as
+66 confirmed production defects. All eight targeted mutations were killed by
+assertion failures, after their unchanged selections passed. The full 1665-method
+Python suite, including all 218 new rows, passed in 322.559 seconds. Shell syntax
+and Python compilation passed once. The native amd64 package rebuilt and passed
+checksum, metadata, layout and both extracted binary checks; probes are repository
+feasibility tools and are not shipped in this headless package. Rust is unchanged.
+The full run is process-stability pass one; nine process-only passes remain.
+No new hardware operation or call.
+Owned scoped/mutation terminal sessions completed and closed (Terminal closed).
+
+## Assertion-level mutation map
+
+| Mutation | Required failing assertion |
+| --- | --- |
+| Gateway profile removed from shared recognition | exact profile recognition and direction |
+| Gateway output direction inverted | downlink equals source |
+| Gateway input direction inverted | uplink equals sink |
+| Gateway stream counted as physical default source | default source remains false for streams |
+| Gateway excluded by SCO consumer | both stream endpoints prove node readiness |
+| Gateway excluded by health consumer | exact HFP error-growth count |
+| Gateway excluded by watcher | exact HFP graph count |
+| Failed final call read reported absent | final call state remains unknown |
+
+Each of the eight unchanged mutation selections passed before mutation. All
+eight modified selections failed by assertions, rather than syntax/import
+errors. Full mutation logs remain under ignored work/. No real phone was used.

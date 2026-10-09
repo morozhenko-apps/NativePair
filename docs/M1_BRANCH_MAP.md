@@ -1,6 +1,6 @@
 # M1 current source branch map
 
-Date: 2026-10-09. Status: GetCalls compatibility, complete Python suite and no-dial Pixel preflight passed.
+Date: 2026-10-09. Status: HFP gateway classification and failed-node-wait observations implemented; complete 1665-method Python suite passed; process-stability verification pending.
 
 This source decision index links methods, conditions, loops, command substitutions,
 returns and cleanup exits to executable assertion families. It is an audit index,
@@ -86,7 +86,7 @@ Assertion families: [test_packaging_contract](../scripts/tests/test_packaging_co
 
 ## scripts/probe-audio-health.sh
 
-Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_hfp_node_classification](../scripts/tests/test_hfp_node_classification.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
@@ -133,49 +133,47 @@ Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audi
 | 166 | return props_by_id.get(str(nid), {}) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 | 168 | def is_bluetooth(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 | 169 | return ( | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 175 | def is_hfp(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 176 | return props.get("api.bluez5.profile") == "headset-head-unit" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 178 | def media_class(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 179 | return str(props.get("media.class") or "") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 181 | def default_kind(node_id): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 182 | if not node_id: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 175 | def media_class(props): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 176 | return str(props.get("media.class") or "") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 178 | def default_kind(node_id): | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 179 | if not node_id: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 180 | return "unknown" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 182 | if props is None: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 | 183 | return "unknown" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 185 | if props is None: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 186 | return "unknown" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 187 | return "yes" if is_bluetooth(props) else "no" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 191 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 192 | if states_seen.get(nid, set()) & {"R", "t", "T"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 195 | nid: delta for nid, delta in growth.items() if is_bluetooth(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 198 | nid: delta for nid, delta in growth.items() if is_hfp(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 202 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 203 | if media_class(props_for(nid)).startswith("Stream/Output/Audio") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 207 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 208 | if media_class(props_for(nid)) == "Audio/Sink" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 212 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 213 | if media_class(props_for(nid)) == "Audio/Source" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 223 | default_sink_delta = growth.get(int(default_sink_id), 0) if default_sink_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 224 | default_source_delta = growth.get(int(default_source_id), 0) if default_source_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 226 | positive_now = sum(1 for value in last_err.values() if value > 0) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 239 | print(f"xrun_or_error_growth_observed={'yes' if growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 242 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 243 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 246 | print(f"default_sink_err_growth={'yes' if default_sink_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 248 | print(f"default_source_err_growth={'yes' if default_source_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 257 | print(f"bluetooth_err_growth_observed={'yes' if bluetooth_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 258 | print(f"hfp_err_growth_observed={'yes' if hfp_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 259 | print(f"output_stream_err_growth_observed={'yes' if output_stream_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 264 | journalctl --user -u pipewire.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$PIPEWIRE_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 265 | journalctl --user -u wireplumber.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$WIREPLUMBER_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 267 | PIPEWIRE_WARNINGS="$(grep -cve '^[[:space:]]*$' "$PIPEWIRE_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 268 | WIREPLUMBER_WARNINGS="$(grep -cve '^[[:space:]]*$' "$WIREPLUMBER_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 273 | if grep -Eqi 'xrun\|underrun\|overrun\|deadline\|missed' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 275 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 279 | if grep -Eqi 'bluez\|bluetooth\|sco\|hfp\|transport' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 281 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 184 | return "yes" if is_bluetooth(props) else "no" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 188 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 189 | if states_seen.get(nid, set()) & {"R", "t", "T"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 192 | nid: delta for nid, delta in growth.items() if is_bluetooth(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 195 | nid: delta for nid, delta in growth.items() if is_hfp(props_for(nid)) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 199 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 200 | if media_class(props_for(nid)).startswith("Stream/Output/Audio") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 204 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 205 | if media_class(props_for(nid)) == "Audio/Sink" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 209 | for nid, delta in growth.items() | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 210 | if media_class(props_for(nid)) == "Audio/Source" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 220 | default_sink_delta = growth.get(int(default_sink_id), 0) if default_sink_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 221 | default_source_delta = growth.get(int(default_source_id), 0) if default_source_id.isdigit() else 0 | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 223 | positive_now = sum(1 for value in last_err.values() if value > 0) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 236 | print(f"xrun_or_error_growth_observed={'yes' if growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 239 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 240 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 243 | print(f"default_sink_err_growth={'yes' if default_sink_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 245 | print(f"default_source_err_growth={'yes' if default_source_delta > 0 else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 254 | print(f"bluetooth_err_growth_observed={'yes' if bluetooth_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 255 | print(f"hfp_err_growth_observed={'yes' if hfp_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 256 | print(f"output_stream_err_growth_observed={'yes' if output_stream_growth else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 261 | journalctl --user -u pipewire.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$PIPEWIRE_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 262 | journalctl --user -u wireplumber.service --since "-$RECENT_WINDOW" -p warning   --no-pager --output=cat >"$WIREPLUMBER_LOG" 2>/dev/null \|\| true | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 264 | PIPEWIRE_WARNINGS="$(grep -cve '^[[:space:]]*$' "$PIPEWIRE_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 265 | WIREPLUMBER_WARNINGS="$(grep -cve '^[[:space:]]*$' "$WIREPLUMBER_LOG" \|\| true)" | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 270 | if grep -Eqi 'xrun\|underrun\|overrun\|deadline\|missed' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 272 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 276 | if grep -Eqi 'bluez\|bluetooth\|sco\|hfp\|transport' "$PIPEWIRE_LOG" "$WIREPLUMBER_LOG"; then | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 278 | else | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 
 ## scripts/probe-audio-routing.sh
 
-Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py).
+Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_hfp_node_classification](../scripts/tests/test_hfp_node_classification.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
@@ -208,16 +206,16 @@ Assertion families: [test_audio_diagnostics_contract](../scripts/tests/test_audi
 | 90 | sys.exit(1) | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 | 93 | for obj in data: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 | 96 | if props.get("api.bluez5.address") != device: | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 98 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 102 | source_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Source"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 103 | sink_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Sink"} | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 106 | print(f"hfp_source_node_present={'yes' if source_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 107 | print(f"hfp_sink_node_present={'yes' if sink_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 108 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 109 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 110 | print(f"default_sink_is_phone_hfp={'yes' if default_sink_id in sink_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 111 | print(f"default_source_is_phone_hfp={'yes' if default_source_id in source_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
-| 112 | print(f"orphan_hfp_nodes_present={'yes' if hfp_nodes else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 98 | if not is_hfp(props): | test_hfp_node_classification |
+| 102 | source_ids = {node_id for node_id, props in hfp_nodes if props.get("media.class") == "Audio/Source"} | test_hfp_node_classification |
+| 103 | sink_ids = {node_id for node_id, props in hfp_nodes if props.get("media.class") == "Audio/Sink"} | test_hfp_node_classification |
+| 108 | print(f"hfp_source_node_present={'yes' if source_present else 'no'}") | test_hfp_node_classification |
+| 109 | print(f"hfp_sink_node_present={'yes' if sink_present else 'no'}") | test_hfp_node_classification |
+| 110 | print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 111 | print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 112 | print(f"default_sink_is_phone_hfp={'yes' if default_sink_id in sink_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 113 | print(f"default_source_is_phone_hfp={'yes' if default_source_id in source_ids else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
+| 114 | print(f"orphan_hfp_nodes_present={'yes' if hfp_nodes else 'no'}") | test_audio_diagnostics_contract, test_probe_parameters, test_remaining_contracts |
 
 ## scripts/probe-bluetooth.sh
 
@@ -509,7 +507,7 @@ Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contr
 
 ## scripts/probe-hfp-sco.sh
 
-Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
+Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_probe_contract](../scripts/tests/test_hfp_probe_contract.py), [test_probe_parameters](../scripts/tests/test_probe_parameters.py), [test_remaining_contracts](../scripts/tests/test_remaining_contracts.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py), [test_hfp_node_classification](../scripts/tests/test_hfp_node_classification.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
@@ -567,9 +565,9 @@ Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contr
 | 194 | sys.exit(1) | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 200 | for obj in data: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 203 | if props.get("api.bluez5.address") != device: | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 205 | if props.get("api.bluez5.profile") != "headset-head-unit": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 210 | if media_class == "Audio/Source": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 212 | elif media_class == "Audio/Sink": | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 205 | if not is_hfp(props): | test_hfp_node_classification |
+| 210 | if direction == "source": | test_hfp_node_classification |
+| 212 | elif direction == "sink": | test_hfp_node_classification |
 | 216 | print(f"hfp_source_node_present={'yes' if source else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 217 | print(f"hfp_sink_node_present={'yes' if sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 218 | print(f"hfp_nodes_ready={'yes' if count >= 2 and source and sink else 'no'}") | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
@@ -657,11 +655,14 @@ Assertion families: [test_hfp_contract_extended](../scripts/tests/test_hfp_contr
 | 525 | if [[ -s "$NODE_RESULT" ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 527 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 | 536 | if [[ "$NODES_READY" != yes ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 539 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 551 | if [[ $HANGUP_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 555 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 561 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
-| 563 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 542 | if [[ "$SNAPSHOT_STATUS" == 0 ]]; then | test_hfp_node_classification |
+| 544 | elif [[ "$SNAPSHOT_STATUS" == 2 ]] && | test_hfp_node_classification |
+| 549 | NODE_WAIT_TRANSPORT_STATE="$(read_transport_state \|\| true)" | test_hfp_node_classification |
+| 553 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 565 | if [[ $HANGUP_STATUS -ne 0 ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 569 | exit 1 | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 575 | if [[ "$ACTIVATE_RESULT" == error_but_transport_active ]]; then | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
+| 577 | else | test_hfp_contract_extended, test_hfp_probe_contract, test_probe_parameters, test_remaining_contracts, test_getcalls_compatibility |
 
 ## scripts/probe-map-events.sh
 
@@ -1142,44 +1143,43 @@ Assertion families: [test_obex_contract](../scripts/tests/test_obex_contract.py)
 
 ## scripts/probe_call_audio_watch.py
 
-Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contract.py), [test_call_audio_watch](../scripts/tests/test_call_audio_watch.py), [test_watcher_entry](../scripts/tests/test_watcher_entry.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py).
+Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contract.py), [test_call_audio_watch](../scripts/tests/test_call_audio_watch.py), [test_watcher_entry](../scripts/tests/test_watcher_entry.py), [test_getcalls_compatibility](../scripts/tests/test_getcalls_compatibility.py), [test_hfp_node_classification](../scripts/tests/test_hfp_node_classification.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
-| 16 | def command(args): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 22 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 23 | return result.stdout if result.returncode == 0 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 26 | def parse_wpctl_id(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 27 | if not isinstance(output, str): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 28 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 30 | if not match: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 31 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 33 | return value if value <= MAX_NODE_ID else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 36 | def parse_sink_mute(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 37 | if not isinstance(output, str) or not re.fullmatch( | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 39 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 40 | return "yes" if "[MUTED]" in output else "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 43 | def is_bluetooth(props): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 44 | return bool(props.get("api.bluez5.address") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 49 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 53 | for obj in objects: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 54 | if not isinstance(obj, dict): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 57 | if info is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 59 | if not isinstance(info, dict) or (info.get("props") is not None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 62 | if obj.get("type") == "PipeWire:Interface:Node": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 64 | if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 66 | elif obj.get("type") == "PipeWire:Interface:Link": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 67 | if all(type(info.get(key)) is int for key in | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 71 | def props(nid): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 72 | return (nodes.get(nid) or {}).get("props") or {} | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 74 | outputs = {nid: info for nid, info in nodes.items() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 75 | if str((info.get("props") or {}).get("media.class") or "") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 77 | connected_outputs = {link.get("output-node-id") for link in links | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 78 | if link.get("input-node-id") == sink_id | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 81 | bt_nodes = [info for info in nodes.values() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 82 | if is_bluetooth(info.get("props") or {})] | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 83 | hfp_nodes = [info for info in bt_nodes | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
-| 84 | if (info.get("props") or {}).get("api.bluez5.profile") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 18 | def command(args): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 24 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 25 | return result.stdout if result.returncode == 0 else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 28 | def parse_wpctl_id(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 29 | if not isinstance(output, str): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 30 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 32 | if not match: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 33 | return None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 35 | return value if value <= MAX_NODE_ID else None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 38 | def parse_sink_mute(output): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 39 | if not isinstance(output, str) or not re.fullmatch( | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 41 | return "unknown" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 42 | return "yes" if "[MUTED]" in output else "no" | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 45 | def is_bluetooth(props): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 46 | return bool(props.get("api.bluez5.address") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 51 | def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 55 | for obj in objects: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 56 | if not isinstance(obj, dict): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 59 | if info is None: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 61 | if not isinstance(info, dict) or (info.get("props") is not None | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 64 | if obj.get("type") == "PipeWire:Interface:Node": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 66 | if type(identifier) is int and 0 <= identifier <= MAX_NODE_ID: | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 68 | elif obj.get("type") == "PipeWire:Interface:Link": | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 69 | if all(type(info.get(key)) is int for key in | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 73 | def props(nid): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 74 | return (nodes.get(nid) or {}).get("props") or {} | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 76 | outputs = {nid: info for nid, info in nodes.items() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 77 | if str((info.get("props") or {}).get("media.class") or "") | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 79 | connected_outputs = {link.get("output-node-id") for link in links | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 80 | if link.get("input-node-id") == sink_id | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 83 | bt_nodes = [info for info in nodes.values() | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 84 | if is_bluetooth(info.get("props") or {})] | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
+| 85 | hfp_nodes = [info for info in bt_nodes if is_hfp(info.get("props") or {})] | test_hfp_node_classification |
 | 87 | if sink_state not in ("running", "idle", "suspended", "error"): | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
 | 89 | return { | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
 | 91 | "default_sink_present": "yes" if sink_id in nodes else "no", | test_watcher_contract, test_call_audio_watch, test_watcher_entry, test_getcalls_compatibility |
@@ -1233,23 +1233,38 @@ Assertion families: [test_watcher_contract](../scripts/tests/test_watcher_contra
 
 ## scripts/probe_audio_graph.py
 
-Assertion families: [test_audio_graph](../scripts/tests/test_audio_graph.py), [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py).
+Assertion families: [test_audio_graph](../scripts/tests/test_audio_graph.py), [test_audio_diagnostics_contract](../scripts/tests/test_audio_diagnostics_contract.py), [test_hfp_contract_extended](../scripts/tests/test_hfp_contract_extended.py), [test_hfp_node_classification](../scripts/tests/test_hfp_node_classification.py).
 
 | Source line | Decision / method | Assertion mapping |
 | --- | --- | --- |
 | 1 | """Shared strict node decoding for read-only feasibility audio classifiers.""" | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 5 | def valid_nodes(data): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 7 | if not isinstance(data, list): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 10 | for obj in data: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 11 | if not isinstance(obj, dict) or obj.get("type") != "PipeWire:Interface:Node": | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 14 | if type(identifier) is not int or not 0 <= identifier <= 4294967295: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 17 | if info is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 19 | if not isinstance(info, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 22 | if props is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 24 | if not isinstance(props, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 28 | return list(nodes.values()) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 31 | def load_nodes(path): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
-| 34 | return valid_nodes(json.load(handle)) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 5 | def is_hfp(props): | test_hfp_node_classification |
+| 7 | return props.get("api.bluez5.profile") in ( | test_hfp_node_classification |
+| 11 | def hfp_direction(props): | test_hfp_node_classification |
+| 13 | if not is_hfp(props): | test_hfp_node_classification |
+| 14 | return None | test_hfp_node_classification |
+| 16 | if media == "Audio/Source": | test_hfp_node_classification |
+| 17 | return "source" | test_hfp_node_classification |
+| 18 | if media == "Audio/Sink": | test_hfp_node_classification |
+| 19 | return "sink" | test_hfp_node_classification |
+| 20 | if props.get("api.bluez5.profile") == "headset-audio-gateway": | test_hfp_node_classification |
+| 21 | if media == "Stream/Output/Audio": | test_hfp_node_classification |
+| 22 | return "source" | test_hfp_node_classification |
+| 23 | if media == "Stream/Input/Audio": | test_hfp_node_classification |
+| 24 | return "sink" | test_hfp_node_classification |
+| 25 | return None | test_hfp_node_classification |
+| 28 | def valid_nodes(data): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 30 | if not isinstance(data, list): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 33 | for obj in data: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 34 | if not isinstance(obj, dict) or obj.get("type") != "PipeWire:Interface:Node": | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 37 | if type(identifier) is not int or not 0 <= identifier <= 4294967295: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 40 | if info is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 42 | if not isinstance(info, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 45 | if props is None: | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 47 | if not isinstance(props, dict): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 51 | return list(nodes.values()) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 54 | def load_nodes(path): | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
+| 57 | return valid_nodes(json.load(handle)) | test_audio_graph, test_audio_diagnostics_contract, test_hfp_contract_extended |
 
 ## scripts/probe_obex_monitor.py
 

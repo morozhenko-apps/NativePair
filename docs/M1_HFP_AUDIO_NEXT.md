@@ -61,7 +61,7 @@ required before stage 2. No production code, architecture or dependencies are
 planned. Documentation commits can be reverted independently; existing probes
 own their temporary files and terminate their owned call during cleanup.
 
-## Current state
+## Initial preparation state (historical)
 
 The plan was committed before hardware operations (b564d13). Preparation ran
 the existing audio transport probe, no-dial SCO probe and read-only routing
@@ -109,7 +109,7 @@ confirmation. Do not force privilege changes or restart services. Keep the
 radio available for this selected verification stage; do not automatically
 disable it if that could interrupt a user-owned connection.
 
-Live proof is not authorized in this continuation. Once preparation is ready,
+At this preparation stage, live proof was not yet authorized. Once ready,
 obtain fresh call authorization and a dedicated destination before stage 2.
 No sensitive identifiers or payloads belong in committed evidence.
 
@@ -188,3 +188,16 @@ enumeration remains unresolved; the probe result is still a failure and must
 not be relabelled successful. A scoped privacy-safe graph diagnostic can be
 planned before another separately approved live test. This is not a claim of
 repeatability, recovery, all-device support or product routing readiness.
+
+## Endpoint classifier follow-up
+
+The zero count is not evidence that the counter never ran: endpoint snapshots
+were attempted during the bounded wait, before the probe's own HangupAll. A
+remote/manual early hangup could remove nodes during that wait; the retained
+log does not record the final call/transport state and cannot establish timing.
+A separate source-confirmed defect excluded headset-audio-gateway and its
+stream classes. The [scoped correction](M1_HFP_NODE_CLASSIFICATION.md) recognizes
+these nodes in all audio diagnostics and records anonymous final call/transport
+state on failure before cleanup. Automated verification is separate from live
+validation. The original failed result is preserved; the existing one-call
+authorization is consumed.

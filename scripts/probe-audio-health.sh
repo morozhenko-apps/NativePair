@@ -85,7 +85,7 @@ python3 - "$PW_TOP_RAW" "$PW_DUMP" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(di
 import json
 import sys
 sys.path.insert(0, sys.argv[-1])
-from probe_audio_graph import load_nodes
+from probe_audio_graph import is_hfp, load_nodes
 
 top_path, dump_path, default_sink_id, default_source_id = sys.argv[1:5]
 
@@ -171,9 +171,6 @@ def is_bluetooth(props):
         or props.get("device.api") == "bluez5"
         or bool(props.get("api.bluez5.profile"))
     )
-
-def is_hfp(props):
-    return props.get("api.bluez5.profile") == "headset-head-unit"
 
 def media_class(props):
     return str(props.get("media.class") or "")

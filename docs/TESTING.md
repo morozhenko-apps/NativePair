@@ -155,7 +155,26 @@ python3 -m unittest discover -s scripts/tests -p test_getcalls_compatibility.py 
 python3 scripts/tests/review_mutations.py --start-at call_dictionary_reply_rejected --output work/getcalls-mutations.json
 ```
 
-The full current inventory contains 1447 Python methods. The previous ten-run
+The GetCalls-revision inventory contained 1447 Python methods. The previous ten-run
 process stability evidence is tied to commit 5d72c31; the wire correction does
 not change process/signal ownership logic and receives one fresh full-suite
 run plus six targeted mutation trials. See [the correction record](M1_GETCALLS_COMPATIBILITY.md).
+
+## HFP gateway node regression
+
+The current inventory contains 1665 Python methods, including 218 explicit
+profile/class/direction/default-device and early-hangup observation rows in
+`test_hfp_node_classification.py`. Only the external command adapters are fake;
+SCO/routing/health scripts and shared classification execute unchanged.
+
+```bash
+python3 -m unittest discover -s scripts/tests -p test_hfp_node_classification.py -v
+python3 scripts/tests/review_mutations.py --start-at hfp_gateway_profile_ignored --output work/hfp-node-mutations.json
+```
+
+Source rationale, complete changed-artifact inventory, negative/interaction
+matrix and execution state: [HFP node correction](M1_HFP_NODE_CLASSIFICATION.md).
+Full-suite and process-only stability evidence are recorded there separately.
+A failed node wait now records fresh anonymous call/transport states before
+cleanup; `unknown` never means an absent call. This does not establish the
+timing of the earlier live attempt or authorize a new call.

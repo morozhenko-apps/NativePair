@@ -1836,6 +1836,878 @@
     "category": "N5"
   },
   {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_alerting_when_node_wait_other_call_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_0_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_1_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_2_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_3_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_4_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_0_transport_5_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_0_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_1_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_2_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_3_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_4_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_1_transport_5_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_0_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_1_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_2_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_3_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_4_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_2_transport_5_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_0_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_1_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_2_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_3_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_4_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_call_3_transport_5_when_node_wait_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_dialing_when_node_wait_other_call_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_duplex_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_duplex_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_duplicate_id_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_duplicate_id_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_foreign_target_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_foreign_target_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_repeated_sink_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_repeated_sink_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_repeated_source_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_repeated_source_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_sink_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_sink_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_source_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_source_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_unknown_roles_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_0_unknown_roles_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_duplex_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_duplex_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_duplicate_id_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_duplicate_id_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_foreign_target_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_foreign_target_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_repeated_sink_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_repeated_sink_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_repeated_source_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_repeated_source_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_sink_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_sink_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_source_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_source_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_unknown_roles_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_1_unknown_roles_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_duplex_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_duplex_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_duplicate_id_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_duplicate_id_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_foreign_target_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_foreign_target_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N7"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_repeated_sink_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_repeated_sink_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_repeated_source_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_repeated_source_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_sink_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_sink_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_source_only_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_source_only_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N2"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_unknown_roles_probe_audio_routing_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_family_2_unknown_roles_probe_hfp_sco_sh_when_endpoints_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_health_0_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_health_1_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_health_2_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_held_when_node_wait_other_call_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_incoming_when_node_wait_other_call_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_legacy_empty_when_node_wait_legacy_empty_observed_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_malformed_when_node_wait_unknown_reply_preserved_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_0_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_10_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_1_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_2_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_3_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_4_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_5_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_6_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_7_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_8_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_0_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_10_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_11_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_1_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_2_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_3_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_4_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_5_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_6_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_7_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_8_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_profile_9_class_9_when_hfp_direction_classified_then_contract_holds",
+    "category": "N6"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_query_failed_when_node_wait_failed_query_preserved_then_contract_holds",
+    "category": "N3"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_waiting_when_node_wait_other_call_state_observed_then_contract_holds",
+    "category": "N9"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_watcher_0_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_watcher_1_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
+    "id": "test_hfp_node_classification.HfpNodeContracts.test_given_watcher_2_when_consumer_profile_counted_then_contract_holds",
+    "category": "Positive"
+  },
+  {
     "id": "test_hfp_probe_contract.GuardedProbeTests.test_given_activate_error_and_active_transport_when_sco_observed_then_success",
     "category": "N5"
   },

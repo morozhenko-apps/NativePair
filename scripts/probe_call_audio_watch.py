@@ -8,6 +8,8 @@ import shutil
 import subprocess
 import time
 
+from probe_audio_graph import is_hfp
+
 TELEPHONY = "org.pipewire.Telephony"
 AG_PATH = re.compile(r'"(/org/pipewire/Telephony/ag[0-9]+)"')
 MAX_NODE_ID = 4294967295
@@ -80,9 +82,7 @@ def graph_snapshot(objects, sink_id, source_id, sink_muted, call_present):
                          and link.get("state") in ("active", "paused", "init")}
     bt_nodes = [info for info in nodes.values()
                 if is_bluetooth(info.get("props") or {})]
-    hfp_nodes = [info for info in bt_nodes
-                 if (info.get("props") or {}).get("api.bluez5.profile")
-                 == "headset-head-unit"]
+    hfp_nodes = [info for info in bt_nodes if is_hfp(info.get("props") or {})]
     sink_state = (nodes.get(sink_id) or {}).get("state")
     if sink_state not in ("running", "idle", "suspended", "error"):
         sink_state = "unknown"

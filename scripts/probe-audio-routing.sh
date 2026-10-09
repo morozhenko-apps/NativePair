@@ -80,7 +80,7 @@ python3 - "$PW_DUMP" "$DEVICE" "$DEFAULT_SINK_ID" "$DEFAULT_SOURCE_ID" "$(dirnam
 import json
 import sys
 sys.path.insert(0, sys.argv[-1])
-from probe_audio_graph import load_nodes
+from probe_audio_graph import hfp_direction, is_hfp, load_nodes
 
 path, device, default_sink_id, default_source_id = sys.argv[1:5]
 try:
@@ -95,16 +95,18 @@ for obj in data:
     props = info.get("props") or {}
     if props.get("api.bluez5.address") != device:
         continue
-    if props.get("api.bluez5.profile") != "headset-head-unit":
+    if not is_hfp(props):
         continue
-    hfp_nodes.append((str(obj.get("id")), props.get("media.class")))
+    hfp_nodes.append((str(obj.get("id")), props))
 
-source_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Source"}
-sink_ids = {node_id for node_id, media_class in hfp_nodes if media_class == "Audio/Sink"}
+source_ids = {node_id for node_id, props in hfp_nodes if props.get("media.class") == "Audio/Source"}
+sink_ids = {node_id for node_id, props in hfp_nodes if props.get("media.class") == "Audio/Sink"}
+source_present = any(hfp_direction(props) == "source" for _, props in hfp_nodes)
+sink_present = any(hfp_direction(props) == "sink" for _, props in hfp_nodes)
 
 print(f"hfp_node_count={len(hfp_nodes)}")
-print(f"hfp_source_node_present={'yes' if source_ids else 'no'}")
-print(f"hfp_sink_node_present={'yes' if sink_ids else 'no'}")
+print(f"hfp_source_node_present={'yes' if source_present else 'no'}")
+print(f"hfp_sink_node_present={'yes' if sink_present else 'no'}")
 print(f"default_sink_snapshot_available={'yes' if default_sink_id else 'no'}")
 print(f"default_source_snapshot_available={'yes' if default_source_id else 'no'}")
 print(f"default_sink_is_phone_hfp={'yes' if default_sink_id in sink_ids else 'no'}")

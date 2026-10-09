@@ -184,7 +184,7 @@ inspect_hfp_nodes() {
 import json
 import sys
 sys.path.insert(0, sys.argv[-1])
-from probe_audio_graph import load_nodes
+from probe_audio_graph import hfp_direction, is_hfp, load_nodes
 
 path, device = sys.argv[1:3]
 try:
@@ -202,14 +202,14 @@ for obj in data:
     props = info.get("props") or {}
     if props.get("api.bluez5.address") != device:
         continue
-    if props.get("api.bluez5.profile") != "headset-head-unit":
+    if not is_hfp(props):
         continue
 
     count += 1
-    media_class = props.get("media.class")
-    if media_class == "Audio/Source":
+    direction = hfp_direction(props)
+    if direction == "source":
         source = True
-    elif media_class == "Audio/Sink":
+    elif direction == "sink":
         sink = True
 
 print(f"hfp_node_count={count}")
@@ -534,6 +534,20 @@ fi
 echo "pipewire_hfp_nodes_observed=$NODES_READY"
 
 if [[ "$NODES_READY" != yes ]]; then
+  # Snapshot before our cleanup; a remote/manual hangup may remove SCO nodes.
+  # Only a canonical successful empty reply proves absence, never a read error.
+  SNAPSHOT_STATUS=0
+  refresh_call_snapshot || SNAPSHOT_STATUS=$?
+  NODE_WAIT_CALL_STATE=unknown
+  if [[ "$SNAPSHOT_STATUS" == 0 ]]; then
+    NODE_WAIT_CALL_STATE="${CALL_STATE:-unknown}"
+  elif [[ "$SNAPSHOT_STATUS" == 2 ]] &&
+    grep -Eq '^a(\(oa\{sv\}\)|\{oa\{sv\}\}) 0[[:space:]]*$' "$CALLS_REPLY"; then
+    NODE_WAIT_CALL_STATE=absent
+  fi
+  printf 'call_state_after_node_wait=%s\n' "$NODE_WAIT_CALL_STATE"
+  NODE_WAIT_TRANSPORT_STATE="$(read_transport_state || true)"
+  printf 'transport_state_after_node_wait=%s\n' "${NODE_WAIT_TRANSPORT_STATE:-unknown}"
   echo "probe_complete=no"
   echo "sco_error=hfp_nodes_not_ready"
   exit 1
