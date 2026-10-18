@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - dev
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -15,7 +17,7 @@ permissions:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
 
 jobs:
   rust:
@@ -46,8 +48,28 @@ jobs:
       - name: Run tests
         run: cargo test --workspace --all-features
 
+      - name: Check shell syntax and executable permissions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for script in scripts/*.sh; do
+            bash -n "$script"
+          done
+          while IFS= read -r script; do
+            if [[ ! -x "$script" ]]; then
+              echo "Script is tracked but not executable: $script" >&2
+              exit 1
+            fi
+          done < <(git ls-files 'scripts/*.sh')
+
+      - name: Test deterministic M1 Python contracts
+        run: |
+          python3 -m py_compile scripts/probe_call_audio_watch.py scripts/probe_audio_graph.py scripts/probe_obex_monitor.py
+          python3 -m unittest discover -s scripts/tests -v
+
   package-deb:
-    name: Debian package gate
+    name: Debian release package gate
+    if: github.ref_type == 'tag'
     needs: rust
     runs-on: ubuntu-24.04
 
@@ -56,6 +78,16 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
+
+      - name: Verify annotated version tag points to current main HEAD
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+$ ]] || exit 1
+          test "$(git cat-file -t "refs/tags/$GITHUB_REF_NAME")" = tag
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse refs/remotes/origin/main)"
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@7e38f4b43b4db5c8dd498af069a4f6196df1d067 # v1
