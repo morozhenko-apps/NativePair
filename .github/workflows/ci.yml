@@ -7,6 +7,11 @@ on:
       - dev
     tags:
       - 'v*'
+    paths-ignore:
+      - 'docs/**'
+      - 'doc/**'
+      - '**/*.md'
+      - '**/*.mdx'
   pull_request:
     branches:
       - main
