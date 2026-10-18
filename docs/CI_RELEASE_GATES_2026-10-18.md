@@ -20,3 +20,8 @@ Date: 2026-10-18. Status: planned and tested only after associated CI evidence.
 
 ## Rollback
 Revert the isolated CI commit on dev; preserve main and tags without force-pushing.
+
+## Reproduced binary-order failure and corrective plan
+
+The earlier dev run `39089996466` failed 26 Python binary integration contracts after running 1,869 tests: the suite requires native binaries produced by `cargo build --workspace --locked`. The quick Rust job incorrectly invoked this full Python inventory before the package job; the package job is intentionally tag-only. The confirmed root cause is a missing binary build prerequisite, not a failed functional assertion. Keep syntax checks on each dev push, run all executable Python contracts in the tagged package job **after** its existing workspace build step, and keep the packaging/install smoke and full tests unchanged. Re-run the dev CI on the exact new SHA. Release-tag acceptance is not claimed before a real annotated current-main tag run.
+
