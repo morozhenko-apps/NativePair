@@ -10,3 +10,15 @@
 **/__pycache__/
 /work/
 /artifacts/
+
+# Root-local assistant state; neutral project and evidence guides stay tracked.
+/.cursor/
+/.claude/
+/.codex/
+/.gemini/
+/.aider*
+/.github/agents/
+/CLAUDE.md
+/GEMINI.md
+/*.code-workspace
+Thumbs.db
