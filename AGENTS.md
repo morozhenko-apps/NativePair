@@ -42,14 +42,14 @@ No product, architecture, protocol, privacy, audio, test or deployment change.
 
 1. [x] Read project rules, canonical product/architecture/privacy/testing owners,
    M1 evidence/branch/coverage and hardware handoffs, scripts and actual CI.
-2. [ ] Add a docs navigation index grouped by protocol, audio, process/packaging
+2. [x] Add a docs navigation index grouped by protocol, audio, process/packaging
    and hardware. Map every original M1 branch-map artifact/anchor without
    reducing its exhaustive assertions, negative/interaction or mutation evidence.
-3. [ ] Qualify README/build/testing/CI text against the implemented workflow:
+3. [x] Qualify README/build/testing/CI text against the implemented workflow:
    ordinary Rust/syntax checks versus full binary-dependent contracts/package
    checks on an annotated current-main tag. Keep original paragraphs and dated
    failure/acceptance bodies verbatim behind explicit historical boundaries.
-4. [ ] Add local assistant-state ignores; existing IDE/build/work/artifact rules
+4. [x] Add local assistant-state ignores; existing IDE/build/work/artifact rules
    remain. No disposable tracked IDE/model preset or diagnostic file was found.
    Preserve all hardware records, canonical inventories, release/build scripts,
    code/tests/config/lock and ignored sole-copy captures/packages.

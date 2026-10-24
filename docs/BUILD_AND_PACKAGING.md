@@ -1,5 +1,17 @@
 # Build and Packaging
 
+## CI execution boundary — 2026-10-24
+
+The complete package/build/install/upload procedure below describes the
+tagged-release lane. It does not run on each branch push: ordinary CI owns Rust
+quality and shell/Python syntax, while an annotated version tag at current main
+HEAD admits the binary-dependent Python contracts and Debian gate. The package
+job builds binaries before the full Python suite; preserve that ordering.
+Original commands, layout, checksum and no-service-activation contracts remain
+verbatim. This documentation pass neither builds/installs a package nor proves
+tagged CI or a supported physical audio path. Read [CI correction](CI_RELEASE_GATES_2026-10-18.md)
+and [navigation](README.md) for exact evidence and remaining boundaries.
+
 ## Goals
 
 NativePair should be straightforward to build on Ubuntu and should produce a real Debian package without requiring Node.js, WebKit, Tauri, or an application framework solely for packaging.

@@ -1,5 +1,17 @@
 # GitHub Actions release-only packaging and fast branch checks
 
+## Source implementation versus historical plan — 2026-10-24
+
+Current workflow implements hosted ubuntu-24.04 Rust/syntax checks on branch/PR
+and a protected tag-only Debian lane. The final corrective paragraph below
+supersedes the earlier plan to keep binary-dependent Python tests in quick CI:
+full contracts follow the explicit workspace binary build in the package job.
+Tag admission requires annotation and exact current-main identity; branch pushes
+cannot install/upload packages. Original failure26/1869, plan and rollback are
+retained unchanged. Source inspection is not a fresh CI/release outcome or new
+authorization to promote main or create a release tag. Ignore/config/docs commits
+may still trigger CI under actual path filters; commit separation is no bypass.
+
 Date: 2026-10-18. Status: planned and tested only after associated CI evidence.
 
 ## Baseline

@@ -49,6 +49,13 @@ The daemon owns transport and protocol state. Domain logic is isolated from Blue
 
 See [Architecture](docs/ARCHITECTURE.md) and the [ADR index](docs/DECISIONS.md).
 
+For current implementation evidence, start with the [roadmap](docs/ROADMAP.md),
+[capability matrix](docs/CAPABILITY_MATRIX.md) and [documentation navigation](docs/README.md).
+The initial capability table above is a planning overview, not a replacement
+for source-bound Pixel results or pending physical microphone/ANCS/recovery work.
+No automatic method count, SCO node or graph link proves audible call quality.
+
+
 ## Initial scope
 
 NativePair starts with protocol feasibility, not GUI work.
@@ -90,7 +97,19 @@ Build and verify the Debian package:
 ./scripts/verify-deb.sh artifacts/nativepair_0.1.0_amd64.deb
 ```
 
+Current CI runs hosted Rust quality and shell/Python syntax checks for branch
+and PR validation. The full binary-dependent Python contracts and Debian
+build/verify/install/upload lane require an annotated version tag at current
+`main` HEAD; package binaries are built before those integration contracts.
+See the [CI correction record](docs/CI_RELEASE_GATES_2026-10-18.md).
+
+<details>
+<summary>Earlier packaging CI description — historical checkpoint</summary>
+
 CI builds the `.deb`, verifies its checksum and layout, runs both packaged binaries, installs the package through `apt` on Ubuntu, and publishes the package plus SHA-256 sidecar as a short-lived workflow artifact.
+
+
+</details>
 
 See [Build and packaging](docs/BUILD_AND_PACKAGING.md) and [Protocol feasibility](docs/FEASIBILITY.md).
 

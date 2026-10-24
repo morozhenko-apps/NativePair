@@ -1,5 +1,29 @@
 # Testing Strategy
 
+## Current cadence and evidence boundary — 2026-10-24
+
+Current `.github/workflows/ci.yml` separates ordinary hosted Rust/shell/Python
+syntax checks from the tagged Debian package job. The complete binary-dependent
+Python suite runs only after `cargo build --workspace --locked` in that job;
+the tag must be annotated and match current `origin/main` HEAD. The later
+[binary-order correction](CI_RELEASE_GATES_2026-10-18.md#reproduced-binary-order-failure-and-corrective-plan)
+supersedes older statements below that every dev CI pass runs all Python cases
+or builds/installs a Debian package. Do not bypass the prerequisite or drop cases.
+
+The original M1 lane's ten successful process-stability passes belong to its
+source-bound verification, not routine documentation maintenance or a newly
+identified flaky group. Current owner policy runs appropriate stable checks once
+at the final gate and keeps known-flaky outcomes explicit; never reclassify a
+new stable failure or infer zero flakiness from a rerun. Full release/M1-specific
+requirements remain separately scoped. No hardware call/message/adapter command
+is authorized by a local test invocation; external-command fixtures are hermetic.
+
+The [navigation index](README.md) links every original branch-map artifact and
+the exact inventory/receipt owners. Entire original test guidance and dated
+results below remain verbatim; old method counts and percentages are not a
+fresh cleanup-SHA coverage claim. Documentation/ignore changes require focused
+integrity checks, not a new full M1, hardware, install or ten-run campaign.
+
 ## Purpose
 
 Tests protect behavior, protocol contracts, privacy invariants, and state transitions. Coverage percentage is not a goal by itself.
