@@ -53,7 +53,7 @@ No product, architecture, protocol, privacy, audio, test or deployment change.
    remain. No disposable tracked IDE/model preset or diagnostic file was found.
    Preserve all hardware records, canonical inventories, release/build scripts,
    code/tests/config/lock and ignored sole-copy captures/packages.
-5. [ ] At final gate run existing pure graph-parser and hermetic GetCalls
+5. [x] At final gate run existing pure graph-parser and hermetic GetCalls
    contracts once, plus source/hash/body/link/anchor/catalog/ignore/diff checks.
    No actual Bluetooth/D-Bus/PipeWire/journal/device/call/SMS/probe, Rust build,
    package install or process-stability campaign is needed for documentation.
@@ -66,3 +66,17 @@ all original M1 maps/inventory/negative evidence and distinguish exact source,
 automated proof and remaining physical acceptance. Original failed call probes
 and fresh-approval boundaries remain. Rollback uses inverse scoped commits,
 not shared history rewrite; no data, device, audio or artifact undo is needed.
+
+Final housekeeping evidence: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest
+discover -s scripts/tests -p test_audio_graph.py -v` exits0,41 tests;
+the same command with `-p test_getcalls_compatibility.py` exits0,84 tests.
+Both existing suites ran once; all125 cases passed. GetCalls uses hermetic
+external-command fakes, not actual phone/D-Bus/PipeWire calls.
+External static checks exit0:700 checks,304 local links,23 branch-map sections,
+109 protected original SHA-256 values identical. Canonical1869-method inventory
+and182-case process lane remain unchanged; their old execution is not a fresh
+coverage/stability result. All original M1 maps, hardware evidence and receipt
+JSON remain intact. `git diff --check 8051c48745b2583e3f4c2d3ed70fc6fa8d9a1e2f HEAD`
+exits0. No full Rust/Python/10x/mutation/package/install/remote-CI or hardware
+acceptance was executed. Physical microphone/uplink, ANCS and recovery gates
+remain open. All owned commands completed; no background process needs cleanup.
