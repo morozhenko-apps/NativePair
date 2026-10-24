@@ -33,3 +33,36 @@ The current phase is protocol feasibility and foundation work. Do not build prod
 - `docs/TESTING.md`
 - `docs/PRIVACY.md`
 - `docs/DECISIONS.md`
+
+## Repository housekeeping — 2026-10-24
+
+Mode A, documentation/ignore maintenance only. Baseline
+`8051c48745b2583e3f4c2d3ed70fc6fa8d9a1e2f` on clean synchronized `dev`.
+No product, architecture, protocol, privacy, audio, test or deployment change.
+
+1. [x] Read project rules, canonical product/architecture/privacy/testing owners,
+   M1 evidence/branch/coverage and hardware handoffs, scripts and actual CI.
+2. [ ] Add a docs navigation index grouped by protocol, audio, process/packaging
+   and hardware. Map every original M1 branch-map artifact/anchor without
+   reducing its exhaustive assertions, negative/interaction or mutation evidence.
+3. [ ] Qualify README/build/testing/CI text against the implemented workflow:
+   ordinary Rust/syntax checks versus full binary-dependent contracts/package
+   checks on an annotated current-main tag. Keep original paragraphs and dated
+   failure/acceptance bodies verbatim behind explicit historical boundaries.
+4. [ ] Add local assistant-state ignores; existing IDE/build/work/artifact rules
+   remain. No disposable tracked IDE/model preset or diagnostic file was found.
+   Preserve all hardware records, canonical inventories, release/build scripts,
+   code/tests/config/lock and ignored sole-copy captures/packages.
+5. [ ] At final gate run existing pure graph-parser and hermetic GetCalls
+   contracts once, plus source/hash/body/link/anchor/catalog/ignore/diff checks.
+   No actual Bluetooth/D-Bus/PipeWire/journal/device/call/SMS/probe, Rust build,
+   package install or process-stability campaign is needed for documentation.
+   Commit docs/config separately; normal push dev after fresh fetch, no main
+   promotion, release tag, hardware action or external publication.
+
+Risks: treating endpoint/graph evidence as audible physical uplink, old counts
+as new coverage, or synthetic command tests as real phone operations. Preserve
+all original M1 maps/inventory/negative evidence and distinguish exact source,
+automated proof and remaining physical acceptance. Original failed call probes
+and fresh-approval boundaries remain. Rollback uses inverse scoped commits,
+not shared history rewrite; no data, device, audio or artifact undo is needed.
