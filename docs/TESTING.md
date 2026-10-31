@@ -231,3 +231,42 @@ new assertion-killed mutations. All 22 prior production hashes, the exact
 182-case lane and its test/harness sources are unchanged; retain their ten-pass
 evidence and do not repeat new pure/static cases. Rust checks pass again.
 Latest counts, hashes and hardware readiness: [uplink execution](evidence/m1-hfp-uplink-execution.json).
+
+## CI toolchain maintenance
+
+Scope: refresh maintained GitHub Actions implementations while preserving existing
+permissions, triggers, runner routing, cache intent and release/publication gates.
+JavaScript action internals use supported Node24; this is distinct from project Node.
+Reconcile the existing rust-cache Dependabot change; preserve its provenance
+and avoid a duplicate update. The Rust SDK version remains unchanged.
+
+Maintained action targets:
+
+- `Swatinem/rust-cache`: `v2.9.3` (`d1527c8f67ef9af357290475d4af4b0fab8f12e0`).
+- `actions/upload-artifact`: `v7.0.2` (`cf430e030ddbb5b0abf93d22962f4752f3646cd9`).
+- `dtolnay/rust-toolchain`: preserve channel/explicit toolchain; refresh only an older implementation.
+
+Milestones:
+
+- [x] Read current source, agent/CI owners, permanent refs and concurrent work.
+- [x] Record scope, compatibility decisions, validation and rollback before code.
+- [ ] Apply scoped action/toolchain and directly related source-contract changes.
+- [ ] Execute applicable stable checks once at the final gate; report separate
+  known-flaky/stability outcomes and unexecuted native/provider gates.
+- [ ] Record the final source/verification boundary and publish validated dev work.
+
+Planned validation:
+
+- Parse all affected workflow YAML and verify maintained action SHA/runtime identities.
+- Review diffs and preserve permissions, events, routing, signing/publication admission,
+  artifact names/paths and existing non-Node SDK versions.
+- `cargo fmt --all -- --check`.
+- `cargo clippy --workspace --all-targets --all-features -- -D warnings`.
+- `cargo test --workspace --all-features`.
+
+Risk and rollback: action majors may change auth/cache/artifact or build-wrapper
+behavior; Node-major transitions require the existing tooling checks. Revert the
+scoped executable commit and its documentation update separately if needed. This
+maintenance does not authorize protected-branch promotion, tags, store upload,
+runner changes or cloud deployment. Native/device/provider acceptance remains
+independent of local checks. No architecture or application contract changes.
