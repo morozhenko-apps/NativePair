@@ -207,3 +207,17 @@ new assertion-killed mutations. All 22 prior production hashes, the exact
 182-case lane and its test/harness sources are unchanged; retain their ten-pass
 evidence and do not repeat new pure/static cases. Rust checks pass again.
 Latest counts, hashes and hardware readiness: [uplink execution](evidence/m1-hfp-uplink-execution.json).
+
+## Build toolchain maintenance integration
+
+The owner approved a scoped integration of the already validated maintenance into the current release branch through a reviewable PR. This authorization supersedes ordinary temporary-branch restrictions for this integration only. Build/CI tool versions change; application behavior, public contracts, data, credentials and immutable release identities remain unchanged. Upstream Actions keep their supported internal runtime; project Node tooling uses the exact maintained LTS pin.
+
+Plan:
+
+- [x] Inspect current release source, owning instructions, prior maintenance evidence and deployment triggers. Start from the current release head to preserve its unique commits.
+- [x] Record this plan before executable edits, with documentation and executable changes committed separately.
+- [ ] Apply only the reviewed Actions, Node and required compatibility/security corrections; adapt references to existing release workflows. Exclude unrelated accumulated development work.
+- [ ] Review complete diff and source invariants, run applicable final stable checks once, and reuse previous suite evidence only with exact source/lock equivalence. Keep native/store and release-only acceptance separate.
+- [ ] Create the scoped PR; integrate only after its exact-head required checks and existing production-admission conditions pass. Preserve concurrent release changes and never bypass branch protection.
+
+Rollback uses an ordinary revert of the scoped maintenance commits; no tag movement, resource recreation or provider/data rollback is part of this task. Existing automatic Git deployment ownership and triggers are preserved. A source/PR pass alone does not establish effective production Node or native/store acceptance.
